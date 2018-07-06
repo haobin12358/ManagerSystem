@@ -28,16 +28,16 @@ export const constantRouterMap = [
   { path: '/login', component: () => import('../views/login/index'), hidden: true },
   { path: '/error', component: () => import('../views/error/error'), hidden: true },
   {
-    path: '/index',
+    path: '/',
     component: Layout,
     redirect: 'index/userIndex',
     children: [{
-      path: 'userIndex',
+      path: 'index/userIndex',
       component: () => import('../views/index/userIndex'),
       name: 'userIndex',
       meta: { title: 'userIndex', icon: 'userIndex', noCache: true }
     },{
-      path: 'adminIndex',
+      path: 'index/adminIndex',
       component: () => import('../views/index/adminIndex'),
       name: 'adminIndex',
       meta: { title: 'adminIndex', icon: 'adminIndex', noCache: true }
