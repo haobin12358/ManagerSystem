@@ -100,7 +100,7 @@ ENV/
 # mypy
 .mypy_cache/
 # idea 
-LoveBreakfast/.idea/
+.idea/
 # config
-LoveBreakfast/config/dbconfig.py
-LoveBreakfast/config/Inforcode.py
+config/dbconfig.py
+config/Inforcode.py
