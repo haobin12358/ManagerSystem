@@ -1,0 +1,121 @@
+@import "./resize.css";
+@import "./_variate.less";
+@import "./_mixture.less";
+@import "./_argument.less";
+
+//页面的公共样式
+html, body {
+  background-color: @bgMainColor;
+  height: 100%;
+}
+
+.m-flex-between{
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.m-flex-start{
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.m-flex-around{
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.m-flex-center{
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+}
+
+//element 样式
+//.logon-status{
+.m-input{
+  .el-input__inner{
+    background-color: #eee;
+    border: none;
+    height: 0.54rem;
+    line-height: 0.54rem;
+    padding: 0 0.6rem;
+  }
+}
+.m-btn{
+  &.el-form-item{
+    margin-bottom: 0;
+  }
+}
+.el-checkbox__input.is-checked+.el-checkbox__label {
+  color: #000;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner{
+  background-color: #ef636e;
+  border-color: #ef636e;
+}
+
+//sidebar样式
+.m-sidebar{
+  .el-menu-item, .el-submenu__title{
+    height: 0.7rem;
+    line-height: 0.7rem;
+  }
+  .el-submenu__title i,.el-submenu__title span{
+    color: #fff;
+    font-size: 0.16rem;
+  }
+  .el-submenu .el-menu-item{
+    height: 0.7rem;
+    line-height: 0.7rem;
+  }
+  .el-submenu__title:hover{
+    background-color: @sidebarBgHoverColor;
+  }
+  .el-menu-item:focus, .el-menu-item:hover{
+    background-color: @sidebarChildHoverColor;
+  }
+  //.el-submenu:nth-child(even) .el-menu{
+  //  background-color: @sidebarChildColor;
+  //}
+  //.el-submenu:nth-child(odd) .el-menu{
+  //  background-color: @sidebarBgColor;
+  //}
+  .el-menu-item{
+    color: #fff;
+    font-size: 0.16rem;
+  }
+  .el-submenu{
+    border-right: none;
+    background-color: @sidebarChildColor;
+  }
+  .el-menu{
+    border-right: none;
+    background-color: @sidebarBgColor;
+  }
+  .el-menu-vertical-demo {
+    width: 0.63rem;
+    //min-height: 400px;
+  }
+
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: @sidebarWidth;
+    //min-height: 400px;
+  }
+  .el-menu--collapse .el-menu-item span, .el-menu--collapse .el-submenu .el-submenu__title span {
+    height: 0;
+    width: 0;
+    overflow: hidden;
+    visibility: hidden;
+    display: inline-block;
+  }
+  .el-menu--collapse .el-menu-item .el-submenu__icon-arrow, .el-menu--collapse .el-submenu .el-submenu__title .el-submenu__icon-arrow {
+    display: none;
+  }
+}
+.el-menu{
+  border-right: none;
+}
