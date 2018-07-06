@@ -1,7 +1,6 @@
 <template>
 <div class="m-index">
   首页
-  <router-view/>
 </div>
 
 </template>
