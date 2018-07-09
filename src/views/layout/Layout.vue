@@ -31,6 +31,9 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/_variate";
+  .app-wrapper{
+    min-height: 100%;
+  }
 .sidebar-container{
   /*-webkit-transition: width 0.28s;*/
   /*transition: width 0.28s;*/

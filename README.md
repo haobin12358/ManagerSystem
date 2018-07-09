@@ -11,18 +11,18 @@ npm run build
 --src
    --assets//
    --base//
-   --common//css£¬js£¬image£¬json
+   --common//cssï¼Œjsï¼Œimageï¼Œjson
    --components
-      --common //¹«ÓÃ×é¼ş
+      --common //å…¬ç”¨ç»„ä»¶
    --router
-      --router.js//Â·ÓÉ
-   --views//Ò³Ãæ×é¼ş
-     --layout //¹«ÓÃ²à±ß£¬Í·²¿×é¼ş
+      --router.js//è·¯ç”±
+   --views//é¡µé¢ç»„ä»¶
+     --layout //å…¬ç”¨ä¾§è¾¹ï¼Œå¤´éƒ¨ç»„ä»¶
    --vuex
-      --index.js//¹«ÓÃÊı¾İ
-    --filter.js //¹ıÂËÆ÷
+      --index.js//å…¬ç”¨æ•°æ®
+    --filter.js //è¿‡æ»¤å™¨
 
-´ËÏîÄ¿ÒÑ½« °²×°
+æ­¤é¡¹ç›®å·²å°† å®‰è£…
    elementui
    vuex
    axios

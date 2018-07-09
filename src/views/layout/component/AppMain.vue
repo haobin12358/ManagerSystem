@@ -24,6 +24,6 @@ export default {
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../../common/css/_variate";
  .app-main{
-   padding: 0.2rem;
+   padding:  0.2rem 0.4rem  0.2rem  0.2rem ;
  }
 </style>

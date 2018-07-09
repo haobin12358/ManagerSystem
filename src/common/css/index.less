@@ -21,6 +21,7 @@ html, body {
   align-items: center;
   justify-content: flex-start;
 }
+
 .m-flex-around{
   display: flex;
   flex-flow: row;
@@ -32,6 +33,26 @@ html, body {
   flex-flow: row;
   align-items: center;
   justify-content: center;
+}
+
+.flex-col(@x){
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: @x;
+}
+.flex-row(@x){
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: @x;
+}
+
+.m-left{
+  float: left;
+}
+.m-right{
+  float: right;
 }
 
 //element 样式

@@ -66,6 +66,7 @@ export default {
   justify-content: flex-end;
   align-items: center;
   padding: 0.2rem;
+  background-color: #fff;
   .m-search-box{
     width: 1.80rem;
     height: 0.27rem;

@@ -142,9 +142,6 @@
           &:hover{
             background-color: #001528;
           }
-          &.router-link-active{
-            color: @sidebarActiveFont;
-          }
         }
       }
     }
