@@ -12,11 +12,11 @@
                <span>12</span>
              </li>
              <li class="m-label m-green">
-               <span>待处理</span>
+               <span>审批中</span>
                <span>12</span>
              </li>
              <li class="m-label m-blue">
-               <span>待处理</span>
+               <span>待发货</span>
                <span>12</span>
              </li>
            </ul>
@@ -119,7 +119,86 @@
         </div>
       </div>
       <div class="m-right">
-        <div class="one-part"></div>
+        <div class="one-part">
+          <h3 class="m-title">店铺数据</h3>
+          <div class="m-store-data">
+            <div class="m-store-content">
+              <ul>
+                <li class="m-store-label icon-green">
+                  <div class="m-store-content">
+                    <p>访客人数</p>
+                    <p></p>
+                    <p class="m-decline">33.33% ⬇</p>
+                  </div>
+                  <div class="m-store-icon-box">
+                    <span class="m-store-icon icon-person"></span>
+                    <span>访客</span>
+                  </div>
+                </li>
+                <li class="m-store-label icon-red">
+                  <div class="m-store-content">
+                    <div>
+                      <p>下单买家数</p>
+                      <p></p>
+                      <p class="m-decline">33.33% ⬇</p>
+                    </div>
+                    <div>
+                      <p>下单金额</p>
+                      <p>336.00</p>
+                      <p class="m-decline">33.33% ⬇</p>
+                    </div>
+                  </div>
+                  <div class="m-store-icon-box">
+                    <span class="m-store-icon icon-make-order"></span>
+                    <span>下单</span>
+                  </div>
+                </li>
+                <li class="m-store-label icon-yellow">
+                  <div class="m-store-content">
+                    <div>
+                      <p>支付买家数</p>
+                      <p></p>
+                      <p class="m-decline">33.33% ⬇</p>
+                    </div>
+                    <div>
+                      <p>支付金额</p>
+                      <p>336.00</p>
+                      <p class="m-decline">33.33% ⬇</p>
+                    </div>
+                    <div>
+                      <p>客单价</p>
+                      <p>336.00</p>
+                      <p class="m-decline">33.33% ⬇</p>
+                    </div>
+                  </div>
+                  <div class="m-store-icon-box">
+                    <span class="m-store-icon icon-pay"></span>
+                    <span>支付</span>
+                  </div>
+                </li>
+              </ul>
+              <span class="m-arrows"></span>
+            </div>
+
+
+
+            <p class="m-percent">
+              <span class="m-percent-content">下单转化率12.3% </span>
+              <span class="m-green m-arrow"></span>
+              <span class="m-green m-arrow-head"></span>
+            </p>
+            <p class="m-percent">
+              <span class="m-percent-content">支付转化率12.3% </span>
+              <span class="m-red m-arrow"></span>
+              <span class="m-red m-arrow-head"></span>
+            </p>
+            <p class="m-percent">
+              <span class="m-percent-content">下单-支付转化率12.3% </span>
+              <span class="m-yellow m-arrow"></span>
+              <span class="m-yellow m-arrow-head"></span>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -150,6 +229,7 @@
   @import "../../common/css/index";
 .m-content{
   font-size: 0.14rem;
+  margin-top: 0.2rem;
   &:after{
     content: '';
     display: block;
@@ -159,7 +239,7 @@
     width: 5.4rem;
     .one-part{
       background-color: #fff;
-      height: 3rem;
+      height: 2.8rem;
       margin-bottom: 0.1rem;
       h3.m-title{
         padding: 0.15rem 0.4rem;
@@ -261,8 +341,122 @@
     width: 5.4rem;
     .one-part{
       background-color: #fff;
-      height: 6.1rem;
+      height: 5.7rem;
       margin-bottom: 0.1rem;
+      h3.m-title{
+        padding: 0.15rem 0.4rem;
+        border-bottom: 1px solid @borderColor;
+        margin: 0 0.05rem;
+      }
+      .m-store-data{
+        padding: 0.2rem 0.15rem;
+        border-bottom: 1px solid @borderColor;
+        margin: 0 0.05rem;
+        .m-store-content {
+          .flex-row(flex-start);
+          margin-bottom: 0.2rem;
+          ul {
+            li.m-store-label {
+              width: 3.4rem;
+              height: 0.8rem;
+              padding: 0 0.24rem;
+              background: url("../../common/images/icon-data-green.png");
+              background-size: 100% 100%;
+              .flex-row(space-between);
+              &.icon-red {
+                background: url("../../common/images/icon-data-red.png");
+                background-size: 100% 100%;
+              }
+              &.icon-yellow {
+                background: url("../../common/images/icon-data-yellow.png");
+                background-size: 100% 100%;
+              }
+              .m-store-content {
+                /*line-height: 0.3rem;*/
+                font-size: 0.12rem;
+                p {
+                  height: 0.2rem;
+                }
+                .flex-row(flex-start);
+                div {
+                  margin-right: 0.2rem;
+                }
+                .m-decline {
+                  color: #1ea45a;
+                }
+              }
+              .m-store-icon-box {
+                color: #fff;
+                .flex-row(flex-start);
+                .m-store-icon {
+                  display: inline-block;
+                  width: 0.32rem;
+                  height: 0.32rem;
+                  background: url("../../common/images/icon-visitor.png");
+                  background-size: 100% 100%;
+                  margin-right: 0.1rem;
+                  &.icon-make-order {
+                    background: url("../../common/images/icon-make-order.png");
+                    background-size: 100% 100%;
+                  }
+                  &.icon-pay {
+                    background: url("../../common/images/icon-pay.png");
+                    background-size: 100% 100%;
+                  }
+                }
+              }
+
+            }
+          }
+          span.m-arrows{
+            width: 0.6rem;
+            height: 2rem;
+            display: block;
+            background: url("../../common/images/icon-arrow.png");
+            background-size: 100% 100%;
+          }
+        }
+        .m-percent{
+          font-size: 0.12rem;
+          line-height: 0.24rem;
+          .flex-row(flex-start);
+          .m-percent-content{
+              width: 1.5rem;
+          }
+          .m-arrow{
+            display: block;
+            width: 0.4rem;
+            height: 0.02rem;
+            background-color:#a9d5c6 ;
+            &.m-red{
+              background-color:#edb3b1 ;
+            }
+            &.m-yellow{
+              background-color:#fee1bf ;
+            }
+          }
+          .m-arrow-head{
+            display: block;
+            width: 0;
+            border: 0.05rem solid #a9d5c6;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+            border-right-color: transparent;
+            &.m-red{
+              border: 0.05rem solid #edb3b1;
+              border-top-color: transparent;
+              border-bottom-color: transparent;
+              border-right-color: transparent;
+            }
+            &.m-yellow{
+              border: 0.05rem solid #fee1bf;
+              border-top-color: transparent;
+              border-bottom-color: transparent;
+              border-right-color: transparent;
+            }
+          }
+        }
+      }
     }
   }
 }
