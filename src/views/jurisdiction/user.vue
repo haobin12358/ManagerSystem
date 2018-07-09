@@ -17,13 +17,13 @@
 
       <div class="m-middle">
         <el-table :data="user" stripe style="width: 100%">
-          <el-table-column prop="userId" label="用户ID" width="130"></el-table-column>
-          <el-table-column prop="userName" label="用户名" width="130"></el-table-column>
-          <el-table-column prop="registerTime" label="注册时间" width="180"></el-table-column>
-          <el-table-column prop="email" label="E-mall" width="180"></el-table-column>
-          <el-table-column prop="group" label="用户组" width="130"></el-table-column>
-          <el-table-column prop="loginTime" label="最近登录" width="150"></el-table-column>
-          <el-table-column label="操作" width="130">
+          <el-table-column align="center" prop="userId" label="用户ID" width="120"></el-table-column>
+          <el-table-column align="center" prop="userName" label="用户名" width="120"></el-table-column>
+          <el-table-column align="center" prop="registerTime" label="注册时间" width="170"></el-table-column>
+          <el-table-column align="center" prop="email" label="E-mall" width="170"></el-table-column>
+          <el-table-column align="center" prop="group" label="用户组" width="120"></el-table-column>
+          <el-table-column align="center" prop="loginTime" label="最近登录" width="120"></el-table-column>
+          <el-table-column align="center" label="操作" min-width="120">
             <template slot-scope="scope">
               <el-dropdown size="mini" split-button>查看
                 <el-dropdown-menu slot="dropdown">
@@ -83,20 +83,21 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/_variate.less";
   .m-content {
+    padding: 0.2rem;
+    background: @bgMainColor;
     .m-top {
       .m-top-search {
+        margin: 0 0 0.1rem 0;
         float: left;
-        width: 90%;
-        padding-left: 0.1rem;
-        margin: -0.05rem 0.10rem;
+        width: 85%;
         .m-top-text {
           float: left;
-          line-height: 0.24rem;
-          padding-left: 0.1rem;
+          line-height: 0.27rem;
         }
         .m-top-input {
           float: left;
           width: 12%;
+          margin-right: 0.15rem;
         }
         .m-top-search-button {
           background: @btnActiveColor;
@@ -111,6 +112,7 @@
       }
     }
     .m-middle {
+      /*width: 1000px;*/
       .el-crud {
         font-size: 0.14rem;
         color: #000000;
