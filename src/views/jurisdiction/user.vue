@@ -17,13 +17,13 @@
 
       <div class="m-middle">
         <el-table :data="user" stripe style="width: 100%">
-          <el-table-column align="center" prop="userId" label="用户ID" width="120"></el-table-column>
-          <el-table-column align="center" prop="userName" label="用户名" width="120"></el-table-column>
-          <el-table-column align="center" prop="registerTime" label="注册时间" width="170"></el-table-column>
-          <el-table-column align="center" prop="email" label="E-mall" width="170"></el-table-column>
-          <el-table-column align="center" prop="group" label="用户组" width="120"></el-table-column>
-          <el-table-column align="center" prop="loginTime" label="最近登录" width="120"></el-table-column>
-          <el-table-column align="center" label="操作" min-width="120">
+          <el-table-column align="center" prop="userId" label="用户ID"></el-table-column>
+          <el-table-column align="center" prop="userName" label="用户名"></el-table-column>
+          <el-table-column align="center" prop="registerTime" label="注册时间" width="180"></el-table-column>
+          <el-table-column align="center" prop="email" label="E-mall" width="180"></el-table-column>
+          <el-table-column align="center" prop="group" label="用户组"></el-table-column>
+          <el-table-column align="center" prop="loginTime" label="最近登录"></el-table-column>
+          <el-table-column align="center" label="操作">
             <template slot-scope="scope">
               <el-dropdown size="mini" split-button>查看
                 <el-dropdown-menu slot="dropdown">
@@ -45,12 +45,16 @@
           </el-table-column>
         </el-table>
       </div>
+      <div class="m-bottom">
+        <pagination></pagination>
+      </div>
     </div>
   </div>
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
   import user from '../../common/json/userInfo'
+  import Pagination from "../../components/common/pages";
     export default {
         data() {
             return {
@@ -61,6 +65,7 @@
             }
         },
         components:{
+          Pagination,
           pageTitle
         },
         methods: {
@@ -112,11 +117,13 @@
       }
     }
     .m-middle {
-      /*width: 1000px;*/
       .el-crud {
         font-size: 0.14rem;
         color: #000000;
       }
+    }
+    .m-bottom {
+      margin: 0.2rem 0.4rem 0.3rem 0;
     }
   }
 </style>
