@@ -23,20 +23,26 @@
           <el-table-column prop="email" label="E-mall" width="180"></el-table-column>
           <el-table-column prop="group" label="用户组" width="130"></el-table-column>
           <el-table-column prop="loginTime" label="最近登录" width="150"></el-table-column>
-          <!--<el-table-column label="操作" width="130">-->
-            <!--<template slot-scope="scope">-->
-              <!--<el-dropdown size="mini" split-button type="primary" @click="openAdminForm(scope.row, 'query')">查看-->
-                <!--<el-dropdown-menu slot="dropdown">-->
-                  <!--<el-dropdown-item>-->
-                    <!--<el-button type="text" class="el-crud" @click="lockAdmin(scope.row)">封禁管理员</el-button>-->
-                  <!--</el-dropdown-item>-->
-                  <!--<el-dropdown-item>-->
-                    <!--<el-button type="text" class="el-crud" @click="openAdminForm(scope.row, 'edit')">编辑管理员信息</el-button>-->
-                  <!--</el-dropdown-item>-->
-                <!--</el-dropdown-menu>-->
-              <!--</el-dropdown>-->
-            <!--</template>-->
-          <!--</el-table-column>-->
+          <el-table-column label="操作" width="130">
+            <template slot-scope="scope">
+              <el-dropdown size="mini" split-button>查看
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>
+                    <el-button type="text" class="el-crud">编辑用户权限</el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button type="text" class="el-crud">发送密码重置邮件</el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button type="text" class="el-crud">发送邮箱验证邮件</el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button type="text" class="el-crud">封禁用户</el-button>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </div>
@@ -81,12 +87,12 @@
       .m-top-search {
         float: left;
         width: 90%;
-        padding-left: 10px;
-        margin-bottom: 15px;
+        padding-left: 0.1rem;
+        margin: -0.05rem 0.10rem;
         .m-top-text {
           float: left;
-          line-height: 24px;
-          padding-left: 10px;
+          line-height: 0.24rem;
+          padding-left: 0.1rem;
         }
         .m-top-input {
           float: left;
@@ -95,7 +101,7 @@
         .m-top-search-button {
           background: @btnActiveColor;
           color: @bgMainColor;
-          margin-left: 10px;
+          margin-left: 0.1rem;
         }
       }
       .m-top-button-button {
@@ -105,12 +111,9 @@
       }
     }
     .m-middle {
-      .el-table th {
-        background: red;
-        height: 35px;
-      }
-      .el-table td {
-        padding: 2px 0;
+      .el-crud {
+        font-size: 0.14rem;
+        color: #000000;
       }
     }
   }
