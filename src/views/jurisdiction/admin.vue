@@ -59,7 +59,7 @@
   export default {
     data() {
       return {
-        name: '管理员数据管理',
+        name: '管理员管理',
         inputID: '',
         inputName: '',
         admin: admin,
@@ -105,6 +105,7 @@
         .m-top-text {
           float: left;
           line-height: 0.27rem;
+          font-size: 0.14rem;
         }
         .m-top-input {
           float: left;
@@ -115,12 +116,14 @@
           background: @btnActiveColor;
           color: @bgMainColor;
           margin-left: 0.1rem;
+          font-size: .14rem;
         }
       }
       .m-top-button-button {
         background: @btnActiveColor;
         color: @bgMainColor;
         float: right;
+        font-size: .14rem;
       }
     }
     .m-middle {

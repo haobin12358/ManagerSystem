@@ -97,6 +97,7 @@
         width: 85%;
         .m-top-text {
           float: left;
+          font-size: 0.14rem;
           line-height: 0.27rem;
         }
         .m-top-input {
@@ -108,12 +109,14 @@
           background: @btnActiveColor;
           color: @bgMainColor;
           margin-left: 0.1rem;
+          font-size: 0.14rem;
         }
       }
       .m-top-button-button {
         background: @btnActiveColor;
         color: @bgMainColor;
         float: right;
+        font-size: 0.14rem;
       }
     }
     .m-middle {
