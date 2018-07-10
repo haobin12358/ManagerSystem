@@ -11,11 +11,13 @@
       共 {{pages}} 页
     </div>
     <div class="page-button">
+      <span @click="firstClick">首页</span>
       <el-pagination
         background
         layout="prev, pager, next"
         :total="1000">
       </el-pagination>
+      <span @click="lastClick">尾页</span>
     </div>
   </div>
 </template>
@@ -75,6 +77,12 @@
         this.user = user.slice(this.value*10-10, this.value*10)
         this.sendData()
       },
+      firstClick(){
+
+      },
+      lastClick(){
+
+      },
       setOptions() {
         for(var i=0;i<this.pages;i++) {
           this.options.push({
@@ -87,29 +95,39 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" rel="stylesheet/less" scoped>
+  @import "../../common/css/_variate.less";
   .page-total {
     float: left;
-    width: 115px;
+    width: 1.15rem;
     font-size: 14px;
     margin: 0 0 55px 30px;
   }
   .page-current {
     float: left;
-    width: 115px;
+    width: 1.15rem;
     font-size: 14px;
     margin: 0 0 55px 30px;
   }
   .page-pages {
     float: left;
-    width: 115px;
-    font-size: 14px;
+    width: 1.15rem;
+    font-size: 0.14rem;
     margin: 0 0 55px 0;
   }
   .page-button {
-    width: 400px;
+    width: 5rem;
     float: right;
     margin-top: -10px;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: flex-end;
+    span{
+      color: @sidebarChildColor;
+      cursor: pointer;
+      font-size: 0.14rem;
+    }
   }
   .firstPage {
     color: #000000;
@@ -125,6 +143,6 @@
   }
   .page-select {
     margin: 0 5px 0 5px;
-    width: 93px;
+    width: 0.93rem;
   }
 </style>
