@@ -125,7 +125,8 @@
                 <el-input v-model="addForm.againPassword" size="mini"></el-input>
               </el-form-item>
               <el-form-item label="状态：" :label-width="addFormWidth">
-                <el-input v-model="addForm.status" size="mini"></el-input>
+                <el-switch v-model="addForm.status" active-text="正常" inactive-text="失效">
+                </el-switch>
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.3rem">
@@ -171,7 +172,7 @@
           email: '',
           password: '',
           againPassword: '',
-          status: ''
+          status: true
         },
         formLabelWidth: '1.2rem',
         addFormWidth: '1rem',
