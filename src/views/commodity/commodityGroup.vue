@@ -25,23 +25,28 @@
           </el-table-column>
         </el-table>
       </div>
+      <div class="m-bottom">
+        <pagination></pagination>
+      </div>
     </div>
   </div>
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
-  import user from '../../common/json/userInfo'
+  import user from '../../common/json/userInfo';
+  import Pagination from "../../components/common/pages";
   export default {
     data() {
       return {
-        name: '用户数据管理',
+        name: '商品分组',
         inputID: '',
         inputName: '',
         user: user
       }
     },
     components:{
-      pageTitle
+      pageTitle,
+      Pagination
     },
     methods: {
       freshClick(){
@@ -113,9 +118,13 @@
   }
   .m-table-link{
     color: @sidebarChildColor;
+    cursor: pointer;
     &.m-table-edit{
       padding: 0 0.2rem;
       border-right: 1px solid @borderColor;
     }
+  }
+  .m-bottom {
+    margin: 0.2rem 0.4rem 0.3rem 0;
   }
 </style>
