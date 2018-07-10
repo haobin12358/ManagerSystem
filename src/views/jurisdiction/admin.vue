@@ -190,9 +190,6 @@
         console.log('用户ID：', this.inputID)
         console.log('用户名：', this.inputName)
       },
-      addAdmin() {
-        console.log('添加管理员')
-      },
       editAdmin(row) {
         this.editAdminVisible = true
         this.dialog = 'index'
