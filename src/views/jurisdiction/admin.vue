@@ -11,7 +11,7 @@
           <el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>
         </div>
         <div class="m-top-button">
-          <el-button class="m-top-button-button" size="mini" @click="addAdmin">添加用户</el-button>
+          <el-button class="m-top-button-button" size="mini" @click="addAdmin">添加管理员</el-button>
         </div>
       </div>
 
@@ -31,7 +31,7 @@
                     <el-button type="text" class="el-crud" @click="editAdmin(scope.row)">编辑管理员信息</el-button>
                   </el-dropdown-item>
                   <el-dropdown-item>
-                    <el-button type="text" class="el-crud">封禁管理员</el-button>
+                    <el-button type="text" class="el-crud" @click="lockAdmin(scope.row)">封禁管理员</el-button>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -39,18 +39,33 @@
           </el-table-column>
         </el-table>
         <el-dialog :title="editAdminTitle" :visible.sync="editAdminVisible" width="30%" show-close center>
-          <div class="edit-dialog">
-            <div class="change">
-              <img class="change-pictures" src="../../assets/images/changePicture.png"/>
-              <div>修改管理员头像</div>
+          <div v-if="dialog=='index'">
+            <div class="edit-dialog">
+              <div class="change" @click="dialog = 'changePicture'">
+                <img class="change-pictures" src="../../assets/images/changePicture.png"/>
+                <div>修改管理员头像</div>
+              </div>
+              <div class="change">
+                <img class="change-pictures" src="../../assets/images/changePw.png"/>
+                <div>修改管理员密码</div>
+              </div>
+              <div class="change">
+                <img class="change-pictures" src="../../assets/images/changGroup.png"/>
+                <div>设置管理员组</div>
+              </div>
             </div>
-            <div class="change">
-              <img class="change-pictures" src="../../assets/images/changePw.png"/>
-              <div>修改管理员密码</div>
-            </div>
-            <div class="change">
-              <img class="change-pictures" src="../../assets/images/changGroup.png"/>
-              <div>设置管理员组</div>
+          </div>
+          <div v-if="dialog=='changePicture'">
+            <div class="edit-dialog">
+              <el-upload
+                class="avatar-uploader"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload">
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
             </div>
           </div>
         </el-dialog>
@@ -73,7 +88,9 @@
         inputName: '',
         admin: admin,
         editAdminVisible: false,
-        editAdminTitle: ''
+        editAdminTitle: '',
+        dialog: '',
+        imageUrl: ''
       }
     },
     components:{
@@ -93,7 +110,41 @@
       },
       editAdmin(row) {
         this.editAdminVisible = true
+        this.dialog = 'index'
         this.editAdminTitle = row.id + ' 管理员数据管理'
+      },
+      lockAdmin(row) {
+        this.$confirm('确认封禁编号为 ' + row.id + ' 的管理员吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          // center: true
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '操作取消'
+          });
+        });
+      },
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
       }
     },
     created() {
@@ -141,6 +192,33 @@
         color: #000000;
       }
       .edit-dialog {
+        .avatar-uploader {
+          text-align: center;
+        }
+        .avatar-uploader .el-upload {
+          border-radius: 6px;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+        }
+        .avatar-uploader .el-upload:hover {
+          border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+          font-size: 0.18rem;
+          color: #8c939d;
+          width: 0.85rem;
+          height: 0.85rem;
+          line-height: 0.85rem;
+          text-align: center;
+        }
+        .avatar {
+          width: 0.85rem;
+          height: 0.85rem;
+          display: block;
+        }
+
+
         height: 1.2rem;
         .change {
           float: left;
