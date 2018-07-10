@@ -39,11 +39,20 @@
           </el-table-column>
         </el-table>
         <el-dialog :title="editAdminTitle" :visible.sync="editAdminVisible" width="30%" show-close center>
-          <span>这是一段信息</span>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="editAdminVisible = false">取 消</el-button>
-            <el-button type="primary" @click="editAdminVisible = false">确 定</el-button>
-          </span>
+          <div class="edit-dialog">
+            <div class="change">
+              <img class="change-pictures" src="../../assets/images/changePicture.png"/>
+              <div>修改管理员头像</div>
+            </div>
+            <div class="change">
+              <img class="change-pictures" src="../../assets/images/changePw.png"/>
+              <div>修改管理员密码</div>
+            </div>
+            <div class="change">
+              <img class="change-pictures" src="../../assets/images/changGroup.png"/>
+              <div>设置管理员组</div>
+            </div>
+          </div>
         </el-dialog>
       </div>
       <div class="m-bottom">
@@ -130,6 +139,18 @@
       .el-crud {
         font-size: 0.14rem;
         color: #000000;
+      }
+      .edit-dialog {
+        height: 1.2rem;
+        .change {
+          float: left;
+          margin-left: 0.2rem;
+          text-align: center;
+          .change-pictures {
+            width: 0.85rem;
+            height: 0.85rem;
+          }
+        }
       }
     }
     .m-bottom {
