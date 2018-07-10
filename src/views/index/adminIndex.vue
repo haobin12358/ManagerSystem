@@ -17,14 +17,18 @@
         </div>
       </div>
 
-      <div class="m-middle" style="width: 100%">
+      <div class="m-middle" style="width: 100%;margin-top: 0.2rem;">
         <el-table :data="user" stripe style="width: 100%">
           <el-table-column align="center" prop="userId" label="用户ID" ></el-table-column>
           <el-table-column align="center" prop="userName" label="用户名"></el-table-column>
           <el-table-column align="center" prop="registerTime" label="审批分类"  :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"></el-table-column>
           <el-table-column align="center" prop="email" label="时间" ></el-table-column>
           <el-table-column align="center" prop="group" label="用户组" ></el-table-column>
-          <el-table-column align="center" prop="loginTime" label="状态" :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"></el-table-column>
+          <el-table-column align="center" prop="loginTime" label="状态" :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]">
+            <template slot-scope="scope">
+              <span class="m-wait">已处理</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" label="操作" >
             <template slot-scope="scope">
               <el-button
@@ -75,12 +79,18 @@
     padding: 0.2rem;
     background: @bgMainColor;
     .m-top {
+      &:after{
+        content: '';
+        display: block;
+        clear: both;
+      }
       .m-top-search {
         margin: 0 0 0.1rem 0;
         float: left;
         .m-top-text {
           float: left;
           line-height: 0.27rem;
+          font-size: 0.14rem;
         }
         .m-top-input {
           float: left;
@@ -112,5 +122,21 @@
         color: #000000;
       }
     }
+  }
+  .m-table-button{
+    background-color: @sidebarChildColor;
+    color: #fff;
+    border-radius: 5px;
+    padding: 0.05rem 0.15rem;
+    &.m-cancel{
+      background-color: @btnColor;
+      color: @greyColor;
+    }
+  }
+  .m-deal{
+    color: @green;
+  }
+  .m-wait{
+    color: red;
   }
 </style>
