@@ -11,7 +11,7 @@
           <el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>
         </div>
         <div class="m-top-button">
-          <el-button class="m-top-button-button" size="mini" @click="addUser">添加用户</el-button>
+          <el-button class="m-top-button-button" size="mini" @click="addUserVisible=true">添加用户</el-button>
         </div>
       </div>
 
@@ -44,6 +44,28 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-dialog title="添加用户" :visible.sync="addUserVisible" width="30%" center>
+          <div class="add-dialog">
+            <el-form :model="addForm">
+              <el-form-item label="用户名：" :label-width="addFormWidth">
+                <el-input v-model="addForm.userName" size="mini"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱：" :label-width="addFormWidth">
+                <el-input v-model="addForm.email" size="mini"></el-input>
+              </el-form-item>
+              <el-form-item label="密码：" :label-width="addFormWidth">
+                <el-input v-model="addForm.password" size="mini"></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码：" :label-width="addFormWidth">
+                <el-input v-model="addForm.againPassword" size="mini"></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.2rem">
+              <el-button @click="addUserVisible=false" size="mini">取 消</el-button>
+              <el-button type="primary" @click="addUserVisible=false" size="mini">确 定</el-button>
+            </div>
+          </div>
+        </el-dialog>
       </div>
       <div class="m-bottom">
         <pagination></pagination>
@@ -61,7 +83,15 @@
               name: '用户数据管理',
               inputID: '',
               inputName: '',
-              user: user
+              user: user,
+              addUserVisible: false,
+              addForm: {
+                userName: '',
+                email: '',
+                password: '',
+                againPassword: '',
+              },
+              addFormWidth: '1rem'
             }
         },
         components:{
@@ -81,7 +111,7 @@
           }
         },
         created() {
-          console.log(user)
+          // console.log(user)
         }
     }
 </script>
@@ -123,6 +153,11 @@
       .el-crud {
         font-size: 0.14rem;
         color: #000000;
+      }
+      .add-dialog {
+        .el-form-item {
+          margin-bottom: 0;
+        }
       }
     }
     .m-bottom {

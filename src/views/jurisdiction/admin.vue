@@ -11,7 +11,7 @@
           <el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>
         </div>
         <div class="m-top-button">
-          <el-button class="m-top-button-button" size="mini" @click="addAdmin">添加管理员</el-button>
+          <el-button class="m-top-button-button" size="mini" @click="addAdminVisible=true">添加管理员</el-button>
         </div>
       </div>
 
@@ -40,32 +40,97 @@
         </el-table>
         <el-dialog :title="editAdminTitle" :visible.sync="editAdminVisible" width="30%" show-close center>
           <div v-if="dialog=='index'">
-            <div class="edit-dialog">
-              <div class="change" @click="dialog = 'changePicture'">
+            <div class="edit-dialog" style="margin-top: 0.25rem">
+              <div class="change" @click="dialog='changePicture'">
                 <img class="change-pictures" src="../../assets/images/changePicture.png"/>
                 <div>修改管理员头像</div>
               </div>
-              <div class="change">
+              <div class="change" @click="dialog='changePw'">
                 <img class="change-pictures" src="../../assets/images/changePw.png"/>
                 <div>修改管理员密码</div>
               </div>
-              <div class="change">
+              <div class="change" @click="dialog='changeGroup'">
                 <img class="change-pictures" src="../../assets/images/changGroup.png"/>
                 <div>设置管理员组</div>
               </div>
             </div>
           </div>
           <div v-if="dialog=='changePicture'">
-            <div class="edit-dialog">
-              <el-upload
-                class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload">
+            <div class="edit-dialog" style="margin-top: 0.25rem">
+              <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
+                :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                 <img v-if="imageUrl" :src="imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
+              <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.3rem">
+                <el-button @click="dialog='index'">取 消</el-button>
+                <el-button type="primary" @click="dialog='index'">确 定</el-button>
+              </div>
+            </div>
+          </div>
+          <div v-if="dialog=='changePw'">
+            <div class="edit-dialog">
+              <el-form :model="form">
+                <el-form-item label="请输入旧密码：" :label-width="formLabelWidth">
+                  <el-input v-model="form.oldPw" auto-complete="off" type="password" size="mini"></el-input>
+                </el-form-item>
+                <el-form-item label="请输入新密码：" :label-width="formLabelWidth">
+                  <el-input v-model="form.newPw" auto-complete="off" type="password" size="mini"></el-input>
+                </el-form-item>
+                <el-form-item label="请确认新密码：" :label-width="formLabelWidth">
+                  <el-input v-model="form.againNewPw" auto-complete="off" type="password" size="mini"></el-input>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.1rem">
+                <el-button @click="dialog='index'" size="mini">取 消</el-button>
+                <el-button type="primary" @click="changePwDone" size="mini">确 定</el-button>
+              </div>
+            </div>
+          </div>
+          <div v-if="dialog=='changeGroup'">
+            <div class="edit-dialog" style="margin-top: 0.25rem">
+              <el-form :model="groupForm">
+                <el-form-item label="活动区域" :label-width="formLabelWidth">
+                  <el-select v-model="groupForm.group" placeholder="请选择分组">
+                    <el-option label="管理员分组1" value="1"></el-option>
+                    <el-option label="管理员分组2" value="2"></el-option>
+                    <el-option label="管理员分组3" value="3"></el-option>
+                    <el-option label="管理员分组4" value="4"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.6rem">
+                <el-button @click="dialog='index'">取 消</el-button>
+                <el-button type="primary" @click="dialog='index'">确 定</el-button>
+              </div>
+            </div>
+          </div>
+        </el-dialog>
+        <el-dialog title="添加管理员" :visible.sync="addAdminVisible" width="30%" center>
+          <div class="add-dialog">
+            <el-form :model="addForm">
+              <el-form-item label="用户名：" :label-width="addFormWidth">
+                <el-input v-model="addForm.userName" size="mini"></el-input>
+              </el-form-item>
+              <el-form-item label="昵称：" :label-width="addFormWidth">
+                <el-input v-model="addForm.nickName" size="mini"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱：" :label-width="addFormWidth">
+                <el-input v-model="addForm.email" size="mini"></el-input>
+              </el-form-item>
+              <el-form-item label="密码：" :label-width="addFormWidth">
+                <el-input v-model="addForm.password" size="mini"></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码：" :label-width="addFormWidth">
+                <el-input v-model="addForm.againPassword" size="mini"></el-input>
+              </el-form-item>
+              <el-form-item label="状态：" :label-width="addFormWidth">
+                <el-input v-model="addForm.status" size="mini"></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.3rem">
+              <el-button @click="addAdminVisible=false" size="mini">取 消</el-button>
+              <el-button type="primary" @click="addAdminVisible=false" size="mini">确 定</el-button>
             </div>
           </div>
         </el-dialog>
@@ -88,9 +153,28 @@
         inputName: '',
         admin: admin,
         editAdminVisible: false,
+        addAdminVisible: false,
         editAdminTitle: '',
         dialog: '',
-        imageUrl: ''
+        imageUrl: '',
+        form: {
+          oldPw: '',
+          newPw: '',
+          againNewPw: '',
+        },
+        groupForm: {
+          group: ''
+        },
+        addForm: {
+          userName: '',
+          nickName: '',
+          email: '',
+          password: '',
+          againPassword: '',
+          status: ''
+        },
+        formLabelWidth: '1.2rem',
+        addFormWidth: '1rem',
       }
     },
     components:{
@@ -106,7 +190,7 @@
         console.log('用户名：', this.inputName)
       },
       addAdmin() {
-        console.log('添加用户')
+        console.log('添加管理员')
       },
       editAdmin(row) {
         this.editAdminVisible = true
@@ -131,6 +215,7 @@
           });
         });
       },
+      // 更改用户头像
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
       },
@@ -145,10 +230,20 @@
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
         return isJPG && isLt2M;
+      },
+      changePwDone() {
+        console.log('oldPw:', this.form.oldPw)
+        console.log('newPw:', this.form.newPw)
+        console.log('againNewPw:', this.form.againNewPw)
+        if(this.form.againNewPw != this.form.newPw) {
+          this.$message.error('两次密码输入不一致！')
+        }else {
+          this.dialog = 'index'
+        }
+      },
+      created() {
+        // console.log(admin)
       }
-    },
-    created() {
-      // console.log(admin)
     }
   }
 </script>
@@ -192,6 +287,10 @@
         color: #000000;
       }
       .edit-dialog {
+        .el-form-item {
+          margin-bottom: 0;
+        }
+        // 更改用户头像
         .avatar-uploader {
           text-align: center;
         }
@@ -219,7 +318,7 @@
         }
 
 
-        height: 1.2rem;
+        height: 1.6rem;
         .change {
           float: left;
           margin-left: 0.2rem;
@@ -228,6 +327,11 @@
             width: 0.85rem;
             height: 0.85rem;
           }
+        }
+      }
+      .add-dialog {
+        .el-form-item {
+          margin-bottom: 0;
         }
       }
     }
