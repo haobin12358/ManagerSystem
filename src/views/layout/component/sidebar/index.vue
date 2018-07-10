@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link to="/index/userIndex" key="user">
+    <router-link to="/index/adminIndex" key="user">
         <h3 class="m-system-name">后台管理系统 </h3>
     </router-link>
     <el-menu  class="el-menu-vertical-demo m-sidebar"
