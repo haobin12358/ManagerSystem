@@ -4,7 +4,7 @@ body, h1, h2, h3, h4, h5, h6, dl, dt, dd, ul, ol, li, th, td, p, blockquote, pre
 }
 
 body, button, input, select, textarea {
-  font: 0.16rem "微软雅黑", SimHei, verdana, sans-serif
+  font: 0.14rem "微软雅黑", SimHei, verdana, sans-serif
 }
 
 h1, h2, h3, h4, h5, h6 {
