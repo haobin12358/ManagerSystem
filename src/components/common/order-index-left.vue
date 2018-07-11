@@ -38,11 +38,12 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/_variate.less";
   .order-index-left {
-    background-color: @sectionBgColor;
-    padding: 0.3rem 0 0.25rem 0;
     width: 20%;
+    float: left;
     height: 2rem;
     border-radius: 0.1rem;
+    padding: 0.3rem 0 0.25rem 0;
+    background-color: @sectionBgColor;
     .order-box {
       .order-text {
         text-align: center;

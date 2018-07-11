@@ -6,11 +6,11 @@
         <el-tab-pane label="昨日" name="one">
           <order-index-top ref="one" :days="days"></order-index-top>
           <order-index-left ref="leftOne" :leftDays="leftDays"></order-index-left>
-          <!--<my-echarts></my-echarts>-->
         </el-tab-pane>
         <el-tab-pane label="七日" name="seven">
           <order-index-top ref="seven" :days="days"></order-index-top>
           <order-index-left ref="leftSeven" :leftDays="leftDays"></order-index-left>
+          <my-echarts class="seven-echarts" :id="echartsId" :option="option" :width="600" :height="230"></my-echarts>
         </el-tab-pane>
         <el-tab-pane label="月度" name="thirty">
           <order-index-top ref="thirty" :days="days"></order-index-top>
@@ -31,7 +31,47 @@
         name: '订单概况',
         activeName: 'seven',
         days: '本周',
-        leftDays: '上周'
+        leftDays: '上周',
+        echartsId: 'myEcharts',
+        option: {
+          title: {
+            text: '上周数据'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data:['下单笔数','付款笔数']
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一','周二','周三','周四','周五','周六','周日']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              name:'下单笔数',
+              type:'line',
+              stack: '总量',
+              data:[150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+              name:'付款笔数',
+              type:'line',
+              stack: '总量',
+              data:[820, 932, 901, 934, 1290, 1330, 1320]
+            }
+          ]
+        }
       }
     },
     components:{
@@ -75,6 +115,10 @@
   .m-content {
     padding: 0.2rem;
     background-color: @bgMainColor;
+    .seven-echarts {
+      width: 7rem;
+      float: right;
+    }
   }
 </style>
 
