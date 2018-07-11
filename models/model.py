@@ -56,7 +56,15 @@ class Stocks(Base):
     STid = Column(String(64), primary_key=True)
     STname = Column(Text)
     STamount = Column(Integer, default=0)
+    STabo = Column(Text)
+
+
+class StocksProducts(Base):
+    __tablename__ = "StocksProducts"
+    SPid = Column(String(64))
+    STid = Column(String(64))
     PBid = Column(String(64))
+    PBnumber = Column(Integer)
 
 
 # 订单
@@ -117,7 +125,7 @@ class Manager(Base):
     MAemail = Column(Text)                            # 管理员邮箱
     MAidentity = Column(Integer, nullable=False)      # 管理员身份
     # {100: 超级管理员, 101: 管理员, 102: 一级分销商, 103: 二级分销商, 104: 三级分销商, 105: 卖家}
-    MApassword = Column(String, nullable=False)       # 管理员密码
+    MApassword = Column(String(64), nullable=False)       # 管理员密码
     MAstatus = Column(Integer, nullable=False)        # 账号状态 {151: 可用，152: 禁用, 153: 未激活}
     MAcreatTime = Column(String(14), nullable=False)  # 账号创建时间
     MAendTime = Column(String(14))                    # 账号到期时间
@@ -140,6 +148,7 @@ class Permission(Base):
 
 
 class Menu(Base):
+    __tablename__ = "Menu"
     MNid = Column(String(64), primary_key=True)
     MNname = Column(String(66))    # 菜单名称
     MNparent = Column(String(64))  # 父菜单节点id，根节点为0
@@ -169,8 +178,8 @@ class ManagerElement(Base):
 class Approval(Base):
     __tablename__ = "Approval"
     APid = Column(String(64), primary_key=True)
-    APname = Column(String(Text))    # 审批名称
-    APremark = Column(String(Text))  # 审批备注
+    APname = Column(Text)    # 审批名称
+    APremark = Column(Text)  # 审批备注
     APstart = Column(String(64))     # 发起人id
     APreceive = Column(String(64))   # 当前审批人id
     APstatus = Column(Integer)       # 审批状态

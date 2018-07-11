@@ -6,22 +6,21 @@ sys.path.append(os.path.dirname(os.getcwd()))
 from flask import request
 import json
 from service.SManager import SManager
-from common.MakeToken import  usid_to_token, token_to_usid
-from common.LogManager import LOG
+from common.MakeToken import usid_to_token, token_to_usid
+from globals import log
 from common.TimeManagert import TimeManager
 from common.ImportManager import get_response
 from config.response import SYSTEM_ERROR, PARAMS_MISS
-from config.conversion import conversion_MAidentity_reverse, conversion_MAidentity
-
+from config.conversion import conversion_MAidentity_reverse, conversion_MAidentity,\
+    conversion_MAstatus, conversion_MAstatus_resverse
+from common.ResultManager import todict
 
 class CManager():
     def __init__(self):
         self.smanager = SManager()
-        self.title = "=========={0}==========="
-
     def apply_manager(self):
         data = json.loads(request.data)
-        LOG.info("data", data)
+        log.info("data", data)
         param_keys = ["MAtelphone"]
         for params in param_keys:
             if params not in data:
@@ -37,7 +36,7 @@ class CManager():
             if key in data:
                 manager[key] = data.get(key)
         import uuid
-        MAid = uuid.uuid1()
+        MAid = str(uuid.uuid1())
         manager["MAid"] = MAid
         maname = "商家{0}".format(data.get("MAtelphone")) if not data.get("MAname") else data.get("MAname")
         manager["MAname"] = maname
@@ -48,11 +47,12 @@ class CManager():
         manager["MAidentity"] = conversion_MAidentity_reverse.get(data.get("MAidentity", "卖家"))
         manager["MAcreatTime"] = TimeManager.get_db_time_str()
         manager["MAendTime"] = TimeManager.get_db_time_str(data.get("MAendTime"))
+        manager["MAstatus"] = conversion_MAstatus_resverse.get(data.get("MAstatus", "可用"))
 
         try:
             self.smanager.add_model("Manager", **manager)
         except Exception as e:
-            LOG.error("add manager error", e.message)
+            log.error("add manager error", e.message)
             return SYSTEM_ERROR
         response = get_response("SUCCESS_MESSAGE_REGISTER", "OK")
         response["data"] = {
@@ -65,10 +65,10 @@ class CManager():
         args = request.args.to_dict()
         if "token" not in args:
             return PARAMS_MISS
-        LOG.info("args", args)
+        log.info("args", args)
         maid = token_to_usid(args.get("token"))
         data = json.loads(request.data)
-        LOG.info("data", data)
+        log.info("data", data)
         params_key = ["MApasswordNew", "MApasswordRepeat", "MApasswordOld"]
         for key in params_key:
             if key not in data:
@@ -81,25 +81,25 @@ class CManager():
             return get_response("ERROR_MESSAGE_WRONG_PARAMS", "MANAGERSYSTEMERROR", "ERROR_CODE_WRONG_PARAMS")
         try:
             password = self.smanager.get_manager_by_maid(maid).MApassword
-            LOG.info("password", password)
+            log.info("password", password)
             if password != old_pwd:
                 return get_response("ERROR_MESSAGE_WRONG_PASSWORD", "MANAGERSYSTEMERROR", "ERROR_WRONG_PASSWORD")
         except Exception as e:
-            LOG.error("DBERROR", e.message)
+            log.error("DBERROR", e.message)
             return SYSTEM_ERROR
 
         try:
             result = self.smanager.update_manager(maid, {"MApassword": new_pwd})
-            LOG.info("update result", result)
+            log.info("update result", result)
             if result == 1 :
                 return get_response("SUCCESS_MESSAGE_UPDATE_PASSWORD", "OK")
         except Exception as e:
-            LOG.error("DBERROR", e.message)
+            log.error("UPDATEERROR", e.message)
         return SYSTEM_ERROR
 
     def login(self):
         data = json.loads(request.data)
-        LOG.info("data", data)
+        log.info("data", data)
         param_keys = ["MAname", "MApassword"]
         for key in param_keys:
             if key not in data:
@@ -119,6 +119,46 @@ class CManager():
             response["data"] = {"token": usid_to_token(maid)}
             return response
         except Exception as e:
-            LOG.error("DBERROR", e.message)
+            log.error("LOGINERROR", e.message)
             return SYSTEM_ERROR
 
+    def update_manager(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        if "token" not in args:
+            return PARAMS_MISS
+        data = json.loads(request.data)
+        log.info("data", data)
+
+        if "MAidentity" not in data or "MAstatus" not in data:
+            return PARAMS_MISS
+        manager = {
+            "MAcreatTime": TimeManager.get_db_time_str()
+        }
+        if "MAidentity" in data:
+            manager["MAidentity"] = conversion_MAidentity_reverse.get(data.get("MAidentity", "卖家"))
+        if "MAstatus" in data:
+            manager["MAstatus"] = conversion_MAstatus_resverse.get(data.get("MAstatus"), "可用")
+
+        maid = token_to_usid(args.get("token"))
+        try:
+            self.smanager.update_manager(maid, manager)
+            return get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
+        except Exception as e:
+            log.error("UPDATEERROR", e.message)
+            return SYSTEM_ERROR
+
+    def get_manager(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        if "token" not in args:
+            return PARAMS_MISS
+        maid = token_to_usid(args.get("token"))
+        try:
+            manager = todict(self.smanager.get_manager_by_maid(maid))
+            manager["MAstatus"] = conversion_MAstatus.get(manager.get("MAstatus"))
+            manager["MAidentity"] = conversion_MAidentity.get(manager.get("MAidentity"))
+            return manager
+        except Exception as e:
+            log.error("ERROR", e.message)
+            return SYSTEM_ERROR

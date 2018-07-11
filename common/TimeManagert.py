@@ -12,10 +12,12 @@ re_fomat_for_web = r"^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$"
 fomat_forweb_no_second = '%Y-%m-%d %H:%M'
 format_forweb_no_HMS = "%Y-%m-%d"
 
+
 class TimeManager(object):
     def __new__(cls, *args, **kwargs):
         if not hasattr(cls, '_instance'):
             cls._instance = super(TimeManager, cls).__new__(cls, *args, **kwargs)
+
     def __init__(self):
         pass
 

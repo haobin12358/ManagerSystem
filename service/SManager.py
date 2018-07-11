@@ -17,7 +17,7 @@ class SManager(SBase):
     @close_session
     def get_manager_by_maid(self, maid):
         return self.session.query(
-            Manager.MAid, Manager.MAname, Manager.MAbusinessLicense, Manager.MAcreatTime,
+            Manager.MAname, Manager.MAbusinessLicense, Manager.MAcreatTime,
             Manager.MAcredit, Manager.MAemail, Manager.MAendTime, Manager.MAidentity,
             Manager.MAidImageFront, Manager.MAidImageReverse, Manager.MAidNumber,
             Manager.MApassword, Manager.MAstatus, Manager.MAtelphone

@@ -6,12 +6,16 @@ conversion_OMstatus = {0: "已取消", 7: "未支付", 14: "已支付", 21: "已
                        28: "配送中", 35: "已装箱", 42: "已完成", 49: "已评价"}
 conversion_COtype = {801: "满减", 802: "满折", 803: "商品类目限制", 804: "无限制", 805: "用户类型限制"}
 conversion_MAidentity =  {100: "超级管理员", 101: "管理员", 102: "一级分销商", 103: "二级分销商", 104: "三级分销商", 105: "卖家"}
+conversion_MAstatus = {151: "可用",152: "禁用", 153: "未激活"}
+
 # value 和 key 转置的dict
 conversion_OMstatus_reverse = {v: k for k, v in conversion_OMstatus.items()}
 conversion_PBunit_reverse = {v: k for k, v in conversion_PBunit.items()}
 conversion_PRtype_reverse = {v: k for k, v in conversion_PRtype.items()}
 conversion_PRbrand_reverse = {v: k for k, v in conversion_PRbrand.items()}
-conversion_MAidentity_reverse = {{v: k for k, v in conversion_MAidentity.items()}}
+conversion_MAidentity_reverse = {v: k for k, v in conversion_MAidentity.items()}
+conversion_MAstatus_resverse = {v: k for k, v in conversion_MAstatus.items()}
+
 
 MTR = 1 / 6.3753
 RTM = 1 / 0.1569
