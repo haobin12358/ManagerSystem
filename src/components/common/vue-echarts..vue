@@ -36,8 +36,7 @@
     },
     watch:{
       'option':function (val,oldVal) {
-        console.log('oldVal', oldVal)
-        console.log('val', val)
+
       }
     }
   }

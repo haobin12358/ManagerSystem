@@ -6,6 +6,7 @@
         <el-tab-pane label="昨日" name="one">
           <order-index-top ref="one" :days="days"></order-index-top>
           <order-index-left ref="leftOne" :leftDays="leftDays"></order-index-left>
+          <!--<my-echarts></my-echarts>-->
         </el-tab-pane>
         <el-tab-pane label="七日" name="seven">
           <order-index-top ref="seven" :days="days"></order-index-top>
@@ -23,6 +24,7 @@
   import pageTitle from '../../components/common/title';
   import orderIndexTop from "../../components/common/order-index-top";
   import orderIndexLeft from "../../components/common/order-index-left";
+  import myEcharts from "../../components/common/vue-echarts."
   export default {
     data() {
       return {
@@ -35,7 +37,8 @@
     components:{
       'orderIndexTop': orderIndexTop,
       'orderIndexLeft': orderIndexLeft,
-      'pageTitle': pageTitle
+      'pageTitle': pageTitle,
+      'myEcharts': myEcharts
     },
     methods: {
       freshClick(){
