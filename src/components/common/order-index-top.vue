@@ -1,26 +1,27 @@
 <template>
   <div class="order-index-top">
-    <div class="order-one">
+    <div class="order-box">
       <div class="order-text">{{days}}下单笔数</div>
       <div class="order-number">{{orderNumber}}</div>
     </div>
-    <div class="order-two">
+    <div class="order-box">
       <div class="order-text">待付款</div>
       <div class="order-number">{{toPay}}</div>
     </div>
-    <div class="order-three">
+    <div class="order-box">
       <div class="order-text">待发货</div>
       <div class="order-number">{{toSend}}</div>
     </div>
-    <div class="order-four">
+    <div class="order-box">
       <div class="order-text">{{days}}收入</div>
-      <div class="order-number-red">￥{{income}}</div>
+      <div class="order-number number-red">￥{{income}}</div>
     </div>
   </div>
 </template>
 
 <script>
   import orderIndex from '../../common/json/orderIndex'
+  import orderIndexTop from "../../components/common/order-index-top";
     export default {
       props: ["days"],
       name: "order-index-top",
@@ -32,25 +33,44 @@
           income: ''
         }
       },
+      components: {
+        'orderIndexTop': orderIndexTop
+      },
       methods: {
         changeData(i) {
-          console.log(i)
-        }
-      },
-      created() {
-        console.log(this.days)
-        if(this.days == 'first') {
-          this.changeData(1)
-        }else if(this.days == 'second') {
-          this.changeData(2)
-        }else if(this.days == 'third') {
-          this.changeData(3)
+          console.log(orderIndex[i].orderNumber);
+          this.orderNumber = orderIndex[i].orderNumber;
+          this.toPay = orderIndex[i].toPay;
+          this.toSend = orderIndex[i].toSend;
+          this.income = orderIndex[i].income;
         }
       }
     }
 
 </script>
 
-<style scoped>
-
+<style lang="less" rel="stylesheet/less" scoped>
+  @import "../../common/css/_variate.less";
+  .order-index-top {
+    background-color: @sectionBgColor;
+    padding: 0.2rem 0 0.25rem 0;
+    width: 100%;
+    height: 0.7rem;
+    .order-box {
+      float: left;
+      margin-left: 1.5rem;
+      .order-text {
+        text-align: center;
+      }
+      .order-number {
+        color: @mainColor;
+        text-align: center;
+        margin-top: 0.2rem;
+        font-size: 0.3rem;
+      }
+      .number-red {
+        color: @red;
+      }
+    }
+  }
 </style>

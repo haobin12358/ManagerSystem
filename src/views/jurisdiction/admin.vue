@@ -179,21 +179,21 @@
       }
     },
     components:{
-      Pagination,
-      pageTitle
+      'Pagination': Pagination,
+      'pageTitle': pageTitle
     },
     methods: {
       freshClick(){
         console.log('fresh');
       },
       topSearch() {
-        console.log('用户ID：', this.inputID)
-        console.log('用户名：', this.inputName)
+        console.log('用户ID：', this.inputID);
+        console.log('用户名：', this.inputName);
       },
       editAdmin(row) {
-        this.editAdminVisible = true
-        this.dialog = 'index'
-        this.editAdminTitle = row.id + ' 管理员数据管理'
+        this.editAdminVisible = true;
+        this.dialog = 'index';
+        this.editAdminTitle = row.id + ' 管理员数据管理';
       },
       lockAdmin(row) {
         this.$confirm('确认封禁编号为 ' + row.id + ' 的管理员吗？', '提示', {
@@ -230,17 +230,17 @@
         return isJPG && isLt2M;
       },
       changePwDone() {
-        console.log('oldPw:', this.form.oldPw)
-        console.log('newPw:', this.form.newPw)
-        console.log('againNewPw:', this.form.againNewPw)
+        console.log('oldPw:', this.form.oldPw);
+        console.log('newPw:', this.form.newPw);
+        console.log('againNewPw:', this.form.againNewPw);
         if(this.form.againNewPw != this.form.newPw) {
-          this.$message.error('两次密码输入不一致！')
+          this.$message.error('两次密码输入不一致！');
         }else {
-          this.dialog = 'index'
+          this.dialog = 'index';
         }
       },
       created() {
-        // console.log(admin)
+        // console.log(admin);
       }
     }
   }
@@ -249,7 +249,7 @@
   @import "../../common/css/_variate.less";
   .m-content {
     padding: 0.2rem;
-    background: @bgMainColor;
+    background-color: @bgMainColor;
     .m-top {
       .m-top-search {
         margin: 0 0 0.1rem 0;
@@ -266,14 +266,14 @@
           margin-right: 0.15rem;
         }
         .m-top-search-button {
-          background: @btnActiveColor;
+          background-color: @btnActiveColor;
           color: @bgMainColor;
           margin-left: 0.1rem;
           font-size: .14rem;
         }
       }
       .m-top-button-button {
-        background: @btnActiveColor;
+        background-color: @btnActiveColor;
         color: @bgMainColor;
         float: right;
         font-size: .14rem;
