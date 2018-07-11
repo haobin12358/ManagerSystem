@@ -43,7 +43,7 @@
         <el-button class="search-button" size="mini">批量导出</el-button>
       </div>
     </div>
-    <!--<div>
+    <div class="all-order-content">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="全部" name="one">全部</el-tab-pane>
         <el-tab-pane label="待付款" name="two">待付款</el-tab-pane>
@@ -53,7 +53,7 @@
         <el-tab-pane label="已关闭" name="six">已关闭</el-tab-pane>
         <el-tab-pane label="退款中" name="seven">退款中</el-tab-pane>
       </el-tabs>
-    </div>-->
+    </div>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -94,12 +94,24 @@
       background-color: @borderColor;
       .search-buttons {
         float: right;
-        margin-right: 1rem;
+        margin-right: 1.1rem;
         .search-button {
           background-color: @btnActiveColor;
           color: @bgMainColor;
           font-size: 0.14rem;
         }
+        .el-button:active {
+          color: @sectionBgColor;
+          border-color: @sectionBgColor;
+          outline: 0;
+        }
+      }
+    }
+    .all-order-content {
+      width: 100%;
+      float: left;
+      .el-tabs {
+        padding: 0.2rem;
       }
     }
   }
