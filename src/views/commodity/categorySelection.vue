@@ -103,9 +103,7 @@
               </div>
             </div>
           </el-form-item>
-
         </div>
-
         <div class="m-goodsImported-foot">
           <router-link to="/commodity/goodsImported">
           <span class="m-foot-btn">下一步</span>
