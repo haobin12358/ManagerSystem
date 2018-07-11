@@ -95,23 +95,23 @@
             }
         },
         components:{
-          Pagination,
-          pageTitle
+          'Pagination': Pagination,
+          'pageTitle': pageTitle
         },
         methods: {
           freshClick(){
             console.log('fresh');
           },
           topSearch() {
-            console.log('用户ID：', this.inputID)
-            console.log('用户名：', this.inputName)
+            console.log('用户ID：', this.inputID);
+            console.log('用户名：', this.inputName);
           },
           addUser() {
-            console.log('添加用户')
+            console.log('添加用户');
           }
         },
         created() {
-          // console.log(user)
+          // console.log(user);
         }
     }
 </script>
@@ -119,7 +119,7 @@
   @import "../../common/css/_variate.less";
   .m-content {
     padding: 0.2rem;
-    background: @bgMainColor;
+    background-color: @bgMainColor;
     .m-top {
       .m-top-search {
         margin: 0 0 0.1rem 0;
@@ -136,14 +136,14 @@
           margin-right: 0.15rem;
         }
         .m-top-search-button {
-          background: @btnActiveColor;
+          background-color: @btnActiveColor;
           color: @bgMainColor;
           margin-left: 0.1rem;
           font-size: 0.14rem;
         }
       }
       .m-top-button-button {
-        background: @btnActiveColor;
+        background-color: @btnActiveColor;
         color: @bgMainColor;
         float: right;
         font-size: 0.14rem;
