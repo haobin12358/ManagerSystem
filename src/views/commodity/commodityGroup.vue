@@ -20,7 +20,7 @@
           <el-table-column align="center" label="操作" >
             <template slot-scope="scope">
               <span class="m-table-edit m-table-link">编辑</span>
-              <span class=" m-table-link">编辑</span>
+              <span class=" m-table-link">推广</span>
             </template>
           </el-table-column>
         </el-table>
