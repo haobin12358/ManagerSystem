@@ -23,3 +23,15 @@ class AStocks(Resource):
             return eval(action.get(stock))
 
         return APIS_WRONG
+
+    def post(self, stock):
+        log.info("get api", stock)
+        action = {
+            "add_stock": "self.cstocks.add_stock()",
+            "add_stock_product": "self.cstocks.add_stock_product()",
+            "update_stock": "self.cstocks.update_stock()",
+            "update_stock_product": "self.cstocks.update_stock_product()"
+        }
+        if stock in action:
+            return eval(action.get(stock))
+        return APIS_WRONG

@@ -61,7 +61,7 @@ class Stocks(Base):
 
 class StocksProducts(Base):
     __tablename__ = "StocksProducts"
-    SPid = Column(String(64))
+    SPid = Column(String(64), primary_key=True)
     STid = Column(String(64))
     PBid = Column(String(64))
     PBnumber = Column(Integer)

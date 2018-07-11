@@ -1,10 +1,12 @@
 # *- coding:utf-8 *-
 import sys
+import json
+import uuid
 import os
 
 sys.path.append(os.path.dirname(os.getcwd()))
 from flask import request
-import json
+
 from service.SStocks import SStocks
 from service.SProducts import SProducts
 from common.MakeToken import token_to_usid
@@ -20,8 +22,6 @@ class CStocks():
         self.sproduct = SProducts()
         self.stock_key_list = ["STname", "STamount", "STabo"]
         self.stock_product_key_list = ["STid", "PBid", "PBnumber"]
-
-
 
     def get_stock_all(self):
         args = request.args.to_dict()
@@ -95,10 +95,12 @@ class CStocks():
 
         if "STname" not in data:
             return PARAMS_MISS
-        stock = {}
+        stock = {"STid": str(uuid.uuid1())}
         for key in self.stock_key_list:
             if key in data:
                 stock[key] = data.get(key)
+
+
         try:
             self.sstocks.add_model("Stocks", **stock)
         except Exception as e:
@@ -113,7 +115,7 @@ class CStocks():
             return PARAMS_MISS
         data = json.loads(request.data)
         log.info("data", data)
-        sp = {}
+        sp = {"SPid": str(uuid.uuid1())}
         for key in self.stock_product_key_list:
             if key not in data:
                 return PARAMS_MISS
@@ -154,6 +156,10 @@ class CStocks():
         if "token" not in args:
             return PARAMS_MISS
         data = json.loads(request.data)
+        log.info("data", data)
+        if "SPid" not in data:
+            return PARAMS_MISS
+        spid = data.get("SPid")
         sp = {}
         for key in self.stock_product_key_list:
             if key not in data:
@@ -161,7 +167,8 @@ class CStocks():
             sp[key] = data.get(key)
 
         try:
-            update_result = self.sstocks.update_stock("StocksProducts", **sp)
+            log.info("sp", sp)
+            update_result = self.sstocks.update_stock_product(spid, sp)
             log.info("update result", update_result)
             if not update_result:
                  return get_response("ERROR_MESSAGE_DB_ERROR", "MANAGERSYSTEMERROR", "ERROR_CODE_DB_ERROR")

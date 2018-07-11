@@ -24,4 +24,4 @@ class SStocks(SBase):
 
     @close_session
     def update_stock_product(self, spid, sp):
-        return self.session.query(StocksProducts).filter(StocksProducts.SPid == spid).update(sp)
+        return self.session.query(StocksProducts).filter_by(SPid=spid).update(sp)
