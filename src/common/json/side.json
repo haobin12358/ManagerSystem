@@ -29,7 +29,7 @@
         },
         {
           "name":"商品发布",
-          "url":"goodsImported",
+          "url":"categorySelection",
           "icon":"none"
         },
         {
