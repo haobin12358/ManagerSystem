@@ -78,6 +78,11 @@ export const constantRouterMap = [
       name: 'commodityGroup',
       meta: {title: 'commodityGroup', icon: 'commodityGroup', noCache: true}
     }, {
+      path: 'categorySelection',
+      component: () => import('../views/commodity/categorySelection'),
+      name: 'categorySelection',
+      meta: {title: 'categorySelection', icon: 'categorySelection', noCache: true}
+    }, {
       path: 'goodsImported',
       component: () => import('../views/commodity/goodsImported'),
       name: 'goodsImported',
