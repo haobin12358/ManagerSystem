@@ -5,12 +5,16 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="昨日" name="one">
           <order-index-top ref="one" :days="days"></order-index-top>
+          <order-index-left ref="leftOne" :leftDays="leftDays"></order-index-left>
         </el-tab-pane>
         <el-tab-pane label="七日" name="seven">
           <order-index-top ref="seven" :days="days"></order-index-top>
+          <order-index-left ref="leftSeven" :leftDays="leftDays"></order-index-left>
+          <my-echarts class="seven-echarts" :id="echartsId" :option="option" :width="600" :height="230"></my-echarts>
         </el-tab-pane>
         <el-tab-pane label="月度" name="thirty">
           <order-index-top ref="thirty" :days="days"></order-index-top>
+          <order-index-left ref="leftThirty" :leftDays="leftDays"></order-index-left>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -19,17 +23,62 @@
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
   import orderIndexTop from "../../components/common/order-index-top";
+  import orderIndexLeft from "../../components/common/order-index-left";
+  import myEcharts from "../../components/common/vue-echarts."
   export default {
     data() {
       return {
         name: '订单概况',
         activeName: 'seven',
-        days: '本周'
+        days: '本周',
+        leftDays: '上周',
+        echartsId: 'myEcharts',
+        option: {
+          title: {
+            text: '上周数据'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data:['下单笔数','付款笔数']
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一','周二','周三','周四','周五','周六','周日']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              name:'下单笔数',
+              type:'line',
+              stack: '总量',
+              data:[150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+              name:'付款笔数',
+              type:'line',
+              stack: '总量',
+              data:[820, 932, 901, 934, 1290, 1330, 1320]
+            }
+          ]
+        }
       }
     },
     components:{
       'orderIndexTop': orderIndexTop,
-      'pageTitle': pageTitle
+      'orderIndexLeft': orderIndexLeft,
+      'pageTitle': pageTitle,
+      'myEcharts': myEcharts
     },
     methods: {
       freshClick(){
@@ -39,18 +88,25 @@
         // console.log(tab.name);
         if(tab.name == 'one') {
           this.days = '昨日';
-          this.$refs.one.changeData(0);
+          this.leftDays = '昨日';
+          this.$refs.one.changeTopData(0);
+          this.$refs.leftOne.changeLeftData(0);
         }else if(tab.name == 'seven') {
           this.days = '本周';
-          this.$refs.seven.changeData(1);
+          this.leftDays = '上周';
+          this.$refs.seven.changeTopData(1);
+          this.$refs.leftSeven.changeLeftData(1);
         }else if(tab.name == 'thirty') {
           this.days = '本月';
-          this.$refs.thirty.changeData(2);
+          this.leftDays = '上月';
+          this.$refs.thirty.changeTopData(2);
+          this.$refs.leftThirty.changeLeftData(2);
         }
       }
     },
     mounted() {
-      this.$refs.seven.changeData(1);
+      this.$refs.seven.changeTopData(1);
+      this.$refs.leftSeven.changeLeftData(1);
     }
   }
 </script>
@@ -59,6 +115,10 @@
   .m-content {
     padding: 0.2rem;
     background-color: @bgMainColor;
+    .seven-echarts {
+      width: 7rem;
+      float: right;
+    }
   }
 </style>
 
