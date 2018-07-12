@@ -5,7 +5,6 @@
     </router-link>
     <el-menu  class="el-menu-vertical-demo m-sidebar"
               mode="vertical"
-              :default-active="$route.path"
               :collapse="isCollapse"
               :show-timeout="0"
               :hide-timeout="0"

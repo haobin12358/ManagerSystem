@@ -13,7 +13,10 @@
             </div>
           </div>
           <div class="m-discount-top-part">
-            <div class="m-top-btn">+店铺优惠券</div>
+            <router-link to="/activity/discountStoreStepOne" >
+              <div class="m-top-btn">+店铺优惠券</div>
+            </router-link>
+
             <div class="m-top-btn">+商品优惠券</div>
           </div>
         </div>
