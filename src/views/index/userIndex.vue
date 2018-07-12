@@ -229,7 +229,7 @@
   @import "../../common/css/index";
 .m-content{
   font-size: 0.14rem;
-  margin-top: 0.2rem;
+  margin-top: 0.1rem;
   &:after{
     content: '';
     display: block;
@@ -239,10 +239,10 @@
     width: 5.4rem;
     .one-part{
       background-color: #fff;
-      height: 2.8rem;
+      height: 2.6rem;
       margin-bottom: 0.1rem;
       h3.m-title{
-        padding: 0.15rem 0.4rem;
+        padding: 0.1rem 0.4rem;
         border-bottom: 1px solid @borderColor;
         margin: 0 0.05rem;
       }
@@ -291,7 +291,7 @@
       }
       .m-data-li{
         width: 34.3%;
-        padding: 0.15rem 0.4rem;
+        padding: 0.1rem 0.4rem;
         font-size: 0.14rem;
         .m-data-top{
           .flex-row(flex-start);
@@ -341,10 +341,10 @@
     width: 5.4rem;
     .one-part{
       background-color: #fff;
-      height: 5.7rem;
+      height: 5.3rem;
       margin-bottom: 0.1rem;
       h3.m-title{
-        padding: 0.15rem 0.4rem;
+        padding: 0.1rem 0.4rem;
         border-bottom: 1px solid @borderColor;
         margin: 0 0.05rem;
       }

@@ -4,11 +4,11 @@
     <div class="m-content">
       <div class="m-top">
         <div class="m-top-search">
-          <el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>
+          <el-button class="m-top-search-button" size="mini" @click="topSearch">新建分组</el-button>
           <div class="m-top-text">用户ID：</div>
-          <el-input class="m-top-input" v-model="inputID" size="mini"></el-input>
+          <el-input class="m-top-input" v-model="inputID" size="small"></el-input>
           <div class="m-top-text">用户名：</div>
-          <el-input class="m-top-input" v-model="inputName" size="mini"></el-input>
+          <el-input class="m-top-input" v-model="inputName" size="small"></el-input>
         </div>
       </div>
 
@@ -86,7 +86,7 @@
         }
         .m-top-input {
           float: left;
-          width: 12%;
+          width: 1.2rem;
           margin-right: 0.15rem;
         }
         .m-top-search-button {
@@ -94,6 +94,8 @@
           background: @btnActiveColor;
           color: @bgMainColor;
           margin-right: 0.1rem;
+          font-size: 0.14rem;
+          border-radius: 5px;
         }
       }
       .m-top-button{
@@ -119,8 +121,8 @@
   .m-table-link{
     color: @sidebarChildColor;
     cursor: pointer;
+    padding: 0 0.2rem;
     &.m-table-edit{
-      padding: 0 0.2rem;
       border-right: 1px solid @borderColor;
     }
   }

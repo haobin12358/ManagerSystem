@@ -99,6 +99,9 @@ html, body {
   .el-menu-item:focus, .el-menu-item:hover{
     background-color: @sidebarChildHoverColor;
   }
+  .el-menu-item.is-active{
+    background-color: @sidebarChildHoverColor;
+  }
   //.el-submenu:nth-child(even) .el-menu{
   //  background-color: @sidebarChildColor;
   //}
@@ -146,6 +149,10 @@ html, body {
 .el-table th {
   padding: 0.05rem 0;
   background: @theadColor;
+  color: #595757;
+}
+.el-table .cell{
+  line-height: 0.34rem;
 }
 .el-button-group .el-button+.el-button {
   background: @sidebarBgHoverColor;

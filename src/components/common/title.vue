@@ -30,7 +30,7 @@
   .m-page-title{
     font-size: 0.14rem;
     background-color: #eeeeef;
-    padding: 0.15rem 0.4rem;
+    padding: 0.1rem 0.4rem;
     .flex-row(space-between);
     font-weight: 600;
     span{

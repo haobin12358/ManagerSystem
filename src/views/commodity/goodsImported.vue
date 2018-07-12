@@ -16,7 +16,7 @@
           <el-input v-model="form.name" class="m-input-l" ></el-input>
           <p class="m-alert">建议描述文字在36字以内</p>
         </el-form-item>
-        <el-form-item label="商品属性:" :rules="[{ required: true}]">
+        <el-form-item label="商品属性:" :rules="[{ required: false}]">
           <div class="m-select-box">
             <p class="m-alert">错误填写商品属性，可能会引起商品下架或搜索流量减少，影响您的正常销售，请认真准确填写！</p>
             <div class="m-selects">

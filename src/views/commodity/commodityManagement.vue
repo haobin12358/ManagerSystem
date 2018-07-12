@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="m-middle" style="width: 100%;margin-top: 0.2rem;">
+      <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
         <el-table :data="user" stripe style="width: 100%">
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column align="center" prop="userId" label="商品" width="125">

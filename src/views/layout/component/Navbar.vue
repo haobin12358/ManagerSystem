@@ -59,7 +59,7 @@ export default {
 <style rel="stylesheet/less" lang="less" scoped>
   @import "../../../common/css/_variate";
 .navbar{
-  height: 0.5rem;
+  /*height: 0.5rem;*/
   border: 1px solid @borderColor;
   display: flex;
   flex-flow: row;
