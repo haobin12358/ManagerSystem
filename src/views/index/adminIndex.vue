@@ -106,6 +106,7 @@
           background: @btnActiveColor;
           color: @bgMainColor;
           margin-left: 0.1rem;
+          font-size: 0.14rem;
         }
       }
       .m-top-button{
@@ -113,6 +114,7 @@
         .m-top-button-button {
           background: @btnActiveColor;
           color: @bgMainColor;
+          font-size: 0.14rem;
           &.active{
             background: @btnColor;
             color: @greyColor;

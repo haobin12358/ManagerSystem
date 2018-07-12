@@ -47,6 +47,49 @@
       }
       .m-store-top{
         .flex-row(flex-start);
+        .m-store-card{
+          cursor: pointer;
+          margin-right: 0.2rem;
+          .flex-row(flex-start);
+          background-color: @green;
+          color: #fff;
+          height: 0.9rem;
+          border-radius: 5px;
+          font-size: 0.12rem;
+          text-align: center;
+          .m-card-left{
+              width: 0.7rem;
+            .flex-row(space-around);
+            border-right: 1px solid #fff;
+            height: 100%;
+            span{
+              font-size: 0.45rem;
+            }
+            span.m-card-icon{
+              display: block;
+              width: 0.3rem;
+              height: 0.42rem;
+              background: url("../../common/images/icon-discount-add.png");
+              background-size: 100% 100%;
+            }
+          }
+          .m-card-right{
+            text-align: center;
+            width: 1.6rem;
+            .m-title{
+              font-size: 0.2rem ;
+            }
+          }
+          &:nth-child(2){
+            background-color: @red;
+          }
+          &:nth-child(3){
+            background-color: @blue;
+          }
+          &:nth-child(4){
+            background-color: @yellow;
+          }
+        }
       }
     }
     .m-discount-nav{

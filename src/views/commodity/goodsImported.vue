@@ -363,6 +363,9 @@
             flex-flow: column;
             margin-right: 0.2rem;
             margin-bottom: 0.1rem;
+            .m-input-m{
+              margin-top: 0.1rem;
+            }
           }
         }
         .m-add-more{
