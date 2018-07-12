@@ -1,6 +1,6 @@
 
 <template>
-  <div>
+  <div class="m-age">
     <div class="page-total">
       总记录数：{{total}} 个
     </div>
@@ -97,6 +97,13 @@
 
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/_variate.less";
+  .m-age{
+    &:after{
+      display: block;
+      content: '';
+      clear: both;
+    }
+  }
   .page-total {
     float: left;
     width: 1.15rem;
