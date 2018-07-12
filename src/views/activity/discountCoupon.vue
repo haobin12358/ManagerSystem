@@ -218,52 +218,8 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/index";
   @import "../../common/css/activity";
-.m-discount-index{
-  .m-discount-content{
-    background-color: #fff;
-    padding: 0.1rem 0.2rem;
-    .m-discount-top{
-      .flex-row(space-between);
-      .m-discount-top-part{
-        .flex-row(flex-start);
-        .m-top-img{
-          width: 0.9rem;
-          height: 0.9rem;
-          background: url("../../common/images/icon-discount.png");
-          background-size: 100% 100%;
-          border-radius: 5px;
-          margin-right: 0.2rem;
-        }
-        .m-top-info{
-          font-size: 0.14rem;
-          line-height: 0.18rem;
-          p.m-info-grey{
-            color: @greyColor;
-            font-size: 0.12rem;
-            span.m-num{
-              font-size: 0.14rem;
-            }
-          }
-          p:last-child{
-            margin-top: 0.15rem;
-          }
-        }
-        .m-top-btn{
-          width: 1.5rem;
-          text-align: center;
-          color: #fff;
-          background-color: @btnActiveColor;
-          height: 0.3rem;
-          line-height: 0.3rem;
-          border-radius: 5px;
-          margin-left: 0.2rem;
-          cursor: pointer;
-        }
-      }
-    }
 
-  }
 
-}
+
 
 </style>
