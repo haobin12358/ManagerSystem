@@ -45,7 +45,9 @@
     </div>
     <div class="all-order-content">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="全部" name="one">全部</el-tab-pane>
+        <el-tab-pane label="全部" name="one">
+          <all-order></all-order>
+        </el-tab-pane>
         <el-tab-pane label="待付款" name="two">待付款</el-tab-pane>
         <el-tab-pane label="待发货" name="three">待发货</el-tab-pane>
         <el-tab-pane label="已发货" name="four">已发货</el-tab-pane>
@@ -58,6 +60,7 @@
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
+  import allOrder from '../../components/common/all-order-table';
   export default {
       data() {
           return {
@@ -66,7 +69,8 @@
           }
       },
       components: {
-        'pageTitle': pageTitle
+        'pageTitle': pageTitle,
+        'allOrder': allOrder
       },
       methods: {
         freshClick(){
@@ -84,7 +88,7 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/_variate.less";
   .all-order {
-    height: 5rem;
+    height: 3rem;
     background-color: @bgMainColor;
     .all-order-search {
       height: 1.35rem;
