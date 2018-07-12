@@ -19,17 +19,11 @@
                   <el-option label="区域二" value="beijing"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="优惠券名称">
+              <el-form-item label="活动名称">
                 <el-input v-model="storeForm.name" class="m-input-m" placeholder="审批人"></el-input>
               </el-form-item>
-              <el-form-item label="面额">
+              <el-form-item label="活动ID">
                 <el-input v-model="storeForm.name" class="m-input-m" placeholder="审批人"></el-input>
-              </el-form-item>
-              <el-form-item label="时间">
-                <el-date-picker type="date" class="m-input-m" placeholder="起始时间" v-model="storeForm.date1" style="width: 1.2rem;"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="-">
-                <el-date-picker type="date" class="m-input-m" placeholder="结束时间" v-model="storeForm.date2" style="width: 1.2rem;"></el-date-picker>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="m-select-btn" @click="storeSubmit">查询</el-button>
@@ -44,23 +38,32 @@
         </el-form>
         <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
           <el-table :data="user" stripe style="width: 100%">
-            <el-table-column align="center" prop="userId" label="名称/渠道"></el-table-column>
-            <el-table-column align="center" prop="userId" label="状态" ></el-table-column>
-            <el-table-column align="center" prop="userName" label="面额"></el-table-column>
-            <el-table-column align="center" prop="group" label="门槛" ></el-table-column>
-            <el-table-column align="center" prop="group" label="使用时间" >
+            <el-table-column align="center" prop="userId" label="名称ID"></el-table-column>
+            <el-table-column align="center" prop="userId" label="活动名称" ></el-table-column>
+            <el-table-column align="center" prop="userName" label="活动描述"></el-table-column>
+            <el-table-column align="center" prop="group" label="优惠类型" ></el-table-column>
+            <el-table-column align="center" prop="group" label="活动时间" width="230">
               <template slot-scope="scope">
-                <p>起：2018-07-02</p>
-                <p>止：2018-07-08</p>
+                <div class="m-activity-time">
+                  <p><span>2018-07-02</span><span>20:20:13</span></p>
+                  <p>至</p>
+                  <p><span>2018-07-02</span><span>20:20:13</span></p>
+                </div>
+                <p>活动持续：12小时18分18秒</p>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="group" label="限额" ></el-table-column>
-            <el-table-column align="center" prop="loginTime" label="发行量" ></el-table-column>
-            <el-table-column align="center" prop="group" label="已领取" ></el-table-column>
+            <el-table-column align="center" prop="group" label="创建时间" >
+              <template slot-scope="scope">
+                <p>2018-07-02</p>
+                <p>20:20:13</p>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="loginTime" label="活动状态" ></el-table-column>
             <el-table-column align="center" label="操作" >
               <template slot-scope="scope">
-                <span class="m-table-edit m-table-link">编辑</span>
-                <span class=" m-table-link">推广</span>
+                <span>查看</span>
+                <span class="m-link">删除</span>
+                <span class=" m-link">重启</span>
               </template>
             </el-table-column>
           </el-table>
