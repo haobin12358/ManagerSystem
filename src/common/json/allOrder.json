@@ -10,12 +10,14 @@
       {
         "goodsName": "商品一",
         "goodsPrice": "29.00",
-        "goodsNumber": "2"
+        "goodsNumber": "2",
+        "afterSales": "-"
       },
       {
         "goodsName": "商品二",
         "goodsPrice": "35.00",
-        "goodsNumber": "1"
+        "goodsNumber": "1",
+        "afterSales": "-"
       }
     ],
     "buyer": "maomao",
@@ -32,12 +34,14 @@
       {
         "goodsName": "商品三",
         "goodsPrice": "39.00",
-        "goodsNumber": "2"
+        "goodsNumber": "2",
+        "afterSales": "-"
       },
       {
         "goodsName": "商品二",
         "goodsPrice": "35.00",
-        "goodsNumber": "1"
+        "goodsNumber": "1",
+        "afterSales": "-"
       }
     ],
     "buyer": "maomao",
@@ -54,12 +58,14 @@
       {
         "goodsName": "商品三",
         "goodsPrice": "39.00",
-        "goodsNumber": "2"
+        "goodsNumber": "2",
+        "afterSales": "-"
       },
       {
         "goodsName": "商品二",
         "goodsPrice": "35.00",
-        "goodsNumber": "1"
+        "goodsNumber": "1",
+        "afterSales": "-"
       }
     ],
     "buyer": "maomao",
@@ -76,16 +82,12 @@
       {
         "goodsName": "商品三",
         "goodsPrice": "39.00",
-        "goodsNumber": "2"
-      },
-      {
-        "goodsName": "商品二",
-        "goodsPrice": "35.00",
-        "goodsNumber": "1"
+        "goodsNumber": "2",
+        "afterSales": "-"
       }
     ],
     "buyer": "maomao",
     "orderTime": "2018-07-12 15:32:36",
-    "realPay": "113.00"
+    "realPay": "78.00"
   }
 ]
