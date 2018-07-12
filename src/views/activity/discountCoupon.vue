@@ -86,7 +86,7 @@
                   <el-date-picker type="date" class="m-input-m" placeholder="起始时间" v-model="storeForm.date1" style="width: 1.2rem;"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="-">
-                  <el-time-picker type="fixed-time" class="m-input-m" placeholder="结束时间" v-model="storeForm.date2" style="width: 1.2rem;"></el-time-picker>
+                  <el-date-picker type="date" class="m-input-m" placeholder="结束时间" v-model="storeForm.date2" style="width: 1.2rem;"></el-date-picker>
                 </el-form-item>
               </div>
               <div class="m-right">
@@ -217,6 +217,7 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/index";
+  @import "../../common/css/activity";
 .m-discount-index{
   .m-discount-content{
     background-color: #fff;
@@ -256,101 +257,13 @@
           line-height: 0.3rem;
           border-radius: 5px;
           margin-left: 0.2rem;
+          cursor: pointer;
         }
       }
     }
-    .m-discount-nav{
-      background-color: #eeeeee;
-      padding: 0.1rem 0.1rem 0 0;
-      margin-top: 0.1rem;
-      text-align: right;
-      span.m-one-nav{
-        display: inline-block;
-        padding: 0.02rem 0.15rem 0.05rem;
-        font-size: 0.14rem;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        cursor: pointer;
-        &.active{
-          background-color: #fff;
-        }
-      }
-    }
-    .m-date{
-      line-height: 0.3rem;
-      .m-date-icon{
-        display: inline-block;
-        width: 0.14rem;
-        height: 0.06rem;
-        background: url("../../common/images/icon-date.png");
-        background-size: 100% 100%;
-      }
-    }
-    .m-amount-sheet-ul{
-      .flex-row(flex-start);
-      border: 1px solid @borderColor;
-      .m-amount-sheet{
-        width: 1.5rem;
-        padding: 0.1rem 0.15rem;
-        border-right: 1px solid @borderColor;
-        cursor: pointer;
-        &.active{
-          border-top: 4px solid @red;
-          margin-top: -2px;
-        }
-        &:last-child{
-          border-right: none;
-        }
-        .m-num{
-          font-size: 0.3rem;
-          line-height: 0.4rem;
-        }
-        .m-grey{
-          color: @greyColor;
-          .flex-row(space-between);
-          font-size: 0.12rem;
-        }
-      }
-    }
-    .m-discount-echart{
-      width: 10.82rem;
-      height: 3.25rem;
-      border: 1px solid @borderColor;
-      margin: 0.2rem 0;
-      #echarts{
-        width: 10.7rem;
-        height: 3.2rem;
-      }
-    }
-    .m-select-box{
-      .flex-row(space-between);
-      margin-top: 0.1rem;
-      .m-select-btn{
-        padding: 0.05rem 0.2rem;
-        background-color: @green;
-        border: 1px solid @green;
-        border-radius: 5px;
-      }
-    }
+
   }
-  .m-num{
-    color: @red;
-  }
-  .m-input-m{
-    width: 1rem;
-  }
-  .m-table-link{
-    color: @sidebarChildColor;
-    cursor: pointer;
-    padding: 0 0 0 0.2rem ;
-    &.m-table-edit{
-      border-right: 1px solid @borderColor;
-      padding: 0 0.2rem 0 0;
-    }
-  }
-  .m-page-box {
-    margin: 0.2rem 0.4rem 0.1rem 0;
-  }
+
 }
 
 </style>
