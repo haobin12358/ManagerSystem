@@ -67,6 +67,11 @@
       "icon":"icon-activity",
       "children":[
         {
+          "name":"单品活动",
+          "url":"productActivity",
+          "icon":"none"
+        },
+        {
           "name":"店铺活动",
           "url":"storeActivity",
           "icon":"none"

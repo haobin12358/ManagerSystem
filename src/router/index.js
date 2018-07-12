@@ -115,6 +115,11 @@ export const constantRouterMap = [
     component: Layout,
     redirect: 'activity/discountCoupon',
     children: [{
+      path: 'productActivity',
+      component: () => import('../views/activity/productActivity'),
+      name: 'productActivity',
+      meta: {title: 'productActivity', icon: 'productActivity', noCache: true}
+    }, {
       path: 'discountCoupon',
       component: () => import('../views/activity/discountCoupon'),
       name: 'discountCoupon',
