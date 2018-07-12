@@ -27,7 +27,7 @@
 
 <script>
   import orderIndex from '../../common/json/orderIndex'
-  import orderIndexTop from "../../components/common/order-index-top";
+  // import orderIndexTop from "../../components/common/order-index-top";
     export default {
       props: ["days"],
       name: "order-index-top",
@@ -40,7 +40,7 @@
         }
       },
       components: {
-        'orderIndexTop': orderIndexTop
+        // 'orderIndexTop': orderIndexTop
       },
       methods: {
         changeTopData(i) {
