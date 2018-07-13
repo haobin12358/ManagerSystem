@@ -1,0 +1,71 @@
+<template>
+  <div class="m-step">
+    <page-title :title="name" @freshClick="freshClick"></page-title>
+      <div class="m-step-content">
+        <div class="m-step-part">
+          <step :list="step"></step>
+        </div>
+        <div class="m-step-result">
+          <div class="m-check-result-box m-flex-center">
+            <i class="el-icon-circle-check m-check-icon"></i>
+            <span class="m-line-height">&nbsp;创建成功！</span>
+          </div>
+          <div class="m-step-result-btn">
+            <span>立即推广</span>
+            <router-link to="/activity/discountCoupon" >
+              <span>返回列表</span>
+            </router-link>
+          </div>
+          <div class="m-discount-info">
+            <h2>￥<span>5</span></h2>
+            <p class="m-font-14">满20元可用</p>
+            <p class="m-font-12">使用时间：2018.07.04-2018.07.08</p>
+          </div>
+        </div>
+      </div>
+
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  import pageTitle from '../../components/common/title';
+  import step from '../../components/common/step';
+  export default {
+    data() {
+      return {
+        name:'优惠卷>添加优惠券',
+        step:[
+          {
+            name:'添加优惠券',
+            active:true,
+            next:true
+          },
+          {
+            name:'完成',
+            active:true,
+            next:false
+          }
+        ]
+      }
+    },
+    components:{
+      pageTitle,
+      step
+    },
+    methods: {
+      freshClick(){
+        console.log('fresh');
+      },
+      onSubmit(){
+
+      }
+    },
+    created() {
+
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less" scoped>
+  @import "../../common/css/activity";
+
+</style>

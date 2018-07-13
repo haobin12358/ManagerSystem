@@ -134,6 +134,21 @@ export const constantRouterMap = [
       component: () => import('../views/activity/discountStoreStepOne'),
       name: 'discountStoreStepOne',
       meta: {title: 'discountStoreStepOne', icon: 'discountStoreStepOne', noCache: true}
+    }, {
+      path: 'discountStoreStepTwo',
+      component: () => import('../views/activity/discountStoreStepTwo'),
+      name: 'discountStoreStepTwo',
+      meta: {title: 'discountStoreStepTwo', icon: 'discountStoreStepTwo', noCache: true}
+    }, {
+      path: 'activityStoreStepOne',
+      component: () => import('../views/activity/activityStoreStepOne'),
+      name: 'activityStoreStepOne',
+      meta: {title: 'activityStoreStepOne', icon: 'activityStoreStepOne', noCache: true}
+    }, {
+      path: 'activityStoreStepTwo',
+      component: () => import('../views/activity/activityStoreStepTwo'),
+      name: 'activityStoreStepTwo',
+      meta: {title: 'activityStoreStepTwo', icon: 'activityStoreStepTwo', noCache: true}
     }
     ]
   }

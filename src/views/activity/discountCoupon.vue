@@ -74,22 +74,22 @@
             <div class="m-select-box">
               <div class="m-left">
                 <el-form-item label="活动状态">
-                  <el-select v-model="storeForm.name" class="m-input-m" placeholder="活动区域">
+                  <el-select v-model="storeForm.name" class="m-input-s" placeholder="活动区域">
                     <el-option label="区域一" value="shanghai"></el-option>
                     <el-option label="区域二" value="beijing"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="优惠券名称">
-                  <el-input v-model="storeForm.name" class="m-input-m" placeholder="审批人"></el-input>
+                  <el-input v-model="storeForm.name" class="m-input-s" placeholder="审批人"></el-input>
                 </el-form-item>
                 <el-form-item label="面额">
-                  <el-input v-model="storeForm.name" class="m-input-m" placeholder="审批人"></el-input>
+                  <el-input v-model="storeForm.name" class="m-input-s" placeholder="审批人"></el-input>
                 </el-form-item>
                 <el-form-item label="时间">
-                  <el-date-picker type="date" class="m-input-m" placeholder="起始时间" v-model="storeForm.date1" style="width: 1.2rem;"></el-date-picker>
+                  <el-date-picker type="date" class="m-input-s" placeholder="起始时间" v-model="storeForm.date1" style="width: 1.2rem;"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="-">
-                  <el-date-picker type="date" class="m-input-m" placeholder="结束时间" v-model="storeForm.date2" style="width: 1.2rem;"></el-date-picker>
+                  <el-date-picker type="date" class="m-input-s" placeholder="结束时间" v-model="storeForm.date2" style="width: 1.2rem;"></el-date-picker>
                 </el-form-item>
               </div>
               <div class="m-right">
