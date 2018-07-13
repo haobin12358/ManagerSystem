@@ -45,16 +45,16 @@
           <div class="m-select-box">
             <div class="m-left">
               <el-form-item label="活动状态">
-                <el-select v-model="storeForm.name" class="m-input-m" placeholder="活动区域">
+                <el-select v-model="storeForm.name" class="m-input-s" placeholder="活动区域">
                   <el-option label="区域一" value="shanghai"></el-option>
                   <el-option label="区域二" value="beijing"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="活动名称">
-                <el-input v-model="storeForm.name" class="m-input-m" placeholder=""></el-input>
+                <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
               </el-form-item>
               <el-form-item label="活动编号">
-                <el-input v-model="storeForm.name" class="m-input-m" placeholder=""></el-input>
+                <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="m-select-btn" @click="storeSubmit">查询</el-button>

@@ -170,8 +170,22 @@
 .m-num{
   color: @red;
 }
-.m-input-m{
+.m-input-s{
   width: 1rem;
+}
+.m-input-l{
+  width: 2rem;
+}
+.m-input-special{
+  width: 1.72rem;
+}
+.m-input-m{
+  width: 1.8rem;
+}
+.m-date-line{
+  display: inline-block;
+  color: @green;
+  margin: 0 0.1rem;
 }
 .m-table-link{
   color: @sidebarChildColor;
@@ -207,6 +221,34 @@
     .m-step-part{
       border: 1px solid @borderColor;
       border-radius: 5px;
+      margin-bottom: 0.1rem;
+      h3.m-step-h3{
+        padding: 0.1rem 0.2rem;
+        border-bottom: 1px solid @borderColor;
+        margin-bottom: 0.2rem;
+        .m-step-top-edit{
+          display: inline-block;
+          padding: 0 0.1rem;
+          color: @greyColor;
+          cursor: pointer;
+          &.active{
+            color: @green;
+          }
+        }
+      }
     }
+  }
+}
+.m-bottom-btn{
+  span{
+    display: inline-block;
+    width: 0.9rem;
+    text-align: center;
+    height: 0.3rem;
+    line-height: 0.3rem;
+    background-color: @green;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
   }
 }
