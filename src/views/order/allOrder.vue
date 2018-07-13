@@ -1,60 +1,62 @@
 <template>
   <div class="all-order">
     <page-title :title="name" @freshClick="freshClick"></page-title>
-    <div class="all-order-search">
-      <div class="order-search-one">
-        <div class="search-text-input">
-          <div class="search-text" style="margin-left: 0.53rem">订单号：</div>
-          <el-input size="mini"></el-input>
-        </div>
-        <div class="search-text-input">
-          <div class="search-text">维权状态：</div>
-          <el-input size="mini"></el-input>
-        </div>
-        <div class="search-text-input">
-          <div class="search-text">付款方式：</div>
-          <el-input size="mini"></el-input>
-        </div>
-      </div>
-      <div class="order-search-two">
-        <div class="search-text-input">
-          <div class="search-text">商品名称：</div>
-          <el-input size="mini"></el-input>
-        </div>
-        <div class="search-text-input">
-          <div class="search-text">物流方式：</div>
-          <el-input size="mini"></el-input>
-        </div>
-        <div class="search-text-input">
-          <div class="search-text">订单类型：</div>
-          <el-input size="mini"></el-input>
-        </div>
-      </div>
-      <div class="order-search-three">
-        <div class="search-text-input" style="width: 5rem">
-          <div class="search-text">下单时间：</div>
-          <el-input size="mini"></el-input>
-          <div class="search-text-middle">至</div>
-          <el-input size="mini"></el-input>
-        </div>
-      </div>
-      <div class="search-buttons">
-        <el-button class="search-button" size="mini">筛选</el-button>
-        <el-button class="search-button" size="mini">批量导出</el-button>
-      </div>
-    </div>
     <div class="all-order-content">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="全部" name="one">
-          <all-order-table></all-order-table>
-        </el-tab-pane>
-        <el-tab-pane label="待付款" name="two">待付款</el-tab-pane>
-        <el-tab-pane label="待发货" name="three">待发货</el-tab-pane>
-        <el-tab-pane label="已发货" name="four">已发货</el-tab-pane>
-        <el-tab-pane label="已完成" name="five">已完成</el-tab-pane>
-        <el-tab-pane label="已关闭" name="six">已关闭</el-tab-pane>
-        <el-tab-pane label="退款中" name="seven">退款中</el-tab-pane>
-      </el-tabs>
+      <div class="all-order-search">
+        <div class="order-search-one">
+          <div class="search-text-input">
+            <div class="search-text" style="margin-left: 0.51rem">订单号：</div>
+            <el-input size="mini"></el-input>
+          </div>
+          <div class="search-text-input">
+            <div class="search-text">维权状态：</div>
+            <el-input size="mini"></el-input>
+          </div>
+          <div class="search-text-input">
+            <div class="search-text">付款方式：</div>
+            <el-input size="mini"></el-input>
+          </div>
+        </div>
+        <div class="order-search-two">
+          <div class="search-text-input">
+            <div class="search-text">商品名称：</div>
+            <el-input size="mini"></el-input>
+          </div>
+          <div class="search-text-input">
+            <div class="search-text">物流方式：</div>
+            <el-input size="mini"></el-input>
+          </div>
+          <div class="search-text-input">
+            <div class="search-text">订单类型：</div>
+            <el-input size="mini"></el-input>
+          </div>
+        </div>
+        <div class="order-search-three">
+          <div class="search-text-input" style="width: 5rem">
+            <div class="search-text">下单时间：</div>
+            <el-input size="mini"></el-input>
+            <div class="search-text-middle">至</div>
+            <el-input size="mini"></el-input>
+          </div>
+        </div>
+        <div class="search-buttons">
+          <el-button class="search-button" size="mini">筛选</el-button>
+          <el-button class="search-button" size="mini">批量导出</el-button>
+        </div>
+      </div>
+      <div class="all-order-tabs">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="全部" name="one">
+            <all-order-table></all-order-table>
+          </el-tab-pane>
+          <el-tab-pane label="待付款" name="two">待付款</el-tab-pane>
+          <el-tab-pane label="待发货" name="three">待发货</el-tab-pane>
+          <el-tab-pane label="已发货" name="four">已发货</el-tab-pane>
+          <el-tab-pane label="已完成" name="five">已完成</el-tab-pane>
+          <el-tab-pane label="已关闭" name="six">已关闭</el-tab-pane>
+          <el-tab-pane label="退款中" name="seven">退款中</el-tab-pane>
+        </el-tabs>
+      </div>
     </div>
   </div>
 </template>
@@ -87,8 +89,8 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/_variate.less";
-  .all-order {
-    height: 10rem;
+  .all-order-content {
+    height: 2.07rem;
     background-color: @bgMainColor;
     .all-order-search {
       height: 1rem;
@@ -111,9 +113,10 @@
         }
       }
     }
-    .all-order-content {
+    .all-order-tabs {
       width: 100%;
       float: left;
+      background-color: @bgMainColor;
       .el-tabs {
         padding: 0.2rem;
       }
