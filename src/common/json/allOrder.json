@@ -1,93 +1,160 @@
 [
-  // 1、待付款，2、待发货，3、已发货，4、已完成，5、已关闭，6、退款中
   {
-    "status": "2",
+    "orderNoText": "订单号：",
     "orderNo": "E25642366453654",
+    "payTypeText": "支付方式：",
     "payType": "微信安全支付-代销",
+    "outOrderNoText": "外部订单号：",
     "outOrderNo": "152646462341",
+    "payNoText": "支付流水号：",
     "payNo": "152646462341",
     "goods": [
       {
         "goodsName": "商品一",
         "goodsPrice": "29.00",
         "goodsNumber": "2",
-        "afterSales": "-"
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "2",
+        "realPay": "58.00"
       },
       {
         "goodsName": "商品二",
         "goodsPrice": "35.00",
         "goodsNumber": "1",
-        "afterSales": "-"
-      }
-    ],
-    "buyer": "maomao",
-    "orderTime": "2018-07-12 15:32:36",
-    "realPay": "93.00"
-  },
-  {
-    "status": "3",
-    "orderNo": "E25642366453654",
-    "payType": "支付宝安全支付-代销",
-    "outOrderNo": "152646462341",
-    "payNo": "152646462341",
-    "goods": [
-      {
-        "goodsName": "商品三",
-        "goodsPrice": "39.00",
-        "goodsNumber": "2",
-        "afterSales": "-"
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "2",
+        "realPay": "35.00"
       },
       {
         "goodsName": "商品二",
         "goodsPrice": "35.00",
         "goodsNumber": "1",
-        "afterSales": "-"
-      }
-    ],
-    "buyer": "maomao",
-    "orderTime": "2018-07-12 15:32:36",
-    "realPay": "113.00"
-  },
-  {
-    "status": "3",
-    "orderNo": "E25642366453654",
-    "payType": "支付宝安全支付-代销",
-    "outOrderNo": "152646462341",
-    "payNo": "152646462341",
-    "goods": [
-      {
-        "goodsName": "商品三",
-        "goodsPrice": "39.00",
-        "goodsNumber": "2",
-        "afterSales": "-"
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "2",
+        "realPay": "35.00"
       },
       {
         "goodsName": "商品二",
         "goodsPrice": "35.00",
         "goodsNumber": "1",
-        "afterSales": "-"
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "2",
+        "realPay": "35.00"
+      },
+      {
+        "goodsName": "商品二",
+        "goodsPrice": "35.00",
+        "goodsNumber": "1",
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "2",
+        "realPay": "35.00"
       }
-    ],
-    "buyer": "maomao",
-    "orderTime": "2018-07-12 15:32:36",
-    "realPay": "113.00"
+    ]
   },
   {
-    "status": "4",
+    "orderNoText": "订单号：",
     "orderNo": "E25642366453654",
-    "payType": "支付宝安全支付-代销",
+    "payTypeText": "支付方式：",
+    "payType": "微信安全支付-代销",
+    "outOrderNoText": "外部订单号：",
     "outOrderNo": "152646462341",
+    "payNoText": "支付流水号：",
     "payNo": "152646462341",
     "goods": [
       {
-        "goodsName": "商品三",
-        "goodsPrice": "39.00",
+        "goodsName": "商品一",
+        "goodsPrice": "29.00",
         "goodsNumber": "2",
-        "afterSales": "-"
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "3",
+        "realPay": "58.00"
+      },
+      {
+        "goodsName": "商品二",
+        "goodsPrice": "35.00",
+        "goodsNumber": "1",
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "3",
+        "realPay": "35.00"
       }
-    ],
-    "buyer": "maomao",
-    "orderTime": "2018-07-12 15:32:36",
-    "realPay": "78.00"
+    ]
+  },
+  {
+    "orderNoText": "订单号：",
+    "orderNo": "E25642366453654",
+    "payTypeText": "支付方式：",
+    "payType": "微信安全支付-代销",
+    "outOrderNoText": "外部订单号：",
+    "outOrderNo": "152646462341",
+    "payNoText": "支付流水号：",
+    "payNo": "152646462341",
+    "goods": [
+      {
+        "goodsName": "商品一",
+        "goodsPrice": "29.00",
+        "goodsNumber": "2",
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "3",
+        "realPay": "58.00"
+      },
+      {
+        "goodsName": "商品二",
+        "goodsPrice": "35.00",
+        "goodsNumber": "1",
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "3",
+        "realPay": "35.00"
+      }
+    ]
+  },
+  {
+    "orderNoText": "订单号：",
+    "orderNo": "E25642366453654",
+    "payTypeText": "支付方式：",
+    "payType": "微信安全支付-代销",
+    "outOrderNoText": "外部订单号：",
+    "outOrderNo": "152646462341",
+    "payNoText": "支付流水号：",
+    "payNo": "152646462341",
+    "goods": [
+      {
+        "goodsName": "商品一",
+        "goodsPrice": "29.00",
+        "goodsNumber": "2",
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "4",
+        "realPay": "58.00"
+      },
+      {
+        "goodsName": "商品二",
+        "goodsPrice": "35.00",
+        "goodsNumber": "1",
+        "afterSales": "-",
+        "buyer": "maomao",
+        "orderTime": "2018-07-12 15:32:36",
+        "status": "4",
+        "realPay": "35.00"
+      }
+    ]
   }
 ]

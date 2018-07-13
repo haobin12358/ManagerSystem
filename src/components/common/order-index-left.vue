@@ -52,7 +52,7 @@
         color: @mainColor;
         text-align: center;
         margin: 0.2rem 0 0.2rem 0;
-        font-size: 0.3rem;
+        font-size: 40px;
       }
     }
   }

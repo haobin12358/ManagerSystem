@@ -127,8 +127,8 @@
         width: 85%;
         .m-top-text {
           float: left;
-          font-size: 0.14rem;
-          line-height: 0.27rem;
+          font-size: 14px;
+          line-height: 0.2rem;
         }
         .m-top-input {
           float: left;
@@ -139,19 +139,19 @@
           background-color: @btnActiveColor;
           color: @bgMainColor;
           margin-left: 0.1rem;
-          font-size: 0.14rem;
+          font-size: 14px;
         }
       }
       .m-top-button-button {
         background-color: @btnActiveColor;
         color: @bgMainColor;
         float: right;
-        font-size: 0.14rem;
+        font-size: 14px;
       }
     }
     .m-middle {
       .el-crud {
-        font-size: 0.14rem;
+        font-size: 14px;
         color: #000000;
       }
       .add-dialog {

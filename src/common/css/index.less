@@ -147,7 +147,7 @@ html, body {
   padding: 0.02rem 0;
 }
 .el-table th {
-  padding: 0.05rem 0;
+  padding: 0;
   background: @theadColor;
   color: #595757;
 }
@@ -241,4 +241,7 @@ html, body {
 }
 .el-table td, .el-table th.is-leaf {
   text-align: center;
+}
+.el-table__expanded-cell[class*=cell] {
+  padding: 0 0 0 0.45rem;
 }

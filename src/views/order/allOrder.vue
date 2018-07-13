@@ -5,37 +5,37 @@
       <div class="order-search-one">
         <div class="search-text-input">
           <div class="search-text" style="margin-left: 0.53rem">订单号：</div>
-          <el-input></el-input>
+          <el-input size="mini"></el-input>
         </div>
         <div class="search-text-input">
           <div class="search-text">维权状态：</div>
-          <el-input></el-input>
+          <el-input size="mini"></el-input>
         </div>
         <div class="search-text-input">
           <div class="search-text">付款方式：</div>
-          <el-input></el-input>
+          <el-input size="mini"></el-input>
         </div>
       </div>
       <div class="order-search-two">
         <div class="search-text-input">
           <div class="search-text">商品名称：</div>
-          <el-input></el-input>
+          <el-input size="mini"></el-input>
         </div>
         <div class="search-text-input">
           <div class="search-text">物流方式：</div>
-          <el-input></el-input>
+          <el-input size="mini"></el-input>
         </div>
         <div class="search-text-input">
           <div class="search-text">订单类型：</div>
-          <el-input></el-input>
+          <el-input size="mini"></el-input>
         </div>
       </div>
       <div class="order-search-three">
         <div class="search-text-input" style="width: 5rem">
           <div class="search-text">下单时间：</div>
-          <el-input></el-input>
+          <el-input size="mini"></el-input>
           <div class="search-text-middle">至</div>
-          <el-input></el-input>
+          <el-input size="mini"></el-input>
         </div>
       </div>
       <div class="search-buttons">
@@ -46,7 +46,7 @@
     <div class="all-order-content">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="全部" name="one">
-          <all-order></all-order>
+          <all-order-table></all-order-table>
         </el-tab-pane>
         <el-tab-pane label="待付款" name="two">待付款</el-tab-pane>
         <el-tab-pane label="待发货" name="three">待发货</el-tab-pane>
@@ -60,7 +60,7 @@
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
-  import allOrder from '../../components/common/all-order-table';
+  import allOrderTable from '../../components/common/all-order-table';
   export default {
       data() {
           return {
@@ -70,7 +70,7 @@
       },
       components: {
         'pageTitle': pageTitle,
-        'allOrder': allOrder
+        'allOrderTable': allOrderTable
       },
       methods: {
         freshClick(){
@@ -88,21 +88,21 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/_variate.less";
   .all-order {
-    height: 3rem;
+    height: 10rem;
     background-color: @bgMainColor;
     .all-order-search {
-      height: 1.35rem;
+      height: 1rem;
       padding: 0.2rem 0.3rem 0 0.3rem;
       margin: 0.15rem 0.2rem 0 0.2rem;
       border-radius: 0.1rem;
       background-color: @borderColor;
       .search-buttons {
         float: right;
-        margin-right: 1.1rem;
+        margin-right: 1.15rem;
         .search-button {
           background-color: @btnActiveColor;
           color: @bgMainColor;
-          font-size: 0.14rem;
+          font-size: 14px;
         }
         .el-button:active {
           color: @sectionBgColor;
@@ -126,12 +126,13 @@
     .search-text {
       float: left;
       margin-left: 0.4rem;
-      line-height: 0.32rem;
-      font-size: 0.14rem;
+      line-height: 0.22rem;
+      font-size: 14px;
     }
     .search-text-middle {
       float: left;
-      line-height: 0.32rem;
+      font-size: 14px;
+      line-height: 0.22rem;
       margin: 0 0.1rem 0 0.1rem;
     }
     .el-input {

@@ -72,7 +72,7 @@
         color: @mainColor;
         text-align: center;
         margin-top: 0.2rem;
-        font-size: 0.3rem;
+        font-size: 40px;
       }
       .number-red {
         color: @red;

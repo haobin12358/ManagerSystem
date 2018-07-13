@@ -257,8 +257,8 @@
         width: 85%;
         .m-top-text {
           float: left;
-          line-height: 0.27rem;
-          font-size: 0.14rem;
+          line-height: 0.2rem;
+          font-size: 14px;
         }
         .m-top-input {
           float: left;
@@ -269,19 +269,19 @@
           background-color: @btnActiveColor;
           color: @bgMainColor;
           margin-left: 0.1rem;
-          font-size: .14rem;
+          font-size: 14px;
         }
       }
       .m-top-button-button {
         background-color: @btnActiveColor;
         color: @bgMainColor;
         float: right;
-        font-size: .14rem;
+        font-size: 14px;
       }
     }
     .m-middle {
       .el-crud {
-        font-size: 0.14rem;
+        font-size: 14px;
         color: #000000;
       }
       .edit-dialog {
@@ -302,7 +302,7 @@
           border-color: #409EFF;
         }
         .avatar-uploader-icon {
-          font-size: 0.18rem;
+          font-size: 18px;
           color: #8c939d;
           width: 0.85rem;
           height: 0.85rem;
