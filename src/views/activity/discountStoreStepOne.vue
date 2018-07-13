@@ -44,7 +44,10 @@
           </el-form-item>
         </div>
         <div class="m-bottom-btn m-flex-center">
-          <span class="m-btn">创建</span>
+          <router-link to="/activity/discountStoreStepTwo" >
+            <span class="m-btn">创建</span>
+          </router-link>
+
         </div>
       </div>
       </el-form>
