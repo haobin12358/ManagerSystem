@@ -8,7 +8,10 @@
     "outOrderNo": "152646462341",
     "payNoText": "支付流水号：",
     "payNo": "152646462341",
+    "memo": "-",
+    "sendType": "快递配送",
     "buyerAddress": "杭州市萧山区奔竞二路与民和路交叉口西北200米",
+    "buyer": "maomao",
     "goods": [
       {
         "goodsName": "商品一",
@@ -71,7 +74,10 @@
     "outOrderNo": "152646462341",
     "payNoText": "支付流水号：",
     "payNo": "152646462341",
+    "memo": "-",
+    "sendType": "快递配送",
     "buyerAddress": "杭州市萧山区奔竞二路与民和路交叉口西北200米",
+    "buyer": "maomao",
     "goods": [
       {
         "goodsName": "商品一",
@@ -104,7 +110,10 @@
     "outOrderNo": "152646462341",
     "payNoText": "支付流水号：",
     "payNo": "152646462341",
+    "memo": "-",
+    "sendType": "快递配送",
     "buyerAddress": "杭州市萧山区奔竞二路与民和路交叉口西北200米",
+    "buyer": "maomao",
     "goods": [
       {
         "goodsName": "商品一",
@@ -137,7 +146,10 @@
     "outOrderNo": "152646462341",
     "payNoText": "支付流水号：",
     "payNo": "152646462341",
+    "memo": "-",
+    "sendType": "快递配送",
     "buyerAddress": "杭州市萧山区奔竞二路与民和路交叉口西北200米",
+    "buyer": "maomao",
     "goods": [
       {
         "goodsName": "商品一",

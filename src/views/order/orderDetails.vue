@@ -5,9 +5,23 @@
       <div class="m-step-part">
         <step :list="step"></step>
       </div>
-    </div>
-    <div class="details-middle-left">
-
+      <div class="details-middle-left">
+        <div class="m-step-part">
+          <h4>订单详情</h4>
+          <div class="step-left-text">订单编号：</div>
+          <div class="step-left-value">{{order.orderNo}}</div>
+          <div class="step-left-text">付款方式：</div>
+          <div class="step-left-value">{{order.payType}}</div>
+          <div class="step-left-text" style="margin-left: 0.4rem">买 家：</div>
+          <div class="step-left-value">{{order.buyer}}</div>
+          <div class="step-left-text">配送方式：</div>
+          <div class="step-left-value">{{order.sendType}}</div>
+          <div class="step-left-text">收货地址：</div>
+          <div class="step-left-value">{{order.buyerAddress}}</div>
+          <div class="step-left-text">买家留言：</div>
+          <div class="step-left-value">{{order.memo}}</div>
+        </div>
+      </div>
     </div>
     <div class="details-middle-right">
 
@@ -67,8 +81,8 @@
       }
     },
     created() {
-      this.order = this.$route.query;
-      // console.log(this.order)
+      this.order = this.$route.query.order;
+      console.log(this.order)
     },
   }
 </script>
@@ -77,7 +91,23 @@
   @import "../../common/css/_variate.less";
   @import "../../common/css/activity";
   .m-step {
-    .details-top {
+    .m-step-content {
+      .details-middle-left {
+        width: 40%;
+        .step-left-text {
+          float: left;
+          font-size: 14px;
+          color: @greyColor;
+          margin-left: 0.2rem;
+          line-height: 0.14rem;
+        }
+        .step-left-value {
+          font-size: 14px;
+          color: @greyColor;
+          line-height: 0.14rem;
+          margin-bottom: 0.1rem;
+        }
+      }
     }
   }
 </style>
