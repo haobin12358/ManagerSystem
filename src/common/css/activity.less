@@ -218,6 +218,12 @@
   .m-step-content{
     background-color: #fff;
     padding: 0.1rem 0.2rem;
+    h3.m-step-title{
+      background-color: #eeeeef;
+      padding: 0.1rem 0.4rem;
+      margin-bottom: 0.1rem;
+      border-radius: 5px;
+    }
     .m-step-part{
       border: 1px solid @borderColor;
       border-radius: 5px;
@@ -235,6 +241,9 @@
             color: @green;
           }
         }
+      }
+      h4{
+        padding: 0.2rem 0.2rem 0.1rem;
       }
     }
     .m-step-result{
@@ -287,6 +296,16 @@
         }
         .m-font-12{
           font-size: 0.12rem;
+        }
+      }
+    }
+    .m-bottom-btn{
+      margin: 0.5rem 0;
+      span{
+        background-color: #eeeeef;
+        &.active{
+          background-color: @green;
+          margin-right: 0.2rem;
         }
       }
     }

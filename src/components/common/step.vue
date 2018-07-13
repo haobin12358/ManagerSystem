@@ -51,9 +51,9 @@
       span{
         display: block;
         &.m-progress-line{
-          width: 2rem;
+          width: 1.8rem;
           height: 0.05rem;
-          background-color: #b4b4b5;
+          background-color: #eeeeef;
           &.active{
             background-color: @red;
           }
@@ -65,7 +65,7 @@
           font-size: 0.18rem;
           color: #fff;
           border-radius: 50%;
-          background-color: #b4b4b5;
+          background-color: #eeeeef;
           text-align: center;
         }
       }
@@ -103,7 +103,7 @@
           &.m-progress-line{
             background-color: @red;
             &:last-child{
-              background-color: #b4b4b5;
+              background-color: #efefef;
             }
             &.active{
               background-color: @red;

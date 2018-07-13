@@ -4,7 +4,7 @@
     <div class="m-discount-content">
       <div class="m-discount-top">
         <ul class="m-store-top">
-          <li class="m-store-card">
+          <li class="m-store-card" @click="storeCardClick">
             <div class="m-card-left">
               <span class="m-card-icon"></span>
             </div>
@@ -166,6 +166,9 @@
             this.tab_data[item].show = false;
           }
         }
+      },
+      storeCardClick(){
+        this.$router.push('/activity/activityStoreStepOne');
       }
     },
     mounted(){

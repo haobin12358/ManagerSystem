@@ -12,7 +12,9 @@
           </div>
           <div class="m-step-result-btn">
             <span>立即推广</span>
-            <span>返回列表</span>
+            <router-link to="/activity/discountCoupon" >
+              <span>返回列表</span>
+            </router-link>
           </div>
           <div class="m-discount-info">
             <h2>￥<span>5</span></h2>
