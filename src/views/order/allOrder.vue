@@ -89,36 +89,39 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/_variate.less";
-  .all-order-content {
-    height: 2.07rem;
+  .all-order {
     background-color: @bgMainColor;
-    .all-order-search {
-      height: 1rem;
-      padding: 0.2rem 0.3rem 0 0.3rem;
-      margin: 0.15rem 0.2rem 0 0.2rem;
-      border-radius: 0.1rem;
-      background-color: @borderColor;
-      .search-buttons {
-        float: right;
-        margin-right: 1.15rem;
-        .search-button {
-          background-color: @btnActiveColor;
-          color: @bgMainColor;
-          font-size: 14px;
-        }
-        .el-button:active {
-          color: @sectionBgColor;
-          border-color: @sectionBgColor;
-          outline: 0;
+    .all-order-content {
+      height: 2.07rem;
+      background-color: @bgMainColor;
+      .all-order-search {
+        height: 1rem;
+        padding: 0.2rem 0.3rem 0 0.3rem;
+        margin: 0.15rem 0.2rem 0 0.2rem;
+        border-radius: 0.1rem;
+        background-color: @borderColor;
+        .search-buttons {
+          float: right;
+          margin-right: 1.15rem;
+          .search-button {
+            background-color: @btnActiveColor;
+            color: @bgMainColor;
+            font-size: 14px;
+          }
+          .el-button:active {
+            color: @sectionBgColor;
+            border-color: @sectionBgColor;
+            outline: 0;
+          }
         }
       }
-    }
-    .all-order-tabs {
-      width: 100%;
-      float: left;
-      background-color: @bgMainColor;
-      .el-tabs {
-        padding: 0.2rem;
+      .all-order-tabs {
+        width: 100%;
+        float: left;
+        background-color: @bgMainColor;
+        .el-tabs {
+          padding: 0.2rem;
+        }
       }
     }
   }

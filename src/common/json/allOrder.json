@@ -8,6 +8,7 @@
     "outOrderNo": "152646462341",
     "payNoText": "支付流水号：",
     "payNo": "152646462341",
+    "buyerAddress": "杭州市萧山区奔竞二路与民和路交叉口西北200米",
     "goods": [
       {
         "goodsName": "商品一",
@@ -63,13 +64,14 @@
   },
   {
     "orderNoText": "订单号：",
-    "orderNo": "E25642366453654",
+    "orderNo": "E25642366453655",
     "payTypeText": "支付方式：",
     "payType": "微信安全支付-代销",
     "outOrderNoText": "外部订单号：",
     "outOrderNo": "152646462341",
     "payNoText": "支付流水号：",
     "payNo": "152646462341",
+    "buyerAddress": "杭州市萧山区奔竞二路与民和路交叉口西北200米",
     "goods": [
       {
         "goodsName": "商品一",
@@ -95,13 +97,14 @@
   },
   {
     "orderNoText": "订单号：",
-    "orderNo": "E25642366453654",
+    "orderNo": "E25642366453656",
     "payTypeText": "支付方式：",
     "payType": "微信安全支付-代销",
     "outOrderNoText": "外部订单号：",
     "outOrderNo": "152646462341",
     "payNoText": "支付流水号：",
     "payNo": "152646462341",
+    "buyerAddress": "杭州市萧山区奔竞二路与民和路交叉口西北200米",
     "goods": [
       {
         "goodsName": "商品一",
@@ -127,13 +130,14 @@
   },
   {
     "orderNoText": "订单号：",
-    "orderNo": "E25642366453654",
+    "orderNo": "E25642366453657",
     "payTypeText": "支付方式：",
     "payType": "微信安全支付-代销",
     "outOrderNoText": "外部订单号：",
     "outOrderNo": "152646462341",
     "payNoText": "支付流水号：",
     "payNo": "152646462341",
+    "buyerAddress": "杭州市萧山区奔竞二路与民和路交叉口西北200米",
     "goods": [
       {
         "goodsName": "商品一",

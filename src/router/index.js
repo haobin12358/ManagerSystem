@@ -92,7 +92,7 @@ export const constantRouterMap = [
   },{
     path: '/order',
     component: Layout,
-    redirect: 'order/commodityManagement',
+    redirect: 'order/orderIndex',
     children: [{
       path: 'allOrder',
       component: () => import('../views/order/allOrder'),
@@ -103,6 +103,11 @@ export const constantRouterMap = [
       component: () => import('../views/order/orderIndex'),
       name: 'orderIndex',
       meta: {title: 'orderIndex', icon: 'orderIndex', noCache: true}
+    }, {
+      path: 'orderDetails',
+      component: () => import('../views/order/orderDetails'),
+      name: 'orderDetails',
+      meta: {title: 'orderDetails', icon: 'orderIndex', noCache: true}
     }, {
       path: 'refund',
       component: () => import('../views/order/refund'),
