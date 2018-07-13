@@ -135,10 +135,10 @@ export const constantRouterMap = [
       name: 'discountStoreStepOne',
       meta: {title: 'discountStoreStepOne', icon: 'discountStoreStepOne', noCache: true}
     }, {
-      path: 'discountStoreStepTwo',
-      component: () => import('../views/activity/discountStoreStepTwo'),
-      name: 'discountStoreStepTwo',
-      meta: {title: 'discountStoreStepTwo', icon: 'discountStoreStepTwo', noCache: true}
+      path: 'storeStepResult',
+      component: () => import('../views/activity/storeStepResult'),
+      name: 'storeStepResult',
+      meta: {title: 'storeStepResult', icon: 'storeStepResult', noCache: true}
     }, {
       path: 'activityStoreStepOne',
       component: () => import('../views/activity/activityStoreStepOne'),
@@ -149,6 +149,11 @@ export const constantRouterMap = [
       component: () => import('../views/activity/activityStoreStepTwo'),
       name: 'activityStoreStepTwo',
       meta: {title: 'activityStoreStepTwo', icon: 'activityStoreStepTwo', noCache: true}
+    }, {
+      path: 'activityStoreStepThree',
+      component: () => import('../views/activity/activityStoreStepThree'),
+      name: 'activityStoreStepThree',
+      meta: {title: 'activityStoreStepThree', icon: 'activityStoreStepThree', noCache: true}
     }
     ]
   }

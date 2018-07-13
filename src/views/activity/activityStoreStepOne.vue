@@ -60,7 +60,7 @@
             next:false
           },
           {
-            name:'完成',
+            name:'设置商品优惠',
             active:false,
             next:false
           }

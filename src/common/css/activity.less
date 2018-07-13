@@ -211,6 +211,9 @@
   color: @green;
   border-left: 1px solid @green;
   padding-left: 0.05rem;
+  &.m-first{
+    border-left: none;
+  }
 }
 
 
@@ -228,7 +231,9 @@
       border: 1px solid @borderColor;
       border-radius: 5px;
       margin-bottom: 0.1rem;
+      font-size: 0.12rem;
       h3.m-step-h3{
+        font-size: 0.14rem;
         padding: 0.1rem 0.2rem;
         border-bottom: 1px solid @borderColor;
         margin-bottom: 0.2rem;
@@ -243,7 +248,69 @@
         }
       }
       h4{
-        padding: 0.2rem 0.2rem 0.1rem;
+        font-size: 0.14rem;
+        padding: 0 0.2rem 0.1rem;
+        &:first-child{
+          padding: 0.2rem 0.2rem 0.1rem;
+        }
+      }
+      .m-activity-table{
+        margin: 0.1rem 0.4rem;
+        line-height: 0.3rem;
+        color: @greyColor;
+        span{
+          color: #000;
+        }
+      }
+      .m-alert-box{
+        position: relative;
+        .m-alert-icon{
+          vertical-align: middle;
+          display: inline-block;
+          width: 0.18rem;
+          height: 0.18rem;
+          background: url("../../common/images/icon-more-info.png");
+          background-size: 100% 100%;
+          cursor: pointer;
+        }
+        .m-alert-info{
+          position: absolute;
+          top:0;
+          left: 1.4rem;
+          width: 2rem;
+          padding: 0.1rem;
+          border: 1px solid @borderColor;
+          border-radius: 5px;
+          background-color: #fff;
+          z-index: 100;
+          box-shadow: 1px 1px 1px @green;
+          line-height: 0.14rem;
+          font-size: 0.1rem;
+          &.m-alert-info-a{
+            position: absolute;
+            top:0;
+            left: 2rem;
+          }
+        }
+      }
+      .m-margin-bottom{
+        margin-bottom: 0.2rem;
+      }
+      .m-alert-btn-box{
+        margin-top: 0.2rem;
+        .m-alert-btn{
+          padding: 0.05rem 0.1rem;
+          background-color: #e6e7e7;
+          color: @greyColor;
+          border-radius: 5px;
+          cursor: pointer;
+          &.active{
+            background-color: #fff;
+            border: 1px solid @green;
+            color: #000;
+            margin-right: 0.2rem;
+          }
+        }
       }
     }
     .m-step-result{
@@ -309,6 +376,17 @@
         }
       }
     }
+    .m-production-description{
+      .flex-row(flex-start);
+      text-align: left;
+      .m-img{
+        width: 0.6rem;
+        height: 0.6rem;
+        border: 1px solid @borderColor;
+        border-radius: 5px;
+        margin-right: 0.2rem;
+      }
+    }
   }
 }
 .m-bottom-btn{
@@ -318,9 +396,13 @@
     text-align: center;
     height: 0.3rem;
     line-height: 0.3rem;
-    background-color: @green;
+    background-color: #eeeeef;
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
+    margin-right: 0.2rem;
+    &.active{
+      background-color: @green;
+    }
   }
 }
