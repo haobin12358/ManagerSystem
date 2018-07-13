@@ -8,6 +8,9 @@
           <span class="m-progress-circle">{{index+1}}</span>
           <span class="m-progress-line" :class="item.next?'active':''"></span>
         </div>
+        <div style="height: 0.1rem">
+          <div class="time">{{item.time}}</div>
+        </div>
       </div>
     </template>
 
@@ -39,10 +42,15 @@
   @import "../../common/css/index";
 .m-progress-box{
   .flex-row(center);
-  margin: 0.1rem 0.1rem 0.2rem;
+  margin: 0.1rem 0.1rem 0.1rem;
   .m-progress-one{
     p{
       line-height: 0.4rem;
+      text-align: center;
+      color: #b4b4b5;
+    }
+    .time {
+      margin-top: 0.1rem;
       text-align: center;
       color: #b4b4b5;
     }
@@ -51,7 +59,7 @@
       span{
         display: block;
         &.m-progress-line{
-          width: 1.8rem;
+          width: 1.3rem;
           height: 0.05rem;
           background-color: #eeeeef;
           &.active{
