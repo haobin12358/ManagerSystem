@@ -7,6 +7,27 @@
   .m-discount-content{
     background-color: #fff;
     padding: 0.1rem 0.2rem;
+    .all-order-search {
+      height: 1rem;
+      padding: 0.2rem 0.3rem 0 0.3rem;
+      margin: 0.15rem 0.2rem 0 0.2rem;
+      border-radius: 0.1rem;
+      background-color: @borderColor;
+      .search-buttons {
+        float: right;
+        margin-right: 1.15rem;
+        .search-button {
+          background-color: @btnActiveColor;
+          color: @bgMainColor;
+          font-size: 14px;
+        }
+        .el-button:active {
+          color: @sectionBgColor;
+          border-color: @sectionBgColor;
+          outline: 0;
+        }
+      }
+    }
     .m-discount-top{
       .flex-row(space-between);
       .m-discount-top-part{
