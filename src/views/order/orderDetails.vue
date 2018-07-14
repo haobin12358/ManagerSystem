@@ -26,19 +26,6 @@
               <div class="left-text" style="margin-top: 0.2rem">{{order.memo}}</div>
             </div>
           </div>
-
-          <!--<div class="step-left-text">订单编号：</div>
-          <div class="step-left-value">{{order.orderNo}}</div>
-          <div class="step-left-text">付款方式：</div>
-          <div class="step-left-value">{{order.payType}}</div>
-          <div class="step-left-text" style="margin-left: 0.38rem">买 家：</div>
-          <div class="step-left-value">{{order.buyer}}</div>
-          <div class="step-left-text">配送方式：</div>
-          <div class="step-left-value">{{order.sendType}}</div>
-          <div class="step-left-text">收货地址：</div>
-          <div class="step-left-value">{{order.buyerAddress}}</div>
-          <div class="step-left-text">买家留言：</div>
-          <div class="step-left-value">{{order.memo}}</div>-->
         </div>
       </div>
     </div>
@@ -130,20 +117,6 @@
             margin: 0 0 0.1rem 0.2rem;
           }
         }
-        /*.step-left-text {
-          float: left;
-          width: 14%;
-          font-size: 14px;
-          color: @greyColor;
-          margin-left: 0.2rem;
-          line-height: 0.14rem;
-        }
-        .step-left-value {
-          font-size: 14px;
-          color: @greyColor;
-          line-height: 0.14rem;
-          margin-bottom: 0.1rem;
-        }*/
       }
     }
   }
