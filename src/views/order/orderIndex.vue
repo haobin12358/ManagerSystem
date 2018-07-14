@@ -10,7 +10,7 @@
         <el-tab-pane label="七日" name="seven">
           <order-index-top ref="seven" :days="days"></order-index-top>
           <order-index-left ref="leftSeven" :leftDays="leftDays"></order-index-left>
-          <my-echarts class="seven-echarts" :id="echartsId" :option="option" :width="600" :height="230"></my-echarts>
+          <my-echarts class="seven-echarts" :id="echartsId" :option="option" :width="650" :height="330"></my-echarts>
         </el-tab-pane>
         <el-tab-pane label="月度" name="thirty">
           <order-index-top ref="thirty" :days="days"></order-index-top>

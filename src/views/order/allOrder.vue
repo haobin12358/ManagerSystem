@@ -92,7 +92,6 @@
   .all-order {
     background-color: @bgMainColor;
     .all-order-content {
-      height: 2.07rem;
       background-color: @bgMainColor;
       .all-order-search {
         height: 1rem;
@@ -117,7 +116,6 @@
       }
       .all-order-tabs {
         width: 100%;
-        float: left;
         background-color: @bgMainColor;
         .el-tabs {
           padding: 0.2rem;

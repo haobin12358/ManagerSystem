@@ -8,18 +8,37 @@
       <div class="details-middle-left">
         <div class="m-step-part">
           <h4>订单详情</h4>
-          <div class="step-left-text">订单编号：</div>
+          <div class="order-info-part">
+            <div class="left-text-div">
+              <div class="left-text">订单编号：</div>
+              <div class="left-text">付款方式：</div>
+              <div class="left-text" style="margin-left: 0.4rem;">买 家：</div>
+              <div class="left-text">配送方式：</div>
+              <div class="left-text">收货地址：</div>
+              <div class="left-text" style="margin-top: 0.2rem">买家留言：</div>
+            </div>
+            <div class="left-value-div">
+              <div class="left-text">{{order.orderNo}}</div>
+              <div class="left-text">{{order.payType}}</div>
+              <div class="left-text">{{order.buyer}}</div>
+              <div class="left-text">{{order.sendType}}</div>
+              <div class="left-text">{{order.buyerAddress}}</div>
+              <div class="left-text" style="margin-top: 0.2rem">{{order.memo}}</div>
+            </div>
+          </div>
+
+          <!--<div class="step-left-text">订单编号：</div>
           <div class="step-left-value">{{order.orderNo}}</div>
           <div class="step-left-text">付款方式：</div>
           <div class="step-left-value">{{order.payType}}</div>
-          <div class="step-left-text" style="margin-left: 0.4rem">买 家：</div>
+          <div class="step-left-text" style="margin-left: 0.38rem">买 家：</div>
           <div class="step-left-value">{{order.buyer}}</div>
           <div class="step-left-text">配送方式：</div>
           <div class="step-left-value">{{order.sendType}}</div>
           <div class="step-left-text">收货地址：</div>
           <div class="step-left-value">{{order.buyerAddress}}</div>
           <div class="step-left-text">买家留言：</div>
-          <div class="step-left-value">{{order.memo}}</div>
+          <div class="step-left-value">{{order.memo}}</div>-->
         </div>
       </div>
     </div>
@@ -94,8 +113,26 @@
     .m-step-content {
       .details-middle-left {
         width: 40%;
-        .step-left-text {
+        .order-info-part {
+          height: 1.5rem;
+          .left-text-div {
+            width: 20%;
+            float: left;
+          }
+          .left-value-div {
+            width: 80%;
+            float: right;
+          }
+          .left-text {
+            font-size: 14px;
+            color: @greyColor;
+            line-height: 0.12rem;
+            margin: 0 0 0.1rem 0.2rem;
+          }
+        }
+        /*.step-left-text {
           float: left;
+          width: 14%;
           font-size: 14px;
           color: @greyColor;
           margin-left: 0.2rem;
@@ -106,7 +143,7 @@
           color: @greyColor;
           line-height: 0.14rem;
           margin-bottom: 0.1rem;
-        }
+        }*/
       }
     }
   }
