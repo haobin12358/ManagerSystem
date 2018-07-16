@@ -146,7 +146,7 @@
         }
         .m-top-input {
           float: left;
-          width: 12%;
+          width: 1rem;
           margin-right: 0.15rem;
         }
         .m-top-search-button {

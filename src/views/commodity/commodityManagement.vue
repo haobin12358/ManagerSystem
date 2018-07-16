@@ -121,7 +121,7 @@
           height: 0.27rem;
           line-height: 0.27rem;
           font-size: 0.12rem;
-          border: 1px solid @mainColor;
+          border: 1px solid @green;
           position: relative;
           border-radius: 5px;
           .icon-search{
