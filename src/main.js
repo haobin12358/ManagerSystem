@@ -32,7 +32,7 @@ var loadinginstace
 axios.interceptors.request.use(config => {
   // element ui Loading方法
   loadinginstace = Loading.service({ fullscreen: true });
-  console.log(loadinginstace)
+  // console.log(loadinginstace)
   return config
 }, error => {
   MessageBox({
