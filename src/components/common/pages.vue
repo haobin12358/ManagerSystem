@@ -1,6 +1,9 @@
 
 <template>
   <div class="m-age">
+    <div class="page-total">
+      记录数 {{pages}} 个
+    </div>
     <div class="page-pages">
       共 {{pages}} 页
     </div>
@@ -9,7 +12,8 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="1000">
+        :total="1000"
+        pager-count="3">
       </el-pagination>
       <span @click="lastClick">尾页</span>
     </div>
@@ -117,7 +121,7 @@
     margin: 0 0 55px 0;
   }
   .page-button {
-    width: 5rem;
+    width: 4rem;
     float: right;
     margin-top: -10px;
     display: flex;

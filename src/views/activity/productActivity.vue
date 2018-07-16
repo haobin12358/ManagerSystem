@@ -59,7 +59,7 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="loginTime" label="活动状态" ></el-table-column>
-            <el-table-column align="center" label="操作" >
+            <el-table-column align="center" label="操作" width="160">
               <template slot-scope="scope">
                 <span>查看</span>
                 <span class="m-link">删除</span>
