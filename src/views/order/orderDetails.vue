@@ -73,7 +73,7 @@
               </div>
               <div slot="footer" style="text-align: center;margin-bottom: 0.2rem">
                 <el-button class="right-button" style="background-color: #fff;color: #000" @click="toSendForm = false">取 消</el-button>
-                <el-button class="right-button" @click="toSendForm = false">确 定</el-button>
+                <el-button class="right-button" @click="toSend">确 定</el-button>
               </div>
             </el-dialog>
             <el-dialog title="备 注" :visible.sync="memoForm">
@@ -89,9 +89,6 @@
             </el-dialog>
             <el-button class="right-button" @click="toSendForm=true">发 货</el-button>
             <el-button class="right-button" @click="" style="margin-left: 0.2rem;" @click="memoForm=true">备 注</el-button>
-            <div class="block" style="margin-top: 0.2rem">
-              <el-rate v-model="star" allow-half show-score @change="getStar"></el-rate>
-            </div>
           </div>
           <div class="right-bottom-text">
             <div class="bottom-title">温馨提示</div>
@@ -178,14 +175,40 @@
       freshClick(){
         console.log('fresh');
       },
-      getStar() {
-        console.log('star', this.star)
+      toSend() {
+        this.toSendForm = false
+        this.step = [
+          {
+            name:'买家下单',
+            time: '2018-07-12 14:25:20',
+            active:true,
+            next:true
+          },
+          {
+            name:'买家付款',
+            time: '2018-07-12 14:34:37',
+            active:true,
+            next:true
+          },
+          {
+            name:'商家发货',
+            time: '2018-07-13 10:20:05',
+            active:false,
+            next:false
+          },
+          {
+            name:'交易完成',
+            time: '未完成',
+            active:false,
+            next:false
+          }
+        ]
       }
     },
     created() {
       this.order = this.$route.query.order;
       // console.log(this.order)
-    },
+    }
   }
 </script>
 
@@ -242,7 +265,7 @@
             }
           }
           .right-middle {
-            margin: 0.5rem 0.8rem 0 0.8rem;
+            margin: 0.7rem 0.8rem 0.14rem 0.8rem;
             .right-button {
               width: 0.8rem;
               height: 0.3rem;

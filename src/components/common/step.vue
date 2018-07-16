@@ -67,7 +67,7 @@
           }
         }
         &.m-progress-circle{
-          width: 0.4rem;
+          width: 0.37rem;
           height: 0.4rem;
           line-height: 0.4rem;
           font-size: 0.18rem;
