@@ -1,8 +1,8 @@
 <template>
   <div>
-    <router-link to="/index/adminIndex" key="user">
-        <h3 class="m-system-name">后台管理系统 </h3>
-    </router-link>
+    <!--<router-link to="/index/adminIndex" key="user">-->
+        <h3 class="m-system-name" @click="indexClick">后台管理系统 </h3>
+    <!--</router-link>-->
     <el-menu  class="el-menu-vertical-demo m-sidebar"
               mode="vertical"
               :collapse="isCollapse"
@@ -49,6 +49,12 @@
           },
           handleClose(key, keyPath) {
             console.log(key, keyPath);
+          },
+          indexClick(){
+            if(this.$store.state.role.indexOf('管理员') != -1){
+              this.$router.push('/index/adminIndex')
+            }
+
           }
         },
         created() {

@@ -148,7 +148,7 @@
           background: @btnActiveColor;
           color: @bgMainColor;
           margin-left: 0.1rem;
-          padding: 0.02rem 0.1rem;
+          padding: 0.03rem 0.1rem;
           font-size: 0.14rem;
           border: none;
         }
@@ -159,7 +159,7 @@
           background: @btnActiveColor;
           color: @bgMainColor;
           font-size: 0.14rem;
-          padding: 0.02rem 0.1rem;
+          padding: 0.03rem 0.1rem;
           border: none;
           &.active{
             background: @btnColor;

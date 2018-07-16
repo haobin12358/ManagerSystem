@@ -7,6 +7,7 @@ Vue.use(Vuex);
 let store= new Vuex.Store({
 	state: {
 	  side:null,
+    role:'',
 	    route: {},
 	    now:null,
 	    number:0,

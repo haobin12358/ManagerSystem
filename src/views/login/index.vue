@@ -67,19 +67,30 @@
             this.$http.post(api.login,that.ruleForm).
             then(res=>{
               if(res.data.status == 200){
-                this.$router.push({ path: '/index' });
-                this.$store.state.side = res.data.data.side
+                this.$store.state.side = res.data.data.side;
+                this.$store.state.role = res.data.data.MAidentity;
+                if(res.data.data.MAidentity.indexOf('管理员') != -1){
+                  this.$router.push({ path: '/index/adminIndex' });
+                }else{
+                  this.$router.push({ path: '/index/userIndex' });
+                }
               }else{
                 MessageBox({
                   title:'提示',
                   message:res.data.message,
                   callback: action => {
-                    loadinginstace.close()
+
                   }
                 })
               }
-            }, data=>{
-              console.log('错误')
+            }, res=>{
+              MessageBox({
+                title:'提示',
+                message:res.data.message,
+                callback: action => {
+                 
+                }
+              })
             });
           } else {
             console.log('error submit!!');
