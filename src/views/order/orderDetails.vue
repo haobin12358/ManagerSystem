@@ -62,8 +62,8 @@
                 <el-form :model="form" class="send-info-form">
                   <el-form-item label="物流公司:" :label-width="formLabelWidth">
                     <el-select v-model="form.region" placeholder="" style="width: 1.7rem" size="small">
-                      <el-option label="圆通快递" value="shanghai"></el-option>
-                      <el-option label="中通快递" value="beijing"></el-option>
+                      <el-option label="圆通快递" value="圆通快递"></el-option>
+                      <el-option label="中通快递" value="中通快递"></el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item label="快递单号:" :label-width="formLabelWidth">

@@ -10,7 +10,14 @@
           </div>
           <div class="search-text-input">
             <div class="search-text">退款方式：</div>
-            <el-input size="mini"></el-input>
+            <el-select v-model="value" placeholder="请选择" size="mini">
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+            </el-select>
           </div>
           <div class="search-text-input">
             <div class="search-text">订单编号：</div>
@@ -24,7 +31,14 @@
           </div>
           <div class="search-text-input">
             <div class="search-text">退款状态：</div>
-            <el-input size="mini"></el-input>
+            <el-select v-model="value" placeholder="请选择" size="mini">
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+            </el-select>
           </div>
         </div>
         <div class="order-search-three">
