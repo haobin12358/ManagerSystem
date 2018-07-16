@@ -73,7 +73,7 @@
             <div class="m-approve-info">   申请详情xxxxx</div>
           </div>
         </div>
-        <div class="m-modal-foot">
+        <div class="m-modal-foot" v-show="role">
           <span class="m-btn active">通过</span>
           <span class="m-btn">否决</span>
         </div>
@@ -89,6 +89,7 @@
     data() {
       return {
         name: '管理员首页',
+        role:false,
         inputID: '',
         inputName: '',
         user: user,
@@ -115,7 +116,11 @@
       }
     },
     created() {
-      console.log(user)
+      if(this.$store.state.role.indexOf('管理员') != -1){
+        this.role = true
+      }else{
+        this.role = false
+      }
     }
   }
 </script>
