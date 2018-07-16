@@ -42,43 +42,45 @@
         <pagination></pagination>
       </div>
     </div>
+    <transition name="fade">
+      <div class="m-modal" v-show="show_modal">
+        <div class="m-modal-state">
+          <div class="m-modal-head m-flex-between">
+            <span>审批详情/活动审批</span>
+            <span class="m-close" @click="showModal(false)">X</span></div>
+          <div class="m-modal-content">
+            <table class="m-table" width="100%">
+              <thead>
+              <tr>
+                <td>申请人</td>
+                <td>用户组</td>
+                <td>状态</td>
+                <td>申请时间</td>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>申请人</td>
+                <td>用户组</td>
+                <td>状态</td>
+                <td>申请时间</td>
+              </tr>
+              </tbody>
 
-    <div class="m-modal" v-show="show_modal">
-      <div class="m-modal-state">
-        <div class="m-modal-head m-flex-between">
-          <span>审批详情/活动审批</span>
-        <span class="m-close" @click="showModal(false)">X</span></div>
-        <div class="m-modal-content">
-          <table class="m-table" width="100%">
-            <thead>
-            <tr>
-            <td>申请人</td>
-            <td>用户组</td>
-            <td>状态</td>
-            <td>申请时间</td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>申请人</td>
-              <td>用户组</td>
-              <td>状态</td>
-              <td>申请时间</td>
-            </tr>
-            </tbody>
-
-          </table>
-          <div class="m-approve-box">
-            <p>申请详情：</p>
-            <div class="m-approve-info">   申请详情xxxxx</div>
+            </table>
+            <div class="m-approve-box">
+              <p>申请详情：</p>
+              <div class="m-approve-info">   申请详情xxxxx</div>
+            </div>
+          </div>
+          <div class="m-modal-foot" v-show="role">
+            <span class="m-btn active">通过</span>
+            <span class="m-btn">否决</span>
           </div>
         </div>
-        <div class="m-modal-foot" v-show="role">
-          <span class="m-btn active">通过</span>
-          <span class="m-btn">否决</span>
-        </div>
       </div>
-    </div>
+    </transition>
+
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -202,4 +204,5 @@
   .m-bottom {
     margin: 0.2rem 0.4rem 0.3rem 0;
   }
+
 </style>

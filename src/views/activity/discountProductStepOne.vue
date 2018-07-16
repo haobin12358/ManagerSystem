@@ -49,8 +49,8 @@
         </div>
       </div>
     </el-form>
-
-    <div class="m-modal" v-show="show_modal">
+    <transition name="fade">
+      <div class="m-modal" v-show="show_modal">
       <div class="m-modal-state">
         <div class="m-modal-head m-flex-between">
           <span>选择商品</span>
@@ -113,6 +113,7 @@
         </div>
       </div>
     </div>
+    </transition>
   </div>
 </template>
 

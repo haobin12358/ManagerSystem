@@ -11,6 +11,7 @@
   width: 100%;
   background-color: rgba(0,0,0,0.2);
   z-index: 1001;
+  transition: opacity .5s;
   .m-modal-state{
     background-color: #fff;
     padding: 0.2rem 0.4rem;
@@ -25,6 +26,8 @@
     border: 1px solid @borderColor;
     box-shadow: 1px 1px 2px @green;
     border-radius: 5px;
+    -webkit-transition: height 0.88s;
+    transition: height 0.88s;
     .m-modal-head{
       border-bottom: 1px solid @borderColor;
       padding-bottom: 0.1rem;
@@ -98,4 +101,10 @@
 }
 .m-input-m{
   width: 1.8rem;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
