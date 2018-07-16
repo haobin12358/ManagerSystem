@@ -10,11 +10,25 @@
           </div>
           <div class="search-text-input">
             <div class="search-text">维权状态：</div>
-            <el-input size="mini"></el-input>
+            <el-select v-model="value" placeholder="请选择" size="mini">
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+            </el-select>
           </div>
           <div class="search-text-input">
             <div class="search-text">付款方式：</div>
-            <el-input size="mini"></el-input>
+            <el-select v-model="value" placeholder="请选择" size="mini">
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+            </el-select>
           </div>
         </div>
         <div class="order-search-two">
@@ -24,19 +38,35 @@
           </div>
           <div class="search-text-input">
             <div class="search-text">物流方式：</div>
-            <el-input size="mini"></el-input>
+            <el-select v-model="value" placeholder="请选择" size="mini">
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+            </el-select>
           </div>
           <div class="search-text-input">
             <div class="search-text">订单类型：</div>
-            <el-input size="mini"></el-input>
+            <el-select v-model="value" placeholder="请选择" size="mini">
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+            </el-select>
           </div>
         </div>
         <div class="order-search-three">
           <div class="search-text-input" style="width: 5rem">
-            <div class="search-text">下单时间：</div>
-            <el-input size="mini"></el-input>
-            <div class="search-text-middle">至</div>
-            <el-input size="mini"></el-input>
+            <div class="search-text">退款时间：</div>
+            <div class="block">
+              <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
+                              :picker-options="pickerOptions2" size="mini">
+              </el-date-picker>
+            </div>
           </div>
         </div>
         <div class="search-buttons">
@@ -67,7 +97,35 @@
       data() {
           return {
             name: '所有订单',
-            activeName: 'one'
+            activeName: 'one',
+            pickerOptions2: {
+              shortcuts: [{
+                text: '最近一周',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '最近一个月',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '最近三个月',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                  picker.$emit('pick', [start, end]);
+                }
+              }]
+            },
+            value7: ''
           }
       },
       components: {

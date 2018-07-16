@@ -33,8 +33,8 @@
           <div class="right-top-top">
             <div class="left-icon"><img src="../../assets/images/toSend.png" height="50"/></div>
             <div class="right-text">
-              <div class="right-top">订单状态：买家已付款，等待卖家发货</div>
-              <div class="right-bottom">买家已付款至待结算账户，请尽快发货，否则买家有权利申请退款</div>
+              <div class="right-top">订单状态：{{orderStatus}}</div>
+              <div class="right-bottom">{{reminder}}</div>
             </div>
           </div>
           <div class="right-middle">
@@ -62,8 +62,8 @@
                 <el-form :model="form" class="send-info-form">
                   <el-form-item label="物流公司:" :label-width="formLabelWidth">
                     <el-select v-model="form.region" placeholder="" style="width: 1.7rem" size="small">
-                      <el-option label="圆通快递" value="shanghai"></el-option>
-                      <el-option label="中通快递" value="beijing"></el-option>
+                      <el-option label="圆通快递" value="圆通快递"></el-option>
+                      <el-option label="中通快递" value="中通快递"></el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item label="快递单号:" :label-width="formLabelWidth">
@@ -76,10 +76,10 @@
                 <el-button class="right-button" @click="toSend">确 定</el-button>
               </div>
             </el-dialog>
-            <el-dialog title="备 注" :visible.sync="memoForm">
+            <el-dialog title="备 注" :visible.sync="memoForm" width="4rem">
               <el-form :model="memoForms">
                 <el-form-item label="备 注：" :label-width="formLabelWidth">
-                  <el-input v-model="memoForms.name" auto-complete="off" size="small" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
+                  <el-input v-model="memoForms.name" auto-complete="off" size="small" type="textarea" :autosize="{ minRows: 2, maxRows: 5}"></el-input>
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
@@ -87,8 +87,22 @@
                 <el-button class="right-button" @click="memoForm = false">确 定</el-button>
               </div>
             </el-dialog>
-            <el-button class="right-button" @click="toSendForm=true">发 货</el-button>
-            <el-button class="right-button" @click="" style="margin-left: 0.2rem;" @click="memoForm=true">备 注</el-button>
+            <el-dialog title="物流信息" :visible.sync="searchWhere" width="4rem">
+              <div v-for="where in whereList" class="where-list">
+                {{where}}
+              </div>
+              <span slot="footer" class="dialog-footer">
+                <el-button class="right-button" @click="searchWhere=false">确 定</el-button>
+              </span>
+            </el-dialog>
+
+            <div v-if="toSendStatus">
+              <el-button class="right-button" @click="searchWhere=true">查看物流进度</el-button>
+            </div>
+            <div v-if="!toSendStatus">
+              <el-button class="right-button" @click="toSendForm=true">发 货</el-button>
+              <el-button class="right-button" @click="" style="margin-left: 0.2rem;" @click="memoForm=true">备 注</el-button>
+            </div>
           </div>
           <div class="right-bottom-text">
             <div class="bottom-title">温馨提示</div>
@@ -154,6 +168,22 @@
             next:false
           }
         ],
+        orderStatus: '买家已付款，等待卖家发货',
+        reminder: '买家已付款至待结算账户，请尽快发货，否则买家有权利申请退款',
+        toSendStatus: false,
+        searchWhere: false,
+        whereList: [
+          "2018-07-15 14:25:23 快递已到达杭州萧山分拨中心",
+          "2018-07-14 14:25:23 快递已到达杭州分拨中心",
+          "2018-07-13 14:25:23 快递已到达分拨中心",
+          "2018-07-13 14:25:23 快递已到达杭州萧山分拨中心",
+          "2018-07-13 14:25:23 快递已到达杭州萧山分拨中心",
+          "2018-07-13 14:25:23 快递已到达杭州萧山分拨中心",
+          "2018-07-13 14:25:23 快递已到达杭州萧山分拨中心",
+          "2018-07-13 14:25:23 快递已到达杭州萧山分拨中心",
+          "2018-07-13 14:25:23 快递已到达杭州萧山分拨中心",
+          "2018-07-13 14:25:23 快递已到达杭州萧山分拨中心",
+        ],
         star: 0,
         toSendForm: false,
         memoForm: false,
@@ -193,8 +223,8 @@
           {
             name:'商家发货',
             time: '2018-07-13 10:20:05',
-            active:false,
-            next:false
+            active:true,
+            next:true
           },
           {
             name:'交易完成',
@@ -203,6 +233,9 @@
             next:false
           }
         ]
+        this.orderStatus = '卖家已发货，等待买家签收'
+        this.reminder = '卖家已发货，请关注物流进度'
+        this.toSendStatus = true
       }
     },
     created() {
@@ -225,7 +258,7 @@
         width: 40%;
         float: left;
         .order-info-part {
-          height: 2.05rem;
+          height: 1.8rem;
           .left-text-div {
             width: 20%;
             float: left;
@@ -265,7 +298,10 @@
             }
           }
           .right-middle {
-            margin: 0.7rem 0.8rem 0.14rem 0.8rem;
+            margin: 0.6rem 0.8rem 0 0.8rem;
+            .where-list {
+              margin: 0 0 0.1rem 0.3rem;
+            }
             .right-button {
               width: 0.8rem;
               height: 0.3rem;
