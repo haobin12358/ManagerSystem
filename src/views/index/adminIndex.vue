@@ -121,6 +121,7 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/index.less";
+  @import "../../common/css/modal";
   .m-content {
     padding: 0.2rem;
     background: @bgMainColor;
@@ -147,7 +148,9 @@
           background: @btnActiveColor;
           color: @bgMainColor;
           margin-left: 0.1rem;
+          padding: 0.02rem 0.1rem;
           font-size: 0.14rem;
+          border: none;
         }
       }
       .m-top-button{
@@ -156,6 +159,8 @@
           background: @btnActiveColor;
           color: @bgMainColor;
           font-size: 0.14rem;
+          padding: 0.02rem 0.1rem;
+          border: none;
           &.active{
             background: @btnColor;
             color: @greyColor;
@@ -172,85 +177,7 @@
     }
 
   }
-  .m-modal{
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0,0,0,0.2);
-    z-index: 1001;
-    .m-modal-state{
-      background-color: #fff;
-      padding: 0.2rem 0.4rem;
-      position: absolute;
-      width: 7.5rem;
-      height: 4.5rem;
-      top: 0;
-      left: 0;
-      right:0;
-      bottom:0;
-      margin: auto;
-      border: 1px solid @borderColor;
-      box-shadow: 1px 1px 2px @green;
-      border-radius: 5px;
-      .m-modal-head{
-        border-bottom: 1px solid @borderColor;
-        padding-bottom: 0.1rem;
-        .m-close{
-          cursor: pointer;
-        }
-      }
-      .m-modal-content{
-        padding: 0.4rem 0.2rem;
-        .m-table{
-          text-align: center;
-          line-height: 0.6rem;
-          border-radius: 5px;
-          thead{
-            line-height: 0.3rem;
-          }
-          td{
-            border: 1px solid @borderColor;
-          }
-        }
-        .m-approve-box{
-          margin: 0.2rem 0 0;
-          p{
-            padding: 0.05rem;
-            font-size: 0.14rem;
-          }
-          .m-approve-info{
-            border: 1px solid @borderColor;
-            border-radius: 10px;
-            margin: 0.1rem 0;
-            padding: 0.1rem;
-            height: 1.2rem;
-            font-size: 0.12rem;
-            color: @greyColor;
-          }
-        }
-      }
-      .m-modal-foot{
-        .flex-row(center);
-        span.m-btn{
-          display: block;
-          background-color: @borderColor;
-          color: @greyColor;
-          padding: 0.05rem 0.3rem;
-          border-radius: 5px;
-          margin-left: 0.2rem;
-          font-size: 0.16rem;
-          cursor: pointer;
-          &.active{
-            background-color: @btnActiveColor;
-            color: #fff;
 
-          }
-        }
-      }
-    }
-  }
   .m-table-button{
     background-color: @sidebarChildColor;
     color: #fff;

@@ -132,6 +132,7 @@
     }
     .m-date{
       line-height: 0.3rem;
+      margin: 0.1rem 0;
       .m-date-icon{
         display: inline-block;
         width: 0.14rem;
@@ -237,7 +238,16 @@
     border-left: none;
   }
 }
-
+.m-label-line{
+  display: inline-block;
+  width: 2rem;
+  text-align: right;
+}
+.m-remark{
+  color: @greyColor;
+  font-size: 0.12rem;
+  margin-left: 0.2rem;
+}
 
 .m-step{
   .m-step-content{
@@ -409,6 +419,18 @@
         margin-right: 0.2rem;
       }
     }
+  }
+}
+.m-production-description{
+  .flex-row(flex-start);
+  text-align: left;
+  padding: 0.1rem 0;
+  .m-img{
+    width: 0.6rem;
+    height: 0.6rem;
+    border: 1px solid @borderColor;
+    border-radius: 5px;
+    margin-right: 0.2rem;
   }
 }
 .m-bottom-btn{

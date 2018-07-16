@@ -7,11 +7,11 @@
           <h3 class="login-head">用户登录</h3>
           <el-form-item  prop="name">
             <i class="icon-person icon"></i>
-            <el-input v-model="ruleForm.name" class="m-input"></el-input>
+            <el-input v-model="ruleForm.MAname" class="m-input"></el-input>
           </el-form-item>
           <el-form-item  prop="pwd">
             <span class="icon-pwd icon"></span>
-            <el-input v-model="ruleForm.pwd" type="password" class="m-input"></el-input>
+            <el-input v-model="ruleForm.MApassword" type="password" class="m-input"></el-input>
             <!--<i class="icon-pwd icon-r"></i>-->
           </el-form-item>
           <!--<el-form-item  prop="pwd">-->
@@ -37,7 +37,9 @@
 
 <script>
   import loginHead from '../../components/common/header';
-  import foot from '../../components/common/footer'
+  import foot from '../../components/common/footer';
+  import api from '../../api/api';
+  import { MessageBox } from 'element-ui';
   export default {
     components:{
       loginHead,
@@ -46,25 +48,39 @@
     data() {
       return {
         ruleForm: {
-          name: '',
-          pwd:''
+          MAname: '',
+          MApassword:''
         },
         rules: {
-          name: [
+          MAname: [
             { required: true, message: '请输入账号名称', trigger: 'blur' }
           ],
-          pwd:'password',
+          MApassword:'password',
         }
       };
     },
     methods: {
       submitForm(formName) {
+        let that = this;
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // this.$store.dispatch('LoginByUsername', this.ruleForm).then(() => {
-              this.$router.push({ path: '/' })
-            // }).catch(() => {
-            // })
+            this.$http.post(api.login,that.ruleForm).
+            then(res=>{
+              if(res.data.status == 200){
+                this.$router.push({ path: '/index' });
+                this.$store.state.side = res.data.data.side
+              }else{
+                MessageBox({
+                  title:'提示',
+                  message:res.data.message,
+                  callback: action => {
+                    loadinginstace.close()
+                  }
+                })
+              }
+            }, data=>{
+              console.log('错误')
+            });
           } else {
             console.log('error submit!!');
             return false;

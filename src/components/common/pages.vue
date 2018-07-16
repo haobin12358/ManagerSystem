@@ -1,12 +1,6 @@
 
 <template>
   <div class="m-age">
-    <div class="page-total">
-      总记录数：{{total}} 个
-    </div>
-    <div class="page-current">
-      当前：第 {{page}} 页
-    </div>
     <div class="page-pages">
       共 {{pages}} 页
     </div>

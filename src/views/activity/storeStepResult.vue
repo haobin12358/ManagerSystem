@@ -11,10 +11,7 @@
             <span class="m-line-height">&nbsp;创建成功！</span>
           </div>
           <div class="m-step-result-btn">
-            <span>立即推广</span>
-            <router-link to="/activity/discountCoupon" >
-              <span>返回列表</span>
-            </router-link>
+              <span @click="returnClick">返回列表</span>
           </div>
           <div class="m-discount-info">
             <h2>￥<span>5</span></h2>
@@ -58,6 +55,9 @@
       },
       onSubmit(){
 
+      },
+      returnClick(){
+        this.$router.push('/activity/discountCoupon')
       }
     },
     created() {

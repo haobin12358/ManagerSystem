@@ -23,6 +23,45 @@ Vue.prototype.echarts = echarts;
 
 import axios from 'axios';
 Vue.prototype.$http = axios;
+//拦截器、
+import { Loading, Message, MessageBox  } from 'element-ui'
+// 超时时间
+axios.defaults.timeout = 5000
+// http请求拦截器
+var loadinginstace
+axios.interceptors.request.use(config => {
+  // element ui Loading方法
+  loadinginstace = Loading.service({ fullscreen: true });
+  console.log(loadinginstace)
+  return config
+}, error => {
+  MessageBox({
+    title:'提示',
+    message:'加载超时',
+    callback: action => {
+      loadinginstace.close()
+    }
+  })
+  return Promise.reject(error)
+})
+// http响应拦截器
+axios.interceptors.response.use(data => {// 响应成功关闭loading
+  loadinginstace.close()
+  return data
+}, error => {
+  MessageBox({
+    title:'提示',
+    message:'请求失败',
+    callback: action => {
+      loadinginstace.close()
+    }
+  })
+  return Promise.reject(error)
+})
+
+
+
+
 
 Vue.config.productionTip = false
 import store from './vuex'

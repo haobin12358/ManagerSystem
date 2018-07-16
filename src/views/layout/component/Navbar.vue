@@ -14,13 +14,37 @@
       <input type="text" placeholder="搜索">
     </div>
     <div class="icon icon-message"></div>
-    <el-dropdown :hide-on-click="false">
+    <el-dropdown :hide-on-click="false" @command="handleCommand">
       <span>hello,admin<i class="icon-person-navbar icon"></i></span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>修改密码</el-dropdown-item>
-        <el-dropdown-item divided>退出</el-dropdown-item>
+        <el-dropdown-item command="passward">修改密码</el-dropdown-item>
+        <el-dropdown-item command="exit" divided>退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
+
+    <div class="m-modal" v-show="show_pwd_modal" @click="hideModal">
+      <div class="m-modal-state">
+        <div class="m-modal-content" @click="modalClick">
+          <h3>管理员数据管理</h3>
+          <p>--修改密码</p>
+          <el-form :inline="false" :model="storeForm"   label-width="1rem">
+                <el-form-item label="请输入旧密码">
+                  <el-input v-model="storeForm.name" class="m-input-m" placeholder=""></el-input>
+                </el-form-item>
+                <el-form-item label="请输入新密码">
+                  <el-input v-model="storeForm.name" class="m-input-m" placeholder=""></el-input>
+                </el-form-item>
+                <el-form-item label="请确认新密码">
+                  <el-input v-model="storeForm.name" class="m-input-m" placeholder=""></el-input>
+                </el-form-item>
+
+              <p class="m-btn-p">确认修改</p>
+
+          </el-form>
+
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,7 +60,13 @@ export default {
   },
   data(){
     return{
-      isActive:false
+      isActive:false,
+      show_pwd_modal:false,
+      storeForm:{
+        name:'',
+        user:''
+      }
+
     }
   },
   methods: {
@@ -51,6 +81,21 @@ export default {
         this.isActive = false;
       }
 
+    },
+    hideModal(){
+      this.show_pwd_modal = false;
+    },
+    pwdSubmit(){
+
+    },
+    handleCommand(command) {
+      if(command == 'passward'){
+        this.show_pwd_modal = true;
+      }
+    },
+    modalClick(e){
+      e.stopPropagation();
+      return false
     }
   }
 }
@@ -58,6 +103,7 @@ export default {
 
 <style rel="stylesheet/less" lang="less" scoped>
   @import "../../../common/css/_variate";
+  @import "../../../common/css/modal";
 .navbar{
   /*height: 0.5rem;*/
   border: 1px solid @borderColor;
@@ -126,6 +172,20 @@ export default {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
-
+.m-modal{
+  .m-modal-state{
+    width: 4rem;
+    height: 3.5rem;
+    text-align: center;
+    p{
+      font-size: 0.12rem;
+      margin-bottom: 0.2rem;
+    }
+    .m-btn-p{
+      font-size: 0.14rem;
+      cursor: pointer;
+    }
+  }
+}
 
 </style>

@@ -28,7 +28,7 @@
     export default {
         data() {
             return {
-              side_list:[]
+              side_list:this.$store.state.side
             }
         },
       components:{
@@ -52,7 +52,7 @@
           }
         },
         created() {
-            this.side_list = sideList.side;
+
         },
         computed:{
           isCollapse() {

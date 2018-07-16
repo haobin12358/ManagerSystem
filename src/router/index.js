@@ -140,6 +140,11 @@ export const constantRouterMap = [
       name: 'discountStoreStepOne',
       meta: {title: 'discountStoreStepOne', icon: 'discountStoreStepOne', noCache: true}
     }, {
+      path: 'discountProductStepOne',
+      component: () => import('../views/activity/discountProductStepOne'),
+      name: 'discountProductStepOne',
+      meta: {title: 'discountProductStepOne', icon: 'discountProductStepOne', noCache: true}
+    },{
       path: 'storeStepResult',
       component: () => import('../views/activity/storeStepResult'),
       name: 'storeStepResult',

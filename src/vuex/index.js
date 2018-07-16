@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 let store= new Vuex.Store({
 	state: {
+	  side:null,
 	    route: {},
 	    now:null,
 	    number:0,
