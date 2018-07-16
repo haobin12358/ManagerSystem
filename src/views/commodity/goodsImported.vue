@@ -58,11 +58,25 @@
 
         <el-form-item label="商品样式及价格:" :rules="[{ required: true}]">
           <div class="m-product-style">
+            <div>
+              <span class="m-img-label">A:</span> <el-input v-model="form.name" placeholder="输入商品属性" class="m-input-s" ></el-input>
+              <span class="m-img-label">B:</span> <el-input v-model="form.name" placeholder="输入商品属性" class="m-input-s" ></el-input>
+            </div>
             <div class="m-product">
               <div class="m-product-input">
-                <el-input v-model="form.name" placeholder="输入商品颜色，如粉红色" class="m-input-m" ></el-input>
-                <el-input v-model="form.name" placeholder="输入商品规格，如进阶版" class="m-input-m" ></el-input>
-                <el-input v-model="form.name" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
+                <div>
+                  <span class="m-img-label">A:</span>
+                  <el-input v-model="form.name" placeholder="输入商品颜色，如粉红色" class="m-input-m" ></el-input>
+                </div>
+                <div>
+                  <span class="m-img-label">B:</span>
+                  <el-input v-model="form.name" placeholder="输入商品规格，如进阶版" class="m-input-m" ></el-input>
+                </div>
+                <div>
+                  <span class="m-img-label">价格:</span>
+                  <el-input v-model="form.name" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
+                </div>
+
               </div>
               <div>
                 <el-upload
@@ -77,9 +91,19 @@
             </div>
             <div class="m-product">
               <div class="m-product-input">
-                <el-input v-model="form.name" placeholder="输入商品颜色，如粉红色" class="m-input-m" ></el-input>
-                <el-input v-model="form.name" placeholder="输入商品规格，如进阶版" class="m-input-m" ></el-input>
-                <el-input v-model="form.name" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
+                <div>
+                  <span class="m-img-label">A:</span>
+                  <el-input v-model="form.name" placeholder="输入商品颜色，如粉红色" class="m-input-m" ></el-input>
+                </div>
+                <div>
+                  <span class="m-img-label">B:</span>
+                  <el-input v-model="form.name" placeholder="输入商品规格，如进阶版" class="m-input-m" ></el-input>
+                </div>
+                <div>
+                  <span class="m-img-label">价格:</span>
+                  <el-input v-model="form.name" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
+                </div>
+
               </div>
               <div>
                 <el-upload
@@ -93,27 +117,44 @@
               </div>
             </div>
             <p class="m-add-more">+查看更多</p>
-            <p class="m-look-more">更多基本信息设置</p>
+            <p class="m-look-more" @click="showMore('show_basic_info')">更多基本信息设置</p>
           </div>
         </el-form-item>
-        <el-form-item label="商品卖点:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
-          <el-input v-model="form.name" class="m-input-l" placeholder="输入内容"></el-input>
-          <p class="m-alert">在商品详情页下面展示卖点信息，建议36字以内，<span class="m-link">查看示例</span></p>
-        </el-form-item>
-        <el-form-item label="商品视频:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
-          <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            class="m-img-l">
-            <span>+添加视频</span>
-          </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="">
-          </el-dialog>
-          <p class="m-img-p">建议视频尺寸比例为1:1或16:9，时长不超过60秒</p>
-        </el-form-item>
+        <div v-show="show_basic_info">
+          <el-form-item label="商品卖点:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
+            <el-input v-model="form.name" class="m-input-l" placeholder="输入内容"></el-input>
+            <p class="m-alert">在商品详情页下面展示卖点信息，建议36字以内</p><!--，<span class="m-link">查看示例</span>-->
+          </el-form-item>
+          <el-form-item label="商品视频:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
+            <el-upload
+              action="https://jsonplaceholder.typicode.com/posts/"
+              list-type="picture-card"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+              class="m-img-l">
+              <span>+添加视频</span>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+            <p class="m-img-p">建议视频尺寸比例为1:1或16:9，时长不超过60秒</p>
+          </el-form-item>
+          <el-form-item label="商品详情:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
+            <el-upload
+              action="https://jsonplaceholder.typicode.com/posts/"
+              list-type="picture-card"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+              class="m-img-l">
+              <span>+添加图片</span>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+            <p class="m-img-p">建议尺寸：700*700像素，可以通过拖动图片调整前后顺序</p>
+          </el-form-item>
+        </div>
+
       </div>
       <a name="priceInfo"></a>
       <div class="m-one-part">
@@ -129,12 +170,15 @@
             <span>商品详情不显示剩余件数</span>
           </div>
           <p class="m-alert">库存为0时，会放入已售罄列表中</p>
-          <p class="m-look-more">更多价格库存设置</p>
+          <p class="m-look-more" @click="showMore('show_price_info')">更多价格库存设置</p>
         </el-form-item>
-        <el-form-item label="成本价格:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
-          <el-input v-model="form.name" class="m-input-m" ></el-input>
-          <p class="m-alert">建议描述文字在36字以内</p>
-        </el-form-item>
+        <div v-show="show_price_info">
+          <el-form-item label="成本价格:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
+            <el-input v-model="form.name" class="m-input-m" ></el-input>
+            <p class="m-alert">建议描述文字在36字以内</p>
+          </el-form-item>
+        </div>
+
 
       </div>
 
@@ -154,25 +198,28 @@
             <el-input v-model="form.name" class="m-input-s" ></el-input>
             <p class="m-alert">需等待管理员审批完成，上架时间请选择24小时以后</p>
           </div>
-          <p class="m-look-more">更多其他信息设置</p>
+          <p class="m-look-more" @click="showMore('show_other_info')">更多其他信息设置</p>
         </el-form-item>
-        <el-form-item label="限购:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
-          <div>
-            <el-radio v-model="radio" label="1">无现货，下单后需过段时间才能发货  </el-radio>
-          </div>
-          <div>
-            <el-radio v-model="radio" label="0">只允许特定用户购买  </el-radio>
-          </div>
-          <div>
-            <el-radio v-model="radio" label="0">允许用户购买数量  </el-radio>
-            <el-input v-model="form.name" class="m-input-s" placeholder="每个ID限购5个"></el-input>
-          </div>
-        </el-form-item>
+        <div v-show="show_other_info">
+          <el-form-item label="限购:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
+            <div>
+              <el-radio v-model="radio" label="1">无现货，下单后需过段时间才能发货  </el-radio>
+            </div>
+            <div>
+              <el-radio v-model="radio" label="0">只允许特定用户购买  </el-radio>
+            </div>
+            <div>
+              <el-radio v-model="radio" label="0">允许用户购买数量  </el-radio>
+              <el-input v-model="form.name" class="m-input-s" placeholder="每个ID限购5个"></el-input>
+            </div>
+          </el-form-item>
+        </div>
+
       </div>
 
       <div class="m-goodsImported-foot">
-        <span class="m-foot-btn">保存并查看</span>
-        <span class="m-foot-btn">发布</span>
+        <span class="m-foot-btn">保存</span>
+        <span class="m-foot-btn" @click="issueClick">发布</span>
       </div>
     </div>
     <div class="m-right-side">
@@ -244,7 +291,10 @@
               dialogVisible: false,
               checked:true,
               radio:0,
-              linkTo:'basicInfo'
+              linkTo:'basicInfo',
+              show_basic_info:false,
+              show_price_info:false,
+              show_other_info:false
             }
         },
       components:{
@@ -263,6 +313,14 @@
           },
           sideClick(v){
             this.linkTo = v;
+          },
+          //显示更多
+          showMore(v){
+            this[v] = !this[v];
+          },
+        //  发布
+          issueClick(){
+            this.$router.push('/commodity/commodityManagement')
           }
         },
         created() {
@@ -367,6 +425,13 @@
               margin-top: 0.1rem;
             }
           }
+
+        }
+        .m-img-label{
+          display: inline-block;
+          width: 0.5rem;
+          text-align: right;
+          color: @greyColor;
         }
         .m-add-more{
           font-size: 0.12rem;

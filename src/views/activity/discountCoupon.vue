@@ -116,8 +116,7 @@
             <el-table-column align="center" prop="group" label="已领取" ></el-table-column>
             <el-table-column align="center" label="操作" >
               <template slot-scope="scope">
-                <span class="m-table-edit m-table-link">编辑</span>
-                <span class=" m-table-link">推广</span>
+                <span class="m-link m-first" @click="storeEdit">编辑</span>
               </template>
             </el-table-column>
           </el-table>
@@ -128,7 +127,60 @@
       </div>
       <!--商品优惠卷-->
       <div class="m-commodity" v-show="tab_data.commodity.show">
-
+        <el-form :inline="true" :model="storeForm" class="demo-form-inline">
+          <div class="m-select-box">
+            <div class="m-left">
+              <el-form-item label="活动状态">
+                <el-select v-model="storeForm.name" class="m-input-s" placeholder="活动区域">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="优惠券名称">
+                <el-input v-model="storeForm.name" class="m-input-s" placeholder="审批人"></el-input>
+              </el-form-item>
+              <el-form-item label="面额">
+                <el-input v-model="storeForm.name" class="m-input-s" placeholder="审批人"></el-input>
+              </el-form-item>
+              <el-form-item label="时间">
+                <el-date-picker type="date" class="m-input-s" placeholder="起始时间" v-model="storeForm.date1" style="width: 1.2rem;"></el-date-picker>
+              </el-form-item>
+              <el-form-item label="-">
+                <el-date-picker type="date" class="m-input-s" placeholder="结束时间" v-model="storeForm.date2" style="width: 1.2rem;"></el-date-picker>
+              </el-form-item>
+            </div>
+            <div class="m-right">
+              <el-form-item>
+                <el-button type="primary" class="m-select-btn" @click="storeSubmit">查询</el-button>
+              </el-form-item>
+            </div>
+          </div>
+        </el-form>
+        <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
+          <el-table :data="user" stripe style="width: 100%">
+            <el-table-column align="center" prop="userId" label="名称/渠道"></el-table-column>
+            <el-table-column align="center" prop="userId" label="状态" ></el-table-column>
+            <el-table-column align="center" prop="userName" label="面额"></el-table-column>
+            <el-table-column align="center" prop="group" label="门槛" ></el-table-column>
+            <el-table-column align="center" prop="group" label="使用时间" >
+              <template slot-scope="scope">
+                <p>起：2018-07-02</p>
+                <p>止：2018-07-08</p>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="group" label="限额" ></el-table-column>
+            <el-table-column align="center" prop="loginTime" label="发行量" ></el-table-column>
+            <el-table-column align="center" prop="group" label="已领取" ></el-table-column>
+            <el-table-column align="center" label="操作" >
+              <template slot-scope="scope">
+                <span class="m-link m-first" @click="storeEdit">编辑</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <div class="m-page-box">
+          <pagination></pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -207,6 +259,9 @@
           this.tab_data[item].show = false;
          }
        }
+      },
+      storeEdit(){
+        this.$router.push('/activity/discountStoreStepOne');
       }
     },
     mounted(){

@@ -68,8 +68,8 @@
         }
         &.m-progress-circle{
           width: 0.37rem;
-          height: 0.4rem;
-          line-height: 0.4rem;
+          height: 0.37rem;
+          line-height: 0.37rem;
           font-size: 0.18rem;
           color: #fff;
           border-radius: 50%;

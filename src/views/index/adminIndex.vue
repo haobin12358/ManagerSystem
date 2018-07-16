@@ -33,13 +33,50 @@
             <template slot-scope="scope">
               <el-button
                 size="mini" class="m-table-button"
-                >详情</el-button>
+                @click="showModal(true)">详情</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <div class="m-bottom">
         <pagination></pagination>
+      </div>
+    </div>
+
+    <div class="m-modal" v-show="show_modal">
+      <div class="m-modal-state">
+        <div class="m-modal-head m-flex-between">
+          <span>审批详情/活动审批</span>
+        <span class="m-close" @click="showModal(false)">X</span></div>
+        <div class="m-modal-content">
+          <table class="m-table" width="100%">
+            <thead>
+            <tr>
+            <td>申请人</td>
+            <td>用户组</td>
+            <td>状态</td>
+            <td>申请时间</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>申请人</td>
+              <td>用户组</td>
+              <td>状态</td>
+              <td>申请时间</td>
+            </tr>
+            </tbody>
+
+          </table>
+          <div class="m-approve-box">
+            <p>申请详情：</p>
+            <div class="m-approve-info">   申请详情xxxxx</div>
+          </div>
+        </div>
+        <div class="m-modal-foot">
+          <span class="m-btn active">通过</span>
+          <span class="m-btn">否决</span>
+        </div>
       </div>
     </div>
   </div>
@@ -54,7 +91,8 @@
         name: '管理员首页',
         inputID: '',
         inputName: '',
-        user: user
+        user: user,
+        show_modal:false
       }
     },
     components:{
@@ -71,6 +109,9 @@
       },
       addUser() {
         console.log('添加用户')
+      },
+      showModal(v){
+        this.show_modal = v;
       }
     },
     created() {
@@ -79,7 +120,7 @@
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
-  @import "../../common/css/_variate.less";
+  @import "../../common/css/index.less";
   .m-content {
     padding: 0.2rem;
     background: @bgMainColor;
@@ -127,6 +168,86 @@
       .el-crud {
         font-size: 0.14rem;
         color: #000000;
+      }
+    }
+
+  }
+  .m-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.2);
+    z-index: 1001;
+    .m-modal-state{
+      background-color: #fff;
+      padding: 0.2rem 0.4rem;
+      position: absolute;
+      width: 7.5rem;
+      height: 4.5rem;
+      top: 0;
+      left: 0;
+      right:0;
+      bottom:0;
+      margin: auto;
+      border: 1px solid @borderColor;
+      box-shadow: 1px 1px 2px @green;
+      border-radius: 5px;
+      .m-modal-head{
+        border-bottom: 1px solid @borderColor;
+        padding-bottom: 0.1rem;
+        .m-close{
+          cursor: pointer;
+        }
+      }
+      .m-modal-content{
+        padding: 0.4rem 0.2rem;
+        .m-table{
+          text-align: center;
+          line-height: 0.6rem;
+          border-radius: 5px;
+          thead{
+            line-height: 0.3rem;
+          }
+          td{
+            border: 1px solid @borderColor;
+          }
+        }
+        .m-approve-box{
+          margin: 0.2rem 0 0;
+          p{
+            padding: 0.05rem;
+            font-size: 0.14rem;
+          }
+          .m-approve-info{
+            border: 1px solid @borderColor;
+            border-radius: 10px;
+            margin: 0.1rem 0;
+            padding: 0.1rem;
+            height: 1.2rem;
+            font-size: 0.12rem;
+            color: @greyColor;
+          }
+        }
+      }
+      .m-modal-foot{
+        .flex-row(center);
+        span.m-btn{
+          display: block;
+          background-color: @borderColor;
+          color: @greyColor;
+          padding: 0.05rem 0.3rem;
+          border-radius: 5px;
+          margin-left: 0.2rem;
+          font-size: 0.16rem;
+          cursor: pointer;
+          &.active{
+            background-color: @btnActiveColor;
+            color: #fff;
+
+          }
+        }
       }
     }
   }

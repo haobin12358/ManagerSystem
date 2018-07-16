@@ -43,7 +43,10 @@
           </el-table-column>
           <el-table-column align="center" label="操作" >
             <template slot-scope="scope">
-              <span class=" m-table-link">编辑</span>
+              <router-link to="/commodity/categorySelection" >
+                <span class=" m-table-link">编辑</span>
+              </router-link>
+
             </template>
           </el-table-column>
         </el-table>

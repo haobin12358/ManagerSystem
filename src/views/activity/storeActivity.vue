@@ -91,9 +91,47 @@
           <pagination></pagination>
         </div>
       </div>
-      <!--商品优惠卷-->
-      <div class="m-commodity" v-show="tab_data.dataInfo.show">
-
+      <!--dataInfo-->
+      <div class="m-data-info" v-show="tab_data.dataInfo.show">
+        <p class="m-date">
+          <span>日（2018-07-02——2018-07-02）</span>
+          <span class="m-date-icon"></span>
+        </p>
+        <ul class="m-amount-sheet-ul">
+          <li class="m-amount-sheet">
+            <p>领取张数</p>
+            <p class="m-num">20</p>
+            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
+          </li>
+          <li class="m-amount-sheet">
+            <p>使用张数</p>
+            <p class="m-num">20</p>
+            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
+          </li>
+          <li class="m-amount-sheet">
+            <p>优惠金额</p>
+            <p class="m-num">20</p>
+            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
+          </li>
+          <li class="m-amount-sheet">
+            <p>支付买家数</p>
+            <p class="m-num">20</p>
+            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
+          </li>
+          <li class="m-amount-sheet">
+            <p>支付件数</p>
+            <p class="m-num">20</p>
+            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
+          </li>
+          <li class="m-amount-sheet active">
+            <p>交易金额</p>
+            <p class="m-num">20</p>
+            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
+          </li>
+        </ul>
+        <div class="m-discount-echart">
+          <div id="echarts"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -103,6 +141,7 @@
   import pageTitle from '../../components/common/title';
   import user from '../../common/json/userInfo';
   import Pagination from "../../components/common/pages";
+  import echarts from 'echarts';
   export default {
     data() {
       return {
@@ -172,8 +211,8 @@
       }
     },
     mounted(){
-      // let myChart = echarts.init(document.getElementById('echarts'));
-      // myChart.setOption(this.option);
+      let myChart = echarts.init(document.getElementById('echarts'));
+      myChart.setOption(this.option);
     },
     created() {
 

@@ -65,11 +65,11 @@
             <el-table-column align="center" prop="userId" label="价格" ></el-table-column>
 
             <el-table-column align="center" prop="loginTime" label="库存" ></el-table-column>
-            <el-table-column align="center" label="操作" >
-              <template slot-scope="scope">
-                <span class="m-link m-first">参加活动</span>
-              </template>
-            </el-table-column>
+            <!--<el-table-column align="center" label="操作" >-->
+              <!--<template slot-scope="scope">-->
+                <!--<span class="m-link m-first">参加活动</span>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
           </el-table>
         </div>
         <div class="m-page-box">
