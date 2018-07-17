@@ -136,7 +136,7 @@
   export default {
     data() {
       return {
-        name:'活动管理>单品活动',
+        name:'单品活动',
         storeForm:{
           name:'',
           date1:'',

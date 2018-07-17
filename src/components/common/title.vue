@@ -1,8 +1,21 @@
 <template>
-  <div class="m-page-title">
-    <span v-text="title">工作模块管理</span>
-    <span class="m-page-fresh" @click="freshClick"></span>
+  <div>
+    <div class="m-page-title" v-if="list">
+      <div>
+        <template v-for="(item,index) in list" >
+          <span v-if="index >0 ">&nbsp; > </span>
+          <span v-text="item.name" class="m-router-link" @click="routerClick(item.url)">工作模块管理</span>
+        </template>
+      </div>
+      <span class="m-page-fresh" @click="freshClick"></span>
+    </div>
+
+    <div class="m-page-title" v-else>
+      <span v-text="title">工作模块管理</span>
+      <span class="m-page-fresh" @click="freshClick"></span>
+    </div>
   </div>
+
 </template>
 <script type="text/ecmascript-6">
     export default {
@@ -13,11 +26,18 @@
             title:{
               type:String,
               default:''
+            },
+            list:{
+              type:Array,
+              default:null
             }
         },
         methods: {
           freshClick(){
             this.$emit('freshClick');
+          },
+          routerClick(v){
+            this.$router.push(v);
           }
         },
         created() {
@@ -34,7 +54,10 @@
     .flex-row(space-between);
     font-weight: 600;
     span{
-      display: block;
+      display: inline-block;
+      &.m-router-link{
+        cursor: pointer;
+      }
     }
     .m-page-fresh{
       width: 0.2rem;

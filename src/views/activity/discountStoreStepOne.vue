@@ -1,6 +1,6 @@
 <template>
     <div class="m-step">
-      <page-title :title="name" @freshClick="freshClick"></page-title>
+      <page-title :list="title_list" @freshClick="freshClick"></page-title>
       <el-form  :model="storeForm" label-width="1.2rem" >
       <div class="m-step-content">
         <div class="m-step-part">
@@ -60,7 +60,16 @@
   export default {
     data() {
       return {
-        name:'优惠卷>添加优惠券',
+        title_list:[
+          {
+            name:'优惠券',
+            url:'/activity/discountCoupon'
+          },
+          {
+            name:'添加店铺优惠券',
+            url:'/activity/discountStoreStepOne'
+          }
+        ],
         step:[
           {
             name:'添加优惠券',
