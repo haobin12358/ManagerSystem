@@ -31,7 +31,7 @@
             </div>
             <div class="m-right">
               <el-form-item>
-                <el-button type="primary" class="m-select-btn" @click="storeSubmit">创建</el-button>
+                <el-button type="primary" class="m-select-btn" @click="addNew">创建</el-button>
               </el-form-item>
             </div>
           </div>
@@ -224,6 +224,9 @@
             this.tab_data[item].show = false;
           }
         }
+      },
+      addNew(){
+        this.$router.push('/activity/activityProductStepOne');
       }
     },
     mounted(){

@@ -45,6 +45,7 @@
   margin: 0.1rem 0.1rem 0.1rem;
   .m-progress-one{
     p{
+      font-size: 0.16rem;
       line-height: 0.4rem;
       text-align: center;
       color: #b4b4b5;
