@@ -3,7 +3,7 @@
     <page-title :list="title_list" @freshClick="freshClick"></page-title>
     <el-form  :model="storeForm" label-width="1.2rem" >
       <div class="m-step-content">
-        <h3 class="m-step-title">选择活动</h3>
+        <h3 class="m-step-title">设置商品优惠</h3>
         <div class="m-step-part">
           <step :list="step"></step>
         </div>
@@ -15,7 +15,7 @@
             <table class="m-activity-table" width="100%">
               <tr>
                 <td>活动名称：<span>新品秒杀价</span></td>
-                <td>活动时间：<span>2018-06-29  00 : 00：01 至 2018-06-29  23 : 59：59</span></td>
+                <td >活动时间：<span>2018-06-29  00 : 00：01 至 2018-06-29  23 : 59：59</span></td>
               </tr>
               <tr>
                 <td>优惠方式：<span>促销价</span></td>
@@ -24,27 +24,10 @@
             </table>
           </div>
         </div>
-        <el-form :inline="true" :model="storeForm" class="demo-form-inline">
-          <div class="m-select-box">
-            <div class="m-left">
-              <el-form-item label="商品名称">
-                <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
-              </el-form-item>
-              <el-form-item label="商品ID">
-                <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
-              </el-form-item>
-            </div>
-            <div class="m-right">
-              <el-form-item>
-                <el-button type="primary" class="m-select-btn" @click="storeSubmit">搜索</el-button>
-              </el-form-item>
-            </div>
-          </div>
-        </el-form>
         <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
           <el-table :data="user" stripe style="width: 100%">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column align="center" prop="userId" width="400" label="宝贝描述">
+            <el-table-column align="center" prop="userId" width="250" label="宝贝描述">
               <template slot-scope="scope">
                 <div class="m-production-description">
                   <p class="m-img"></p>
@@ -56,23 +39,36 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="userId" label="单价" ></el-table-column>
+
             <el-table-column align="center" prop="loginTime" label="库存" ></el-table-column>
-            <!--<el-table-column align="center" label="操作" >-->
-              <!--<template slot-scope="scope">-->
-                <!--<span class="m-link m-first">参加活动</span>-->
-              <!--</template>-->
-            <!--</el-table-column>-->
+            <el-table-column align="center" label="优惠方式" >
+              <template slot-scope="scope">
+                <p>促销价：</p>
+                <el-input v-model="storeForm.name" class="m-input-xs" placeholder=""></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="userId" label="优惠后价格"></el-table-column>
+            <el-table-column align="center" label="每人限购" >
+              <template slot-scope="scope">
+                <el-input v-model="storeForm.name" class="m-input-xs" placeholder="1"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="操作" >
+              <template slot-scope="scope">
+                <span class="m-link m-first">搬出活动</span>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <div class="m-page-box">
           <pagination></pagination>
         </div>
         <div class="m-bottom-btn m-flex-center">
-          <router-link to="/activity/activityProductStepOne" >
+          <router-link to="/activity/activityProductStepTwo" >
             <span class="m-btn">上一步</span>
           </router-link>
           <router-link to="/activity/activityProductStepThree" >
-            <span class="m-btn  active">下一步</span>
+            <span class="m-btn  active">完成</span>
           </router-link>
         </div>
       </div>
@@ -107,11 +103,11 @@
           {
             name:'选择活动商品',
             active:true,
-            next:false
+            next:true
           },
           {
             name:'设置商品优惠',
-            active:false,
+            active:true,
             next:false
           }
         ],

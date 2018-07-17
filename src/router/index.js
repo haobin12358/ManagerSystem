@@ -169,13 +169,17 @@ export const constantRouterMap = [
       component: () => import('../views/activity/activityProductStepOne'),
       name: 'activityProductStepOne',
       meta: {title: 'activityProductStepOne', icon: 'activityProductStepOne', noCache: true}
-    }
-      , {
+    }, {
         path: 'activityProductStepTwo',
         component: () => import('../views/activity/activityProductStepTwo'),
         name: 'activityProductStepTwo',
         meta: {title: 'activityProductStepTwo', icon: 'activityProductStepTwo', noCache: true}
-      }
+      }, {
+      path: 'activityProductStepThree',
+      component: () => import('../views/activity/activityProductStepThree'),
+      name: 'activityProductStepThree',
+      meta: {title: 'activityProductStepThree', icon: 'activityProductStepThree', noCache: true}
+    }
     ]
   }
 
