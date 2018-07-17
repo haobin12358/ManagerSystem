@@ -8,7 +8,7 @@
       </div>
       <a name="basicInfo"></a>
       <div class="m-one-part">
-        <h3>基本信息</h3>
+        <h3 id="basicInfo">基本信息</h3>
         <el-form-item label="商品名称:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
           <el-input v-model="form.name" class="m-input-l" ></el-input>
         </el-form-item>
@@ -47,7 +47,9 @@
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
-          class="m-img-l">
+          class="m-img-l"
+            :limit="5"
+            :on-exceed="outImg">
             <span>+添加图片</span>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
@@ -84,7 +86,9 @@
                   list-type="picture-card"
                   :on-preview="handlePictureCardPreview"
                   :on-remove="handleRemove"
-                  class="m-img-l">
+                  class="m-img-l"
+                  :limit="1"
+                  :on-exceed="outImg">
                   <span>+添加图片</span>
                 </el-upload>
               </div>
@@ -111,7 +115,9 @@
                   list-type="picture-card"
                   :on-preview="handlePictureCardPreview"
                   :on-remove="handleRemove"
-                  class="m-img-l">
+                  class="m-img-l"
+                  :limit="1"
+                  :on-exceed="outImg">
                   <span>+添加图片</span>
                 </el-upload>
               </div>
@@ -158,7 +164,7 @@
       </div>
       <a name="priceInfo"></a>
       <div class="m-one-part">
-        <h3>商品库存</h3>
+        <h3 id="priceInfo">商品库存</h3>
         <el-form-item label="划线价格:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
           <el-input v-model="form.name" class="m-input-m" ></el-input>
           <p class="m-alert">建议描述文字在36字以内</p>
@@ -184,7 +190,7 @@
 
       <a name="otherInfo"></a>
       <div class="m-one-part m-other">
-        <h3>其他信息</h3>
+        <h3 id="otherInfo">其他信息</h3>
         <el-form-item label="快递运费:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
           <el-radio v-model="radio" label="1">统一邮费  </el-radio>
           <el-input v-model="form.name" class="m-input-s" ></el-input>
@@ -234,30 +240,30 @@
             <span class="m-step-content"></span>
           </li>
           <li @click="sideClick('basicInfo')">
-            <a href="#basicInfo">
+            <!--<a href="#basicInfo">-->
               <span class="circle" :class="linkTo == 'basicInfo'?'active':''"></span>
               <span class="m-step-content">1、基本信息</span>
-            </a>
+            <!--</a>-->
           </li>
           <li>
             <span class="line">|</span>
             <span class="m-step-content"></span>
           </li>
           <li @click="sideClick('priceInfo')">
-            <a href="#priceInfo">
+            <!--<a href="#priceInfo">-->
               <span class="circle" :class="linkTo == 'priceInfo'?'active':''"></span>
               <span class="m-step-content">2、商品库存</span>
-            </a>
+            <!--</a>-->
           </li>
           <li>
             <span class="line">|</span>
             <span class="m-step-content"></span>
           </li>
           <li @click="sideClick('otherInfo')">
-            <a href="#otherInfo">
+            <!--<a href="#otherInfo">-->
               <span class="circle " :class="linkTo == 'otherInfo'?'active':''"></span>
               <span class="m-step-content">3、其他信息</span>
-            </a>
+            <!--</a>-->
           </li>
           <li>
             <span class="line">|</span>
@@ -313,6 +319,13 @@
           },
           sideClick(v){
             this.linkTo = v;
+            if(v == 'basicInfo'){
+              document.documentElement.scrollTop = 96;
+            }else if(v == 'priceInfo'){
+              document.documentElement.scrollTop = document.getElementById('priceInfo').offsetTop - 89;
+            }else if(v == 'otherInfo'){
+              document.documentElement.scrollTop = document.getElementById('otherInfo').offsetTop - 229;
+            }
           },
           //显示更多
           showMore(v){
@@ -321,11 +334,29 @@
         //  发布
           issueClick(){
             this.$router.push('/commodity/commodityManagement')
+          },
+          outImg(){
+            this.$message({
+              message: '上传图片超出数量限制',
+              type: 'warning'
+            });
+          },
+          handleScroll(){
+            if((document.getElementById('otherInfo').offsetTop <= document.documentElement.scrollTop + 230 ) ){
+              this.linkTo = 'otherInfo';
+            }else if((document.getElementById('priceInfo').offsetTop < document.documentElement.scrollTop +90  ) &&  (document.getElementById('otherInfo').offsetTop > document.documentElement.scrollTop +230)){
+              this.linkTo = 'priceInfo'
+            }else{
+              this.linkTo = 'basicInfo'
+            }
           }
         },
         created() {
 
-        }
+        },
+      mounted(){
+        window.addEventListener('scroll',this.handleScroll)
+      },
     }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>

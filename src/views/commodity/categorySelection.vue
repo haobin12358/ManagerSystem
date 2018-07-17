@@ -181,7 +181,7 @@
         }
         //待判断右终点
         this.scroll_index = this.scroll_index + Number(v);
-        _scroll.style.marginLeft = this.scroll_index * -2.06 +'rem';
+        _scroll.style.marginLeft = this.scroll_index * -2.08 +'rem';
       }
     },
     created() {
