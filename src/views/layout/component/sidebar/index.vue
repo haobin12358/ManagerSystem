@@ -28,7 +28,7 @@
     export default {
         data() {
             return {
-              side_list:this.$store.state.side
+              side_list:''
             }
         },
       components:{
@@ -58,7 +58,12 @@
           }
         },
         created() {
-
+            if(this.$store.state.side == null){
+              console.log(sideList,'asdasda')
+              this.side_list = sideList.side;
+            }else{
+              this.side_list = this.$store.state.side;
+            }
         },
         computed:{
           isCollapse() {

@@ -22,72 +22,96 @@
             <div class="m-select-box">
               <p class="m-alert">错误填写商品属性，可能会引起商品下架或搜索流量减少，影响您的正常销售，请认真准确填写！</p>
               <div class="m-selects">
-                <div class="m-left-right"><span class="m-btn-img m-left-btn-img"></span></div>
+                <div class="m-left-right"><span class="m-btn-img m-left-btn-img" @click="scroll(-1)"></span></div>
                 <div class="m-category-content">
-                  <div class="m-one-category">
-                    <div class="m-search-box">
-                      <span class="icon icon-search"></span>
-                      <input type="text" placeholder="">
+                  <div id="m-scroll">
+                    <div class="m-one-category">
+                      <div class="m-search-box">
+                        <span class="icon icon-search"></span>
+                        <input type="text" placeholder="">
+                      </div>
+                      <div class="m-classify">
+                        <ul>
+                          <li>
+                            <span>游戏话费</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                          <li>
+                            <span>游戏话费</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                          <li>
+                            <span>游戏话费</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                    <div class="m-classify">
-                      <ul>
-                        <li>
-                          <span>游戏话费</span>
-                          <i class="el-icon-arrow-right"></i>
-                        </li>
-                        <li>
-                          <span>游戏话费</span>
-                          <i class="el-icon-arrow-right"></i>
-                        </li>
-                        <li>
-                          <span>游戏话费</span>
-                          <i class="el-icon-arrow-right"></i>
-                        </li>
-                      </ul>
+                    <div class="m-one-category">
+                      <div class="m-search-box">
+                        <span class="icon icon-search"></span>
+                        <input type="text" placeholder="">
+                      </div>
+                      <div class="m-classify">
+                        <ul>
+                          <li>
+                            <span>游戏话费</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                          <li>
+                            <span>游戏话费</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                  <div class="m-one-category">
-                    <div class="m-search-box">
-                      <span class="icon icon-search"></span>
-                      <input type="text" placeholder="">
+                    <div class="m-one-category">
+                      <div class="m-search-box">
+                        <span class="icon icon-search"></span>
+                        <input type="text" placeholder="">
+                      </div>
+                      <div class="m-classify">
+                        <ul>
+                          <li>
+                            <span>游戏话费</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                          <li>
+                            <span>游戏话费</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                          <li>
+                            <span>梳子/便携用镜</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                    <div class="m-classify">
-                      <ul>
-                        <li>
-                          <span>游戏话费</span>
-                          <i class="el-icon-arrow-right"></i>
-                        </li>
-                        <li>
-                          <span>游戏话费</span>
-                          <i class="el-icon-arrow-right"></i>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="m-one-category">
-                    <div class="m-search-box">
-                      <span class="icon icon-search"></span>
-                      <input type="text" placeholder="">
-                    </div>
-                    <div class="m-classify">
-                      <ul>
-                        <li>
-                          <span>游戏话费</span>
-                          <i class="el-icon-arrow-right"></i>
-                        </li>
-                        <li>
-                          <span>游戏话费</span>
-                          <i class="el-icon-arrow-right"></i>
-                        </li>
-                        <li>
-                          <span>梳子/便携用镜</span>
-                          <i class="el-icon-arrow-right"></i>
-                        </li>
-                      </ul>
+                    <div class="m-one-category">
+                      <div class="m-search-box">
+                        <span class="icon icon-search"></span>
+                        <input type="text" placeholder="">
+                      </div>
+                      <div class="m-classify">
+                        <ul>
+                          <li>
+                            <span>游戏话费</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                          <li>
+                            <span>游戏话费</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                          <li>
+                            <span>梳子/便携用镜</span>
+                            <i class="el-icon-arrow-right"></i>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="m-left-right"><span class="m-btn-img m-right-btn-img active"></span></div>
+                <div class="m-left-right"><span class="m-btn-img m-right-btn-img active" @click="scroll(1)"></span></div>
               </div>
               <div class="m-now-select">
                 <p>当前选择类目：<span >家庭/个人清洁工具 > 个人洗护清洁用具 > 梳子/便携用镜 > 镜梳套装 > 礼盒/套装</span></p>
@@ -128,7 +152,8 @@
         dialogVisible: false,
         checked:true,
         radio:0,
-        linkTo:'basicInfo'
+        linkTo:'basicInfo',
+        scroll_index:0
       }
     },
     components:{
@@ -147,6 +172,16 @@
       },
       sideClick(v){
         this.linkTo = v;
+      },
+      scroll(v){
+
+        let _scroll = document.getElementById('m-scroll');
+        if(v == -1 && this.scroll_index == 0){
+          return false;
+        }
+        //待判断右终点
+        this.scroll_index = this.scroll_index + Number(v);
+        _scroll.style.marginLeft = this.scroll_index * -2.06 +'rem';
       }
     },
     created() {
@@ -267,15 +302,22 @@
           .m-category-content{
             width: 6.2rem;
             height: 100%;
-            .flex-row(space-around);
+            overflow: hidden;
+            #m-scroll{
+              margin-left: 0;
+              -webkit-transition: margin-left 0.28s;
+              transition: margin-left 0.28s;
+              .flex-row(flex-start);
+            }
             .m-one-category{
               width: 1.8rem;
-              height: 100%;
+              height: 90%;
               border: 1px solid @sidebarChildColor;
               border-radius: 5px;
               background-color: #fff;
               text-align: center;
-              padding: 0.1rem 0.08rem;
+              padding: 0.1rem 0.08rem 0;
+              margin-right: 0.1rem;
               .m-search-box{
                 width: 1.80rem;
                 height: 0.27rem;
@@ -306,7 +348,7 @@
                 }
               }
               .m-classify{
-                height: 2.7rem;
+                height: 2.65rem;
                 margin-top: 0.1rem;
                 overflow-y: scroll;
                 ul{
