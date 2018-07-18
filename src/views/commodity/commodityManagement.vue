@@ -18,27 +18,22 @@
       </div>
 
       <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
-        <el-table :data="user" stripe style="width: 100%">
+        <el-table :data="product_data" stripe style="width: 100%">
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column align="center" prop="userId" label="商品" width="125">
+          <el-table-column align="center" prop="PRimage" label="商品" width="125">
             <template slot-scope="scope">
-              <!--<image class="m-table-img" src="../../common/images/icon-order.ong"/>-->
-              <div class="m-table-img"></div>
+              <image class="m-table-img" :src="scope.row.PBimage"/>
+              <!--<div class="m-table-img"></div>-->
             </template>
           </el-table-column>
-          <el-table-column align="center" prop="userId" label="价格" >
+          <el-table-column align="center" prop="PRname" label="名称" ></el-table-column>
+          <!--<el-table-column align="center" prop="userName" label="浏览量"></el-table-column>-->
+          <el-table-column align="center" prop="PRsalesvolume" label="库存" ></el-table-column>
+          <el-table-column align="center" prop="PRsalesvolume" label="总销量" ></el-table-column>
+          <el-table-column align="center" prop="PRtime" width="160" label="创建时间" ></el-table-column>
+          <el-table-column align="center" prop="PRstatus" label="状态概况" :filters="[{ text: '全部', value: '全部' }, { text: '出售中', value: '出售中' }, { text: '全部售罄', value: '全部售罄' },{ text: '下架', value: '下架' }]">
             <template slot-scope="scope">
-              <p>商品1</p>
-              <p class="m-table-num">x1</p>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" prop="userName" label="浏览量"></el-table-column>
-          <el-table-column align="center" prop="email" label="库存" ></el-table-column>
-          <el-table-column align="center" prop="group" label="总销量" ></el-table-column>
-          <el-table-column align="center" prop="group" label="创建时间" ></el-table-column>
-          <el-table-column align="center" prop="loginTime" label="状态概况" :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]">
-            <template slot-scope="scope">
-              <span>已处理</span>
+              <span :class="scope.row.PRstatus == '全部售罄'? 'm-alert': ''">{{scope.row.PRstatus}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作" >
@@ -46,7 +41,6 @@
               <router-link to="/commodity/categorySelection" >
                 <span class=" m-table-link">编辑</span>
               </router-link>
-
             </template>
           </el-table-column>
         </el-table>
@@ -56,13 +50,8 @@
             <el-button class="m-bottom-btn m-btm-cancel" size="mini">下架</el-button>
             <el-button class="m-bottom-btn " size="mini">删除</el-button>
           </div>
-
           <div class="page-button">
-            <el-pagination
-              background
-              layout="prev, pager, next"
-              :total="1000">
-            </el-pagination>
+            <Pagination :total="total_page" @pageChange="pageChange"></Pagination>
           </div>
       </div>
     </div>
@@ -70,20 +59,26 @@
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
-  import user from '../../common/json/userInfo';
-  import Pagination from "../../components/common/pages";
+  import Pagination from "../../components/common/page";
+  import api from '../../api/api';
+  import { Message} from 'element-ui';
+  import axios from 'axios';
   export default {
     data() {
       return {
         name: '商品管理',
         inputID: '',
         inputName: '',
-        user: user
+        product_data: [],
+        total_page:2
       }
     },
     components:{
       pageTitle,
       Pagination
+    },
+    mounted(){
+      this.getData();
     },
     methods: {
       freshClick(){
@@ -94,11 +89,26 @@
         console.log('用户名：', this.inputName)
       },
       addUser() {
-        console.log('添加用户')
+
+      },
+      getData(v){
+        let params = {
+          token:this.$store.state.token,
+          PBstatus:''
+        };
+        axios.get(api.get_all_product,{params:params}).then(res => {
+          if(res.data.status == 200){
+              this.product_data = res.data.data
+          }
+        },error => {
+
+        })
+      },
+      pageChange(v){
+
       }
     },
     created() {
-      console.log(user)
     }
   }
 </script>
@@ -216,5 +226,11 @@
     height: 1rem;
     margin: 0.2rem 0;
     border: 1px solid @borderColor;
+  }
+  .m-table-num{
+    color: red;
+  }
+  .m-alert{
+    color: red;
   }
 </style>

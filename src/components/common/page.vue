@@ -15,8 +15,8 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="total"
         :pager-count="5"
+        :page-count="total"
       @current-change="change">
       </el-pagination>
       <span @click="change(total)">尾页</span>
@@ -25,7 +25,6 @@
 </template>
 
 <script>
-  import user from '../../common/json/userInfo'
   export default {
     name: 'Pagination',
 
