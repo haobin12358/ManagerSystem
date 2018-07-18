@@ -294,7 +294,16 @@
                 PRinfo:'',
                 PRbrand:'',
                 PRimage:'',
-
+                brands_key:'',
+                brands:{
+                  PBprice:[],
+                  PBunit:[],
+                  PBimage:[],
+                  BRands:[],
+                  PRtype:'',
+                  PRvideo:'',
+                  PRaboimage:''
+                }
               },
               dialogImageUrl: '',
               dialogVisible: false,

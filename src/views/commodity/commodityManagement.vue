@@ -13,13 +13,13 @@
           <!--<el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>-->
         </div>
         <div class="m-top-button">
-          <el-button class="m-top-button-button" size="mini" @click="addUser">发布商品</el-button>
+          <el-button class="m-top-button-button" size="mini" @click="importProduct">发布商品</el-button>
         </div>
       </div>
 
       <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
-        <el-table :data="product_data" stripe style="width: 100%">
-          <el-table-column type="selection" width="55"></el-table-column>
+        <el-table :data="product_data" stripe style="width: 100%" @selection-change="changeFun">
+          <el-table-column type="selection"  width="55" ></el-table-column>
           <el-table-column align="center" prop="PRimage" label="商品" width="125">
             <template slot-scope="scope">
               <image class="m-table-img" :src="scope.row.PBimage"/>
@@ -28,10 +28,14 @@
           </el-table-column>
           <el-table-column align="center" prop="PRname" label="名称" ></el-table-column>
           <!--<el-table-column align="center" prop="userName" label="浏览量"></el-table-column>-->
-          <el-table-column align="center" prop="PRsalesvolume" label="库存" ></el-table-column>
+          <el-table-column align="center" prop="PRsalesvolume" label="库存" >
+            <template slot-scope="scope">
+              <span :class="scope.row.PRsalesvolume == 0? 'm-alert': ''">{{scope.row.PRsalesvolume}}</span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" prop="PRsalesvolume" label="总销量" ></el-table-column>
           <el-table-column align="center" prop="PRtime" width="160" label="创建时间" ></el-table-column>
-          <el-table-column align="center" prop="PRstatus" label="状态概况" :filters="[{ text: '全部', value: '全部' }, { text: '出售中', value: '出售中' }, { text: '全部售罄', value: '全部售罄' },{ text: '下架', value: '下架' }]">
+          <el-table-column align="center" prop="PRstatus" label="状态概况" :filters="[{ text: '全部', value: '全部' }, { text: '出售中', value: '出售中' },{ text: '未发布', value: '未发布' }, { text: '下架', value: '下架' }]">
             <template slot-scope="scope">
               <span :class="scope.row.PRstatus == '全部售罄'? 'm-alert': ''">{{scope.row.PRstatus}}</span>
             </template>
@@ -47,8 +51,8 @@
       </div>
       <div class="m-bottom">
           <div class="m-bottom-btn-box">
-            <el-button class="m-bottom-btn m-btm-cancel" size="mini">下架</el-button>
-            <el-button class="m-bottom-btn " size="mini">删除</el-button>
+            <el-button class="m-bottom-btn m-btm-cancel" size="mini" @click="soldOut">下架</el-button>
+            <el-button class="m-bottom-btn " size="mini" @click="deleteProduct">删除</el-button>
           </div>
           <div class="page-button">
             <Pagination :total="total_page" @pageChange="pageChange"></Pagination>
@@ -73,7 +77,8 @@
         total_page:1,
         current_page:1,
         total_num:0,
-        page_size:10
+        page_size:10,
+        checkRow:[]
       }
     },
     components:{
@@ -96,8 +101,41 @@
         console.log('用户ID：', this.inputID)
         console.log('用户名：', this.inputName)
       },
-      addUser() {
-
+      changeFun(v){
+        this.checkRow = v;
+      },
+      //发布商品
+      importProduct(){
+        this.updateProduct('上架状态');
+      },
+      //下架商品
+      soldOut(){
+        this.updateProduct('下架状态');
+      },
+      //删除商品
+      deleteProduct(){
+        this.updateProduct('删除状态');
+      },
+      updateProduct(status){
+        let PRid = [];
+        let that = this;
+        for(let i = 0; i< this.checkRow.length;i++){
+          PRid.push(this.checkRow[i].PRid);
+        }
+        let params = {
+          PRid: PRid,
+          PRstatus:status
+        }
+        axios.post(api.update_product+ '?token=' + this.$store.state.token,params).then(res => {
+          if(res.data.status == 200){
+            this.$message({
+              message:res.data.message,
+              type:'success',
+              duration:200000
+            });
+            that.getData();
+          }
+        })
       },
       getData(v){
         let params = {
