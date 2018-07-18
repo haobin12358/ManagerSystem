@@ -19,8 +19,7 @@ class MSProduct(Resource):
         apis = {
             "release": "self.control_product.add_product()",
             "update_pro_info": "self.control_product.update_pro_info()",
-            "update_product": "self.control_product.update_product()"
-
+            "update_product": "self.control_product.update_product_status()",
         }
 
         if product in apis:

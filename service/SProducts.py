@@ -98,7 +98,7 @@ class SProducts(SBase):
     def get_pball_by_prid_pbstatus(self, prid, pbstatus):
         return self.session.query(
             PB.PBimage, PB.PBunit, PB.PBprice, PB.PBscore,
-            PB.PBsalesvolume, PB.PBid, PB.PBstatus).filter_by(PRid = prid).filter_by(PBstatus = pbstatus).all()
+            PB.PBsalesvolume, PB.PBid, PB.PBstatus).filter(PB.PRid == prid, PB.PBstatus == pbstatus).all()
 
     def get_volue_score_by_pbid(self, pbid):
         volue_score = None

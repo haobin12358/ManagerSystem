@@ -138,9 +138,11 @@ class CProducts():
             for pb in pb_list:
                 saleamount += int(pb.get("PBsalesvolume"))
                 PRstatus = conversion_PBstatus.get(pb.get("PBstatus"))
+                stockamout += sum([int(st.get("PBnumber")) for st in tolist(self.stock.get_stocks_by_PBid(pb.get("PBid")))])
                 pb.update(product)
 
             if not PRstatus:
+                count -= 1
                 continue
 
             # product_infos.extend(pb_list)
@@ -406,7 +408,7 @@ class CProducts():
             return SYSTEM_ERROR
 
 
-    def update_product(self):
+    def update_product_status(self):
         args = request.args.to_dict()
         log.info("args", args)
         if "token" not in args:
@@ -434,8 +436,16 @@ class CProducts():
                 if not update_result:
                     raise Exception("update pb failed")
 
-    def update_brands(self):
-        pass
+    def update_pro_info(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        data = json.loads(request.data, encoding="utf8")
+        log.info("data", data)
+        if "token" not in args:
+            return PARAMS_MISS
+
+
+
 
     def add_brands(self, prid, brands, brands_key):
         if not isinstance(brands, list):
