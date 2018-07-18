@@ -131,7 +131,7 @@
             this.$message({
               message:res.data.message,
               type:'success',
-              duration:200000
+              // duration:200000
             });
             that.getData();
           }
