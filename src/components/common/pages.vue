@@ -1,19 +1,22 @@
 
 <template>
   <div class="m-age">
-    <div class="page-total">
-      记录数 {{pages}} 个
+    <div>
+      <div class="page-total">
+        记录数 {{pages}} 个
+      </div>
+      <div class="page-pages">
+        共 {{pages}} 页
+      </div>
     </div>
-    <div class="page-pages">
-      共 {{pages}} 页
-    </div>
+
     <div class="page-button">
       <span @click="firstClick">首页</span>
       <el-pagination
         background
         layout="prev, pager, next"
         :total="1000"
-        pager-count="3">
+        :pager-count="5">
       </el-pagination>
       <span @click="lastClick">尾页</span>
     </div>

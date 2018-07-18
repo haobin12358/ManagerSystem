@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="m-goodsImported">
   <el-form ref="form" :model="form" label-width="1.2rem">
     <page-title :title="name" @freshClick="freshClick"></page-title>
     <div class="m-goodsImported-content">
@@ -342,13 +342,18 @@
             });
           },
           handleScroll(){
-            if((document.getElementById('otherInfo').offsetTop <= document.documentElement.scrollTop + 230 ) ){
-              this.linkTo = 'otherInfo';
-            }else if((document.getElementById('priceInfo').offsetTop < document.documentElement.scrollTop +90  ) &&  (document.getElementById('otherInfo').offsetTop > document.documentElement.scrollTop +230)){
-              this.linkTo = 'priceInfo'
+            if(document.getElementById('otherInfo') && document.getElementById('priceInfo') ){
+              if((document.getElementById('otherInfo').offsetTop <= document.documentElement.scrollTop + 230 ) ){
+                this.linkTo = 'otherInfo';
+              }else if((document.getElementById('priceInfo').offsetTop < document.documentElement.scrollTop +90  ) &&  (document.getElementById('otherInfo').offsetTop > document.documentElement.scrollTop +230)){
+                this.linkTo = 'priceInfo'
+              }else{
+                this.linkTo = 'basicInfo'
+              }
             }else{
-              this.linkTo = 'basicInfo'
+              return 
             }
+
           }
         },
         created() {

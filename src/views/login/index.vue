@@ -40,6 +40,7 @@
   import foot from '../../components/common/footer';
   import api from '../../api/api';
   import { MessageBox } from 'element-ui';
+  import axios from 'axios';
   export default {
     components:{
       loginHead,
@@ -64,7 +65,7 @@
         let that = this;
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$http.post(api.login,that.ruleForm).
+            axios.post(api.login,that.ruleForm).
             then(res=>{
               if(res.data.status == 200){
                 this.$store.state.side = res.data.data.side;

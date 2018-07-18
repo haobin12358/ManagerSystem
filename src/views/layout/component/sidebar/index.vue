@@ -58,12 +58,12 @@
           }
         },
         created() {
-            if(this.$store.state.side == null){
-              console.log(sideList,'asdasda')
-              this.side_list = sideList.side;
-            }else{
+            // if(this.$store.state.side == null){
+            //   console.log(sideList,'asdasda')
+            //   this.side_list = sideList.side;
+            // }else{
               this.side_list = this.$store.state.side;
-            }
+            // }
         },
         computed:{
           isCollapse() {

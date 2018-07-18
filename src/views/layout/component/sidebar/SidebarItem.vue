@@ -13,24 +13,24 @@
     <!--</template>-->
 
         <template v-for="(items,index) in list" >
-          <el-submenu :index="items.url" v-if="items.children.length >0" :key="items.name">
+          <el-submenu :index="items.MNurl" v-if="items.children.length >0" :key="items.MNname">
             <template slot="title">
-              <i :class="items.icon" class="icon"></i>
-              <span slot="title">{{items.name}}</span>
+              <i :class="items.MNicon" class="icon"></i>
+              <span slot="title">{{items.MNname}}</span>
             </template>
             <template v-for="(item,i) in items.children" >
-              <router-link :to="items.url+'/'+item.url" :key="item.name">
-                <el-menu-item :index="items.url+'/'+item.url">
+              <router-link :to="items.MNurl+'/'+item.MNurl" :key="item.MNname">
+                <el-menu-item :index="items.MNurl+'/'+item.MNurl">
                   <i  class="icon"></i>
-                  <span>{{item.name}}</span>
+                  <span>{{item.MNname}}</span>
                 </el-menu-item>
               </router-link>
             </template>
           </el-submenu>
-          <router-link :to="items.url" v-else>
-           <el-menu-item :index="items.url" >
+          <router-link :to="items.MNurl" v-else>
+           <el-menu-item :index="items.MNurl" >
               <i class="el-icon-setting"></i>
-              <span slot="title">{{items.name}}</span>
+              <span slot="title">{{items.MNname}}</span>
            </el-menu-item>
           </router-link>
         </template>
