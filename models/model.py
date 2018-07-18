@@ -6,12 +6,48 @@ sys.path.append(os.path.dirname(os.getcwd()))
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, create_engine, Integer, String, Text, Float
-from config import dbconfig as cfg
+from ManagerSystem.config import dbconfig as cfg
 
 DB_PARAMS = "{0}://{1}:{2}@{3}/{4}?charset={5}".format(
     cfg.sqlenginename, cfg.username, cfg.password, cfg.host, cfg.database, cfg.charset)
 mysql_engine = create_engine(DB_PARAMS, echo=False)
 Base = declarative_base()
+
+
+class Users(Base):
+    __tablename__ = "Users"
+    USid = Column(String(64), primary_key=True)
+    UStelphone = Column(String(14), nullable=False)  # 用户联系方式
+    USpassword = Column(String(32), nullable=False)  # 用户密码
+    USname = Column(String(64))                      # 用户昵称
+    USsex = Column(Integer)                          # 用户性别 {101男， 102女}
+    UScoin = Column(Float)                           # 用户积分，根据用户购买商品生成
+    USinvate = Column(String(64))                    # 用户邀请码，算法生成待设计
+
+
+class Locations(Base):
+    __tablename__ = "Locations"
+    LOid = Column(String(64), primary_key=True)
+    LOtelphone = Column(String(14), nullable=False)  # 收件人联系方式
+    LOname = Column(String(128), nullable=False)     # 收件人姓名
+    LOno = Column(String(8), nullable=False)         # 邮编
+    LOdetail = Column(Text, nullable=False)          # 收件人详细地址
+    LOprovince = Column(String(64), nullable=False)  # 收件人省份
+    LOcity = Column(String(64), nullable=False)      # 收件人城市
+    LOarea = Column(String(64), nullable=False)      # 收件人城区
+    LOisedit = Column(Integer, nullable=False)       # 是否可编辑 {301:可编辑,302:不可编辑,303:已删除}
+    USid = Column(String(64), nullable=False)        # 用户id
+
+
+class Review(Base):
+    __tablename__ = "Review"
+    REid = Column(String(64), primary_key=True)  # 评论id
+    PRid = Column(String(64), nullable=False)    # 对应的评论对象，根据REtype判断
+    USid = Column(String(64), nullable=False)    # 用户id
+    REtime = Column(String(14), nullable=False)  # 评论时间
+    USRid = Column(String(64))                   # 被评论人
+    REcontent = Column(Text, nullable=True)      # 评价内容
+    REtype = Column(Integer, default=1)          # 对应的评论对象类型 {701:商品评价 702:帖子评价}
 
 
 # 商品
@@ -27,6 +63,8 @@ class Products(Base):
     PRbrand = Column(Integer, nullable=False)    # 类目 {601美妆类， 602 3C类}
     PRvideostart = Column(Text)                  # 商品视频未启动图片
     MAid = Column(String(64))                    # 商家id
+    PRtime = Column(String(14))                  # 创建时间
+    CTid = Column(String(64))                    # 类目id
 
 
 class ProductsBrands(Base):
@@ -36,7 +74,7 @@ class ProductsBrands(Base):
     BRid = Column(String(64), nullable=False)        # 叶子类目id
     PBprice = Column(Float, nullable=Float)          # 商品价格
     PBunit = Column(Integer, nullable=False)         # 货币单位 {401美元， 402人民币， 403欧元， 404英镑}
-    PBstatus = Column(Integer, default=201)          # 商品状态 {201:在售状态 202:下架状态}
+    PBstatus = Column(Integer, default=201)          # 商品状态 {201:在售状态 202:下架状态, 203: 预售}
     PBsalesvolume = Column(Integer, nullable=False)  # 商品销量
     PBscore = Column(Float, nullable=True)           # 商品评分
     PBimage = Column(Text, nullable=False)           # 商品图片存放地址
@@ -48,6 +86,22 @@ class Brands(Base):
     BRfromid = Column(String(64), nullable=False)  # 父节点id，如果没有父节点则为0
     BRvalue = Column(String(128), nullable=False)  # 属性值
     BRkey = Column(String(128), nullable=False)    # 属性类型
+
+
+class Category(Base):
+    __tablename__ = "Category"
+    CTid = Column(String(64), primary_key=True)    # 主键
+    CTname = Column(Text)                          # 类目简称
+    CTfromid = Column(String(64))                  # 类目父id
+    MAid = Column(String(64))                      # 创建人id
+
+
+class CategoryBrand(Base):
+    __tablename__ = "Categorybrand"
+    CBid = Column(String(64), primary_key=True)
+    CTid = Column(String(64))
+    CBname = Column(String(64))
+    CBvalue = Column(Text)
 
 
 # 库存
@@ -120,7 +174,8 @@ class Actives(Base):
 class Manager(Base):
     __tablename__ = "Manager"
     MAid = Column(String(64), primary_key=True)
-    MAname = Column(String(64))                       # 昵称
+    MAname = Column(String(64))                       # 用户名
+    MAnicname = Column(String(64))                    # 昵称
     MAtelphone = Column(String(14))                   # 管理员联系方式
     MAemail = Column(Text)                            # 管理员邮箱
     MAidentity = Column(Integer, nullable=False)      # 管理员身份
@@ -151,6 +206,8 @@ class Menu(Base):
     __tablename__ = "Menu"
     MNid = Column(String(64), primary_key=True)
     MNname = Column(String(66))    # 菜单名称
+    MNurl = Column(String(255))    # 菜单url
+    MNicon = Column(String(255))          # 菜单图标名称
     MNparent = Column(String(64))  # 父菜单节点id，根节点为0
 
 
@@ -184,6 +241,7 @@ class Approval(Base):
     APreceive = Column(String(64))   # 当前审批人id
     APstatus = Column(Integer)       # 审批状态
     PEtype = Column(Integer)         # 审批类型
+    APcontent = Column(String(64))   # 待审批活动/商品/类目
 
 
 # 修改密码所用的验证码

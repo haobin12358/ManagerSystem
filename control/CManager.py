@@ -3,21 +3,56 @@ import sys
 import os
 
 sys.path.append(os.path.dirname(os.getcwd()))
-from flask import request
+
 import json
-from service.SManager import SManager
-from common.MakeToken import usid_to_token, token_to_usid
-from globals import log
-from common.TimeManagert import TimeManager
-from common.ImportManager import get_response
-from config.response import SYSTEM_ERROR, PARAMS_MISS
-from config.conversion import conversion_MAidentity_reverse, conversion_MAidentity,\
+import uuid
+from flask import request
+from ManagerSystem.service.SManager import SManager
+from ManagerSystem.service.SInterface import SInterface
+from ManagerSystem.common.MakeToken import usid_to_token, token_to_usid
+from ManagerSystem.globals import log
+from ManagerSystem.common.TimeManagert import TimeManager
+from ManagerSystem.common.Tools import get_str
+from ManagerSystem.common.ImportManager import get_response
+from ManagerSystem.config.response import SYSTEM_ERROR, PARAMS_MISS
+from ManagerSystem.config.conversion import conversion_MAidentity_reverse, conversion_MAidentity,\
     conversion_MAstatus, conversion_MAstatus_resverse
-from common.ResultManager import todict
+from ManagerSystem.common.ResultManager import todict
+
+
 
 class CManager():
     def __init__(self):
         self.smanager = SManager()
+        self.sinterface = SInterface()
+
+    def add_manager(self):
+        data = json.loads(request.data)
+        log.info("data", data)
+        manager_key = [
+            "MAtelphone", "MAemail", "MAname"
+        ]
+        manager = {}
+        for key in manager_key:
+            if key in data:
+                manager[key] = data.get(key)
+        maid = str(uuid.uuid1())
+        manager["MAid"] = maid
+        manager["MAname"] = get_str(data, "MAname")
+        manager["MAtelphone"] = get_str(data, "MAtelphone")
+        # todo 创建管理员
+
+    def update_manager(self):
+        args = request.args.to_dict()
+        if "token" not in args:
+            return PARAMS_MISS
+        log.info("args", args)
+        maid = token_to_usid(args.get("token"))
+        data = json.loads(request.data)
+        log.info("data", data)
+
+
+
     def apply_manager(self):
         data = json.loads(request.data)
         log.info("data", data)
@@ -35,15 +70,13 @@ class CManager():
         for key in manager_key:
             if key in data:
                 manager[key] = data.get(key)
-        import uuid
+
         MAid = str(uuid.uuid1())
         manager["MAid"] = MAid
         maname = "商家{0}".format(data.get("MAtelphone")) if not data.get("MAname") else data.get("MAname")
         manager["MAname"] = maname
-        import random
-        import string
-        ran_str = ''.join(random.sample(string.ascii_letters + string.digits, 8))
-        manager["MApassword"] = ran_str
+
+        manager["MApassword"] = self.create_password()
         manager["MAidentity"] = conversion_MAidentity_reverse.get(data.get("MAidentity", "卖家"))
         manager["MAcreatTime"] = TimeManager.get_db_time_str()
         manager["MAendTime"] = TimeManager.get_db_time_str(data.get("MAendTime"))
@@ -57,9 +90,14 @@ class CManager():
         response = get_response("SUCCESS_MESSAGE_REGISTER", "OK")
         response["data"] = {
             "MAname": maname,
-            "MApassword": ran_str
+            "MApassword": self.create_password()
         }
         return response
+
+    def create_password(self):
+        import random
+        import string
+        return ''.join(random.sample(string.ascii_letters + string.digits, 8))
 
     def update_password(self):
         args = request.args.to_dict()
@@ -112,11 +150,18 @@ class CManager():
 
         try:
             manager = self.smanager.get_manager_by_maname_mapassword(name, password)
-            maid = manager.MAid
-            if not maid:
+
+            if not manager:
                 return get_response("ERROR_MESSAGE_WRONG_PASSWORD", "MANAGERSYSTEMERROR", "ERROR_WRONG_PASSWORD")
+            maid = manager.MAid
             response = get_response("SUCCESS_MESSAGE_LOGIN", "OK")
-            response["data"] = {"token": usid_to_token(maid)}
+
+            from ManagerSystem.config.conversion import conversion_MAidentity
+
+            response["data"] = {
+                "side": self.get_interface(maid),
+                "token": usid_to_token(maid),
+                "MAidentity": conversion_MAidentity.get(manager.MAidentity)}
             return response
         except Exception as e:
             log.error("LOGINERROR", e.message)
@@ -162,3 +207,132 @@ class CManager():
         except Exception as e:
             log.error("ERROR", e.message)
             return SYSTEM_ERROR
+
+    def get_inforcode(self):
+        data = json.loads(request.data)
+        log.info("data", data)
+        if "MAtelphone" not in data:
+            return PARAMS_MISS
+        Utel = data["MAtelphone"]
+        # 拼接验证码字符串（6位）
+        code = ""
+        while len(code) < 6:
+            import random
+            item = random.randint(1, 9)
+            code = code + str(item)
+
+        # 获取当前时间，与上一次获取的时间进行比较，小于60秒的获取直接报错
+        import datetime
+        from ManagerSystem.common.TimeManagert import format_for_db
+        
+        time_time = datetime.datetime.now()
+        time_str = datetime.datetime.strftime(time_time, format_for_db)
+
+        """
+        utel_list = self.smanager.get_user_by_utel(Utel)
+        print(self.title.format("utel_list"))
+        print(utel_list)
+        print(self.title.format("utel_list"))
+        if utel_list:
+            return get_response("ERROR_MESSAGE_REPEAT_TELPHONE", "MANAGERSYSTEMERROR", "ERROR_CODE_REPEAT_TELPHONE")
+            """
+        # 根据电话号码获取时间
+        time_up = self.smanager.get_uptime_by_utel(Utel)
+        log.info(time_up)
+        if time_up:
+            time_up_time = datetime.datetime.strptime(time_up.ICtime, format_for_db)
+            delta = time_time - time_up_time
+            if delta.seconds < 60:
+                return get_response("ERROR_MESSAGE_GET_CODE_FAST", "MANAGERSYSTEMERROR", "ERROR_CODE_GET_CODE_FAST")
+
+        inforcode = {
+            "ICid": str(uuid.uuid1()),
+            "ICtelphone": Utel,
+            "ICcode": code,
+            "ICtime": time_str
+        }
+        new_inforcode = self.smanager.add_model("IdentifyingCode", **inforcode)
+
+        log.info("new inforcode", new_inforcode)
+
+        if not new_inforcode:
+            return SYSTEM_ERROR
+        from ManagerSystem.config.Inforcode import SignName, TemplateCode
+        from ManagerSystem.common.Inforsend import send_sms
+        params = '{\"code\":\"' + code + '\",\"product\":\"etech\"}'
+
+        # params = u'{"name":"wqb","code":"12345678","address":"bz","phone":"13000000000"}'
+        __business_id = uuid.uuid1()
+        response_send_message = send_sms(__business_id, Utel, SignName, TemplateCode, params)
+
+        response_send_message = json.loads(response_send_message)
+        log.info("response_send_message", response_send_message)
+
+        status = 200 if response_send_message["Code"] == "OK" else 405
+        response_ok = {}
+        response_ok["status"] = status
+        response_ok["messages"] = response_send_message["Message"]
+
+        return response_ok
+
+    def forget_password(self):
+        data = json.loads(request.data)
+        log.info("data", data)
+        params_key_list = ["MApasswordnew", "MApasswordnewrepeat", "MAtelphone", "MAcode"]
+        for key in params_key_list:
+            if key not in data:
+                return PARAMS_MISS
+
+        Utel = data["MAtelphone"]
+        try:
+            manager = self.smanager.get_manager_by_matelphone(Utel)
+            log.info("manager", manager)
+            if not manager:
+                return get_response("ERROR_MESSAGE_NONE_TELPHONE", "MANAGERSYSTEMERROR", "ERROR_CODE_NONE_TELPHONE")
+
+            code_in_db = self.smanager.get_code_by_utel(Utel)
+
+            if not code_in_db:
+                return get_response("ERROR_MESSAGE_WRONG_TELCODE", "MANAGERSYSTEMERROR", "ERROR_CODE_WRONG_TELCODE")
+            if code_in_db.ICcode != data["MAcode"]:
+                return get_response("ERROR_MESSAGE_WRONG_TELCODE", "MANAGERSYSTEMERROR", "ERROR_CODE_WRONG_TELCODE")
+
+            if data["MApasswordnew"] != data["MApasswordnewrepeat"]:
+                return get_response("ERROR_MESSAGE_WRONG_REPEAT_PASSWORD", "MANAGERSYSTEMERROR", "ERROR_CODE_WRONG_REPEAT_PASSWORD")
+
+            users = {}
+            Upwd = data["MApasswordnew"]
+            users["MApassword"] = Upwd
+            update_info = self.smanager.update_users_by_matel(Utel, users)
+            log.info("update info", update_info)
+            if not update_info:
+                return SYSTEM_ERROR
+
+            return get_response("SUCCESS_MESSAGE_UPDATE_PASSWORD", "OK")
+        except Exception as e:
+            log.error("forget pwd error", e.message)
+            return SYSTEM_ERROR
+
+    def get_interface(self, maid):
+        mnid_list = [mm.MNid for mm in self.sinterface.get_mnid_by_maid(maid)]
+        menu_dict = {}
+        for mnid in mnid_list:
+            menu = todict(self.sinterface.get_menu_by_mnid(mnid))
+            parentid = menu.get("MNparent")
+            while parentid != "0":
+                if parentid in menu_dict:
+                    menu_dict[parentid].append(menu)
+                else:
+                    menu_dict[parentid] = [menu]
+                menu = todict(self.sinterface.get_menu_by_mnid(parentid))
+                if not menu:
+                    raise Exception("SYSTEM ERROR")
+                parentid = menu.get("MNparent")
+        log.info("menu dict", menu_dict)
+        menu_list = []
+        for mnid in menu_dict:
+            menu = todict(self.sinterface.get_menu_by_mnid(mnid))
+            menu["children"] = menu_dict.get(mnid)
+            menu_list.append(menu)
+        log.info("menu list", menu_list)
+        return menu_list

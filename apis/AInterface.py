@@ -4,11 +4,12 @@ import os
 
 sys.path.append(os.path.dirname(os.getcwd()))
 from flask_restful import Resource
-from ManagerSystem.control.CApproval import CApproval
+from ManagerSystem.control.CInterface import CInterface
 from ManagerSystem.config.response import APIS_WRONG
 from ManagerSystem.globals import log
 
-class AApproval(Resource):
+
+class MSInterface(Resource):
     def __init__(self):
         self.capproval = CApproval()
         # self.log = LOG()

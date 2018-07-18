@@ -2,11 +2,23 @@
 #  引用python类
 from sqlalchemy.orm import sessionmaker
 # 引用项目类
-from models import model
+from ManagerSystem.models import model
 import time
 # 实例化session
 db_session = sessionmaker(bind=model.mysql_engine)
+from sqlalchemy import func
 
+
+model_id = {
+    "Products": "model.Products.PRid",
+    "Users": "model.Users.USid",
+    "Locations": "model.Locations.LOid",
+    "Review": "model.Review.REid",
+    "ProductsBrands": "model.ProductsBrands.PBid",
+    "Brands": "model.Brands.BRid",
+    "Category": "model.Category.CTid",
+    "CategoryBrand": "model.CategoryBrand.CBid",
+}
 
 def close_session(fn):
     def inner(self, *args, **kwargs):
@@ -57,3 +69,17 @@ class SBase(object):
             print("mysql connection error:", e.message)
             self.check_connection(index + 1)
             time.sleep(3)
+
+    # todo 修改mode_id
+    @close_session
+    def get_count(self, model_name, params):
+        """
+        获取某个数据表中的全部数据
+        :param model_name:
+        :return:
+        """
+        # if model_name not in model_id:
+        #     return 0
+        model_id = eval(model_name)
+
+        return self.session.query(func.count(model_id)).filter(*params).scalar()

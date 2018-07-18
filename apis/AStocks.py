@@ -4,9 +4,9 @@ import os
 
 sys.path.append(os.path.dirname(os.getcwd()))
 from flask_restful import Resource
-from control.CStocks import CStocks
-from config.response import APIS_WRONG
-from globals import log
+from ManagerSystem.control.CStocks import CStocks
+from ManagerSystem.config.response import APIS_WRONG
+from ManagerSystem.globals import log
 
 
 class AStocks(Resource):

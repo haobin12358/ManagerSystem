@@ -4,15 +4,15 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.getcwd()))
 from flask_restful import Resource, request
-from config.response import PARAMS_MISS
-from common.ImportManager import get_response
-from config.response import SYSTEM_ERROR
+from ManagerSystem.config.response import PARAMS_MISS
+from ManagerSystem.common.ImportManager import get_response
+from ManagerSystem.config.response import SYSTEM_ERROR
 
 
 class AOther(Resource):
     def __init__(self):
-        from service.SOrders import SOrders
-        self.sorders = SOrders()
+        from ManagerSystem.service.SOrder import SOrder
+        self.sorders = SOrder()
         self.title = '============{0}============'
 
     def get(self, other):

@@ -7,13 +7,13 @@ import os
 sys.path.append(os.path.dirname(os.getcwd()))
 from flask import request
 
-from service.SStocks import SStocks
-from service.SProducts import SProducts
-from common.MakeToken import token_to_usid
-from globals import log
-from common.ImportManager import get_response
-from config.response import SYSTEM_ERROR, PARAMS_MISS
-from common.ResultManager import todict, tolist
+from ManagerSystem.service.SStocks import SStocks
+from ManagerSystem.service.SProducts import SProducts
+from ManagerSystem.common.MakeToken import token_to_usid
+from ManagerSystem.globals import log
+from ManagerSystem.common.ImportManager import get_response
+from ManagerSystem.config.response import SYSTEM_ERROR, PARAMS_MISS
+from ManagerSystem.common.ResultManager import todict, tolist
 
 
 class CStocks():

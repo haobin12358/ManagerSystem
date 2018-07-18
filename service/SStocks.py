@@ -4,9 +4,9 @@ import os
 
 sys.path.append(os.path.dirname(os.getcwd()))
 
-from SBase import SBase, close_session
+from ManagerSystem.service.SBase import SBase, close_session
 
-from models.model import Stocks, StocksProducts
+from ManagerSystem.models.model import Stocks, StocksProducts
 
 class SStocks(SBase):
     @close_session
@@ -16,7 +16,7 @@ class SStocks(SBase):
 
     @close_session
     def get_stock_by_stid(self, stid):
-        return self.session.query(Stocks.STabo, Stocks.STamount, Stocks.STname).filter(Stocks.STid == stid).all()
+        return self.session.query(Stocks.STabo, Stocks.STamount, Stocks.STname).filter(Stocks.STid == stid).first()
 
     @close_session
     def update_stock(self, stid, stock):

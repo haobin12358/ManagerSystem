@@ -4,9 +4,9 @@ import os
 
 sys.path.append(os.path.dirname(os.getcwd()))
 from flask_restful import Resource
-from control.CManager import CManager
-from config.response import APIS_WRONG
-from globals import log
+from ManagerSystem.control.CManager import CManager
+from ManagerSystem.config.response import APIS_WRONG
+from ManagerSystem.globals import log
 
 class AManager(Resource):
     def __init__(self):
@@ -29,9 +29,10 @@ class AManager(Resource):
         action = {
             "apply": "self.cmanager.apply_manager()",
             "update_manager": "self.cmanager.update_manager()",
-            "update_password": "self.cmanager.update_password()",
+            "update_user": "self.cmanager.update_password()",
             "get_inforcode": "self.cmanager.get_inforcode()",
-            "login": "self.cmanager.login()"
+            "login": "self.cmanager.login()",
+            "forget_password": "self.cmanager.forget_password()"
         }
         if manager in action:
             return eval(action.get(manager))

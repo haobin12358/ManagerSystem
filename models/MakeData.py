@@ -3,7 +3,7 @@
 import sys
 import os
 sys.path.append(os.path.dirname(os.getcwd()))  # 增加系统路径
-import model
+from ManagerSystem.models import model
 import pymysql
 
 class databse_deal():
