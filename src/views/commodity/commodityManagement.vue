@@ -70,7 +70,10 @@
         inputID: '',
         inputName: '',
         product_data: [],
-        total_page:2
+        total_page:1,
+        current_page:1,
+        total_num:0,
+        page_size:10
       }
     },
     components:{
@@ -79,6 +82,11 @@
     },
     mounted(){
       this.getData();
+    },
+    computed: {
+      // total_page(){
+      //   return Math.ceil(this.total_num / this.page_size);
+      // }
     },
     methods: {
       freshClick(){
@@ -94,18 +102,32 @@
       getData(v){
         let params = {
           token:this.$store.state.token,
-          PBstatus:''
+          PRstatus:'',
+          page_num: v || this.current_page,
+          page_size:this.page_size
         };
         axios.get(api.get_all_product,{params:params}).then(res => {
-          if(res.data.status == 200){
-              this.product_data = res.data.data
+          if(res.data.status == 200) {
+            this.product_data = res.data.data.products;
+            this.total_num = res.data.data.count;
+            this.total_page = Math.ceil(this.total_num / this.page_size);
+          }else{
+            this.$message.error(res.data.message);
           }
         },error => {
-
+          this.$message.error(error.data.message);
         })
       },
       pageChange(v){
-
+        if(v == this.current_page){
+          this.$message({
+            message: '这已经是第' + v + '页数据了',
+            type: 'warning'
+          });
+          return false;
+        }
+        this.current_page = v;
+        this.getData(v);
       }
     },
     created() {

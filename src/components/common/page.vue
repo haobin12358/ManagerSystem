@@ -49,7 +49,6 @@
     },
     methods:{
       change(v) {
-        console.log(v)
         this.$emit('pageChange',v)
       }
     }

@@ -90,22 +90,10 @@
                   this.$router.push({ path: '/index/userIndex' });
                 }
               }else{
-                MessageBox({
-                  title:'提示',
-                  message:res.data.message,
-                  callback: action => {
-
-                  }
-                })
+                this.$message.error(res.data.message);
               }
             }, res=>{
-              MessageBox({
-                title:'提示',
-                message:res.data.message,
-                callback: action => {
-
-                }
-              })
+              this.$message.error(res.data.message);
             });
           } else {
             console.log('error submit!!');

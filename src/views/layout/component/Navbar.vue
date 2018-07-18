@@ -110,22 +110,10 @@ export default {
               });
               this.show_pwd_modal = false;
             }else{
-              MessageBox({
-                title:'提示',
-                message:res.data.message,
-                callback: action => {
-
-                }
-              })
+              this.$message.error(res.data.message);
             }
           }, res=>{
-            MessageBox({
-              title:'提示',
-              message:res.data.message,
-              callback: action => {
-
-              }
-            })
+            this.$message.error(res.data.message);
           });
         } else {
           console.log('error submit!!');

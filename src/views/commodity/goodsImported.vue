@@ -290,8 +290,11 @@
             return {
               name:'商品发布',
               form:{
-                name:'',
-                select:''
+                PRname:'',
+                PRinfo:'',
+                PRbrand:'',
+                PRimage:'',
+
               },
               dialogImageUrl: '',
               dialogVisible: false,
