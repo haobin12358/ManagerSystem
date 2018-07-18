@@ -4,7 +4,7 @@
     <div class="login-content">
       <div class="login-box">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  >
-          <h3 class="login-head">用户登录</h3>
+          <h3 class="login-head">忘记密码</h3>
           <el-form-item  prop="name">
             <i class="icon-person icon"></i>
             <el-input v-model="ruleForm.MAname" placeholder="输入账号/邮箱" class="m-input"></el-input>
@@ -16,7 +16,8 @@
           <el-form-item  prop="code">
             <i class="icon-tel icon"></i>
             <el-input v-model="ruleForm.MAname" placeholder="验证码" class="m-input-s m-input"></el-input>
-            <span class="m-code">获取验证码</span>
+            <span class="m-code" v-if="show" @click="getCode">获取验证码</span>
+            <span class="m-code active" v-else >重发{{count}}s</span>
           </el-form-item>
           <el-form-item  prop="pwd">
             <span class="icon-pwd icon"></span>
@@ -58,7 +59,9 @@
           MApassword:'',
           checked:true,
         },
-
+        show:true,
+        timer:null,
+        count:'',
         rules: {
           MAname: [
             { required: true, message: '请输入账号名称', trigger: 'blur' }
@@ -69,23 +72,13 @@
     },
     //页面加载调用获取cookie值
     mounted() {
-      this.getCookie();
+
     },
     methods: {
       submitForm(formName) {
         let that = this;
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            //记住密码
-            //判断复选框是否被勾选 勾选则调用配置cookie方法
-            if (that.ruleForm.checked == true) {
-              //传入账号名，密码，和保存天数3个参数
-              that.setCookie(that.ruleForm.MAname, that.ruleForm.MApassword, 7);
-            }else {
-              console.log("清空Cookie");
-              //清空Cookie
-              that.clearCookie();
-            }
             axios.post(api.login,that.ruleForm).
             then(res=>{
               if(res.data.status == 200){
@@ -119,6 +112,23 @@
             return false;
           }
         });
+      },
+      getCode(){
+        this.show = false;
+        const TIME_COUNT = 60;
+        if (!this.timer) {
+          this.count = TIME_COUNT;
+          this.show = false;
+          this.timer = setInterval(() => {
+            if (this.count > 0 && this.count <= TIME_COUNT) {
+              this.count--;
+            } else {
+              this.show = true;
+              clearInterval(this.timer);
+              this.timer = null;
+            }
+          }, 1000)
+        }
       }
     }
   }
@@ -166,6 +176,12 @@
             color: #fff;
             border-radius: 5px;
             margin-left: 0.1rem;
+            cursor: pointer;
+            &.active{
+              background-color: @btnColor;
+              color: @greyColor;
+              cursor: not-allowed;
+            }
           }
           .icon{
             width: 0.25rem;

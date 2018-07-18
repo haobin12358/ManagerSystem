@@ -11,7 +11,8 @@ let store= new Vuex.Store({
 	    route: {},
 	    now:null,
 	    number:0,
-    isCollapse:false
+    isCollapse:false,
+    token:''
 	},
 	mutations: {
 	    add(state,route) {

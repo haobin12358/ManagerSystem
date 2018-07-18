@@ -14,7 +14,7 @@
       <input type="text" placeholder="搜索">
     </div>
     <div class="icon icon-message"></div>
-    <el-dropdown :hide-on-click="false" @command="handleCommand">
+    <el-dropdown :hide-on-click="false" trigger="click" @command="handleCommand">
       <span>hello,admin<i class="icon-person-navbar icon"></i></span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="passward">修改密码</el-dropdown-item>
@@ -27,21 +27,18 @@
         <div class="m-modal-content" @click="modalClick">
           <h3>管理员数据管理</h3>
           <p>--修改密码</p>
-          <el-form :inline="false" :model="storeForm"   label-width="1rem">
-                <el-form-item label="请输入旧密码">
-                  <el-input v-model="storeForm.name" class="m-input-m" placeholder=""></el-input>
+          <el-form :inline="false" :model="pwdForm" :rules="rules" ref="pwdForm"  label-width="1.2rem">
+                <el-form-item label="请输入旧密码" prop="MApasswordOld">
+                  <el-input v-model="pwdForm.MApasswordOld" type="password" class="m-input-pwd" placeholder=""></el-input>
                 </el-form-item>
-                <el-form-item label="请输入新密码">
-                  <el-input v-model="storeForm.name" class="m-input-m" placeholder=""></el-input>
+                <el-form-item label="请输入新密码" prop="MApasswordNew">
+                  <el-input v-model="pwdForm.MApasswordNew" type="password" class="m-input-pwd" placeholder=""></el-input>
                 </el-form-item>
-                <el-form-item label="请确认新密码">
-                  <el-input v-model="storeForm.name" class="m-input-m" placeholder=""></el-input>
+                <el-form-item label="请确认新密码" prop="MApasswordRepeat">
+                  <el-input v-model="pwdForm.MApasswordRepeat" type="password" class="m-input-pwd" placeholder=""></el-input>
                 </el-form-item>
-
-              <p class="m-btn-p">确认修改</p>
-
+              <p class="m-btn-p" @click="pwdSubmit('pwdForm')">确认修改</p>
           </el-form>
-
         </div>
       </div>
     </div>
@@ -50,6 +47,9 @@
 
 <script>
   import store  from '../../../vuex/index.js';
+  import api from '../../../api/api';
+  import { MessageBox } from 'element-ui';
+  import axios from 'axios';
 export default {
 
   components: {
@@ -62,9 +62,21 @@ export default {
     return{
       isActive:false,
       show_pwd_modal:false,
-      storeForm:{
-        name:'',
-        user:''
+      pwdForm:{
+        MApasswordOld:'',
+        MApasswordNew:'',
+        MApasswordRepeat:''
+      },
+      rules: {
+        MApasswordOld: [
+          { required: true, message: '请输入旧密码', trigger: 'blur' }
+        ],
+        MApasswordNew:[
+          { required: true, message: '请输入新密码', trigger: 'blur' }
+          ],
+        MApasswordRepeat:[
+          { required: true, message: '请确认新密码', trigger: 'blur' }
+        ],
       }
 
     }
@@ -85,7 +97,41 @@ export default {
     hideModal(){
       this.show_pwd_modal = false;
     },
-    pwdSubmit(){
+    pwdSubmit(formName){
+      let that = this;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          axios.post(api.changePwd + '?token=' + that.$store.state.token,that.pwdForm).
+          then(res=>{
+            if(res.data.status == 200){
+              this.$message({
+                message: res.data.message,
+                type: 'success'
+              });
+              this.show_pwd_modal = false;
+            }else{
+              MessageBox({
+                title:'提示',
+                message:res.data.message,
+                callback: action => {
+
+                }
+              })
+            }
+          }, res=>{
+            MessageBox({
+              title:'提示',
+              message:res.data.message,
+              callback: action => {
+
+              }
+            })
+          });
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
 
     },
     handleCommand(command) {
@@ -175,7 +221,7 @@ export default {
 .m-modal{
   .m-modal-state{
     width: 4rem;
-    height: 3.5rem;
+    height: 350px;
     text-align: center;
     p{
       font-size: 0.12rem;

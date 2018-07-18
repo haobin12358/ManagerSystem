@@ -5,11 +5,11 @@
       <div class="login-box">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  >
           <h3 class="login-head">用户登录</h3>
-          <el-form-item  prop="name">
+          <el-form-item  prop="MAname">
             <i class="icon-person icon"></i>
             <el-input v-model="ruleForm.MAname" placeholder="输入账号" class="m-input"></el-input>
           </el-form-item>
-          <el-form-item  prop="pwd">
+          <el-form-item  prop="MApassword">
             <span class="icon-pwd icon"></span>
             <el-input v-model="ruleForm.MApassword" placeholder="输入密码" type="password" class="m-input"></el-input>
             <!--<i class="icon-pwd icon-r"></i>-->
@@ -49,12 +49,13 @@
           MApassword:'',
           checked:true,
         },
-
         rules: {
           MAname: [
             { required: true, message: '请输入账号名称', trigger: 'blur' }
           ],
-          MApassword:'password',
+          MApassword: [
+            { required: true, message: '请输入密码', trigger: 'blur' }
+          ],
         }
       };
     },
@@ -82,6 +83,7 @@
               if(res.data.status == 200){
                 this.$store.state.side = res.data.data.side;
                 this.$store.state.role = res.data.data.MAidentity;
+                this.$store.state.token = res.data.data.token;
                 if(res.data.data.MAidentity.indexOf('管理员') != -1){
                   this.$router.push({ path: '/index/adminIndex' });
                 }else{

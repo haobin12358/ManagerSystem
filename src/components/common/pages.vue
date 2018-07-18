@@ -124,7 +124,7 @@
     margin: 0 0 55px 0;
   }
   .page-button {
-    width: 4rem;
+    /*width: 4rem;*/
     float: right;
     margin-top: -10px;
     display: flex;
