@@ -1,7 +1,7 @@
 
 <template>
   <div class="m-age">
-    <div>
+    <div v-if="num">
       <div class="page-total">
         记录数 {{num}} 个
       </div>

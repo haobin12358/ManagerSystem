@@ -351,7 +351,7 @@
                 this.linkTo = 'basicInfo'
               }
             }else{
-              return 
+              return
             }
 
           }

@@ -7,24 +7,20 @@
           <h3 class="login-head">用户登录</h3>
           <el-form-item  prop="name">
             <i class="icon-person icon"></i>
-            <el-input v-model="ruleForm.MAname" class="m-input"></el-input>
+            <el-input v-model="ruleForm.MAname" placeholder="输入账号" class="m-input"></el-input>
           </el-form-item>
           <el-form-item  prop="pwd">
             <span class="icon-pwd icon"></span>
-            <el-input v-model="ruleForm.MApassword" type="password" class="m-input"></el-input>
+            <el-input v-model="ruleForm.MApassword" placeholder="输入密码" type="password" class="m-input"></el-input>
             <!--<i class="icon-pwd icon-r"></i>-->
           </el-form-item>
-          <!--<el-form-item  prop="pwd">-->
-            <!--<span class="icon-pwd icon"></span>-->
-            <!--<el-input v-model="ruleForm.pwd" type="password" class="m-input"></el-input>-->
-            <!--&lt;!&ndash;<i class="icon-pwd icon-r"></i>&ndash;&gt;-->
-          <!--</el-form-item>-->
+
           <el-form-item class="m-btn">
             <el-button type="primary" @click="submitForm('ruleForm')">登 &nbsp;&nbsp;录</el-button>
           </el-form-item>
           <el-form-item >
-            <el-checkbox  name="type">记住密码</el-checkbox>
-            <p class="m-forget-pwd">忘记密码？</p>
+            <el-checkbox  name="type" v-model="ruleForm.checked">记住密码</el-checkbox>
+            <p class="m-forget-pwd" @click="forgetPwd">忘记密码？</p>
           </el-form-item>
         </el-form>
       </div>
@@ -50,8 +46,10 @@
       return {
         ruleForm: {
           MAname: '',
-          MApassword:''
+          MApassword:'',
+          checked:true,
         },
+
         rules: {
           MAname: [
             { required: true, message: '请输入账号名称', trigger: 'blur' }
@@ -60,11 +58,25 @@
         }
       };
     },
+    //页面加载调用获取cookie值
+    mounted() {
+      this.getCookie();
+    },
     methods: {
       submitForm(formName) {
         let that = this;
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            //记住密码
+            //判断复选框是否被勾选 勾选则调用配置cookie方法
+            if (that.ruleForm.checked == true) {
+              //传入账号名，密码，和保存天数3个参数
+              that.setCookie(that.ruleForm.MAname, that.ruleForm.MApassword, 7);
+            }else {
+              console.log("清空Cookie");
+              //清空Cookie
+              that.clearCookie();
+            }
             axios.post(api.login,that.ruleForm).
             then(res=>{
               if(res.data.status == 200){
@@ -98,6 +110,36 @@
             return false;
           }
         });
+      },
+      //设置cookie
+      setCookie(c_name, c_pwd, exdays) {
+        let exdate = new Date(); //获取时间
+        exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays); //保存的天数
+        //字符串拼接cookie
+        window.document.cookie = "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
+        window.document.cookie = "userPwd" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();
+      },
+      //读取cookie
+      getCookie: function() {
+        if (document.cookie.length > 0) {
+          let arr = document.cookie.split('; '); //这里显示的格式需要切割一下自己可输出看下
+          for (let i = 0; i < arr.length; i++) {
+            let arr2 = arr[i].split('='); //再次切割
+            //判断查找相对应的值
+            if (arr2[0] == 'userName') {
+              this.ruleForm.MAname = arr2[1]; //保存到保存数据的地方
+            } else if (arr2[0] == 'userPwd') {
+              this.ruleForm.MApassword = arr2[1];
+            }
+          }
+        }
+      },
+      //清除cookie
+      clearCookie: function() {
+        this.setCookie("", "", -1); //修改2值都为空，天数为负1天就好了
+      },
+      forgetPwd(){
+        this.$router.push('/forgetPwd');
       }
     }
   }
