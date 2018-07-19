@@ -1,11 +1,11 @@
 <template>
   <div class="order-table">
-    <el-table :data="tableData5" style="width: 100%" class="out-table" size="mini">
+    <el-table :data="orderList" style="width: 100%" class="out-table" size="mini">
       <el-table-column type="selection" width="30">
       </el-table-column>
       <el-table-column type="expand" width="30">
         <template slot-scope="scope">
-          <el-table class="demo-table-expand" :data="scope.row.goods" border style="width: 100%" :show-header="false" stripe size="mini">
+          <el-table class="demo-table-expand" :data="scope.row.goods" border style="width: 100%" stripe size="mini">
             <el-table-column align="center" prop="goodsName" label="商品">
             </el-table-column>
             <el-table-column align="center" prop="goodsPrice" label="单价">
@@ -22,26 +22,16 @@
             </el-table-column>
             <el-table-column align="center" prop="realPay" label="实付金额">
             </el-table-column>
-            <el-table-column align="center" label="操作">
-            </el-table-column>
           </el-table>
         </template>
       </el-table-column>
-      <el-table-column align="right" label="商品" prop="orderNoText">
+      <el-table-column align="center" label="订单号" prop="orderNo">
       </el-table-column>
-      <el-table-column align="left" label="单价" prop="orderNo">
+      <el-table-column align="center" label="支付方式" prop="payType">
       </el-table-column>
-      <el-table-column align="right" label="数量" prop="payTypeText">
+      <el-table-column align="center" label="外部订单号" prop="outOrderNo">
       </el-table-column>
-      <el-table-column align="left" label="售后" prop="payType">
-      </el-table-column>
-      <el-table-column align="right" label="买家" prop="outOrderNoText">
-      </el-table-column>
-      <el-table-column align="left" label="下单时间" prop="outOrderNo">
-      </el-table-column>
-      <el-table-column align="right" label="订单状态" prop="payNoText">
-      </el-table-column>
-      <el-table-column align="left" label="实付金额" prop="payNo">
+      <el-table-column align="center" label="支付流水号" prop="payNo">
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
@@ -68,7 +58,7 @@
     name: "all-order-table",
     data() {
       return {
-        tableData5: [],
+        orderList: [],
         total_page:1,
         current_page:1,
         total_num:0,
@@ -81,17 +71,16 @@
     methods: {
       orderDetails(order) {
         this.$router.push({path: '/order/orderDetails', query: {order}});
-        // console.log(order);
       },
       getData(v){
         let params = {
-          token:this.$store.state.token,
+          token:localStorage.getItem('token'),
           OMstatus:'7'
         };
-        console.log(params.token)
-        axios.get(api.get_all_product,{params:params}).then(res => {
+        axios.get(api.get_all_order,{params:params}).then(res => {
+          console.log(res.data.data)
           if(res.data.status == 200) {
-            this.product_data = res.data.data.products;
+            // this.orderList = res.data.data;
             this.total_num = res.data.data.count;
             this.total_page = Math.ceil(this.total_num / this.page_size);
           }else{
@@ -114,7 +103,7 @@
       }
     },
     mounted() {
-      this.tableData5 = allOrder;
+      this.orderList = allOrder;
       this.pageChange(2)
     }
   }
