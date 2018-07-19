@@ -285,11 +285,29 @@ section{
   .el-icon-success:before{
     font-size: 30px;
   }
-  .el-message__content{
-    font-size: 24px;
-    color: @green;
+  .el-icon-error:before{
+    font-size: 30px;
   }
-  .el-message--success{
-    border: 1px solid @green;
+  .el-icon-warning:before{
+    font-size: 30px;
+  }
+  &.el-message--success{
+    .el-message__content{
+      font-size: 24px;
+      color: @green;
+    }
+}
+
+  &.el-message--error{
+    .el-message__content{
+      font-size: 24px;
+      //color: @red;
+    }
+  }
+  &.el-message--warning{
+    .el-message__content{
+      font-size: 24px;
+      //color: #fee1bf;
+    }
   }
 }

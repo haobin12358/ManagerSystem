@@ -35,9 +35,11 @@
           </el-table-column>
           <el-table-column align="center" prop="PRsalesvolume" label="总销量" ></el-table-column>
           <el-table-column align="center" prop="PRtime" width="160" label="创建时间" ></el-table-column>
-          <el-table-column align="center" prop="PRstatus" label="状态概况" :filters="[{ text: '全部', value: '全部' }, { text: '出售中', value: '出售中' },{ text: '未发布', value: '未发布' }, { text: '下架', value: '下架' }]">
+          <el-table-column align="center" prop="PRstaus" label="状态概况"
+                           :filters="[{ text: '全部', value: '' }, { text: '预售状态', value: '预售状态' }, { text: '在售状态', value: '在售状态' },{ text: '未发布', value: '未发布' }, { text: '下架状态', value: '下架状态' }]"
+                           :filter-method="filterTag">
             <template slot-scope="scope">
-              <span :class="scope.row.PRstatus == '全部售罄'? 'm-alert': ''">{{scope.row.PRstatus}}</span>
+              <span :class="scope.row.PRstaus == '全部售罄'? 'm-alert': ''">{{scope.row.PRstaus}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作" >
@@ -101,12 +103,21 @@
         console.log('用户ID：', this.inputID)
         console.log('用户名：', this.inputName)
       },
+      //表格筛选
+      filterTag(value, row) {
+        if(value == ''){
+          return row.PRstaus === row.PRstaus;
+        }else{
+          return row.PRstaus === value;
+        }
+
+      },
       changeFun(v){
         this.checkRow = v;
       },
       //发布商品
       importProduct(){
-        this.updateProduct('上架状态');
+        this.updateProduct('在售状态');
       },
       //下架商品
       soldOut(){
@@ -119,6 +130,13 @@
       updateProduct(status){
         let PRid = [];
         let that = this;
+        if(this.checkRow.length <1){
+          this.$message({
+            message:'请先选择商品',
+            type:'warning'
+          });
+          return false;
+        }
         for(let i = 0; i< this.checkRow.length;i++){
           PRid.push(this.checkRow[i].PRid);
         }
@@ -130,8 +148,7 @@
           if(res.data.status == 200){
             this.$message({
               message:res.data.message,
-              type:'success',
-              // duration:200000
+              type:'success'
             });
             that.getData();
           }

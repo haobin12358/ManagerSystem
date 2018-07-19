@@ -35,13 +35,11 @@ axios.interceptors.request.use(config => {
   // console.log(loadinginstace)
   return config
 }, error => {
-  MessageBox({
-    title:'提示',
+  Message({
     message:'加载超时',
-    callback: action => {
-      loadinginstace.close()
-    }
-  })
+    type:'warning'
+  });
+  loadinginstace.close()
   return Promise.reject(error)
 })
 // http响应拦截器
@@ -49,13 +47,11 @@ axios.interceptors.response.use(data => {// 响应成功关闭loading
   loadinginstace.close()
   return data
 }, error => {
-  MessageBox({
-    title:'提示',
+  Message({
     message:'请求失败',
-    callback: action => {
-      loadinginstace.close()
-    }
-  })
+    type:'warning'
+  });
+  loadinginstace.close()
   return Promise.reject(error)
 })
 

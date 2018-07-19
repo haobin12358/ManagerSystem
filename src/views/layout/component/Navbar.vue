@@ -109,6 +109,9 @@ export default {
                 type: 'success'
               });
               this.show_pwd_modal = false;
+              for(let i in that.pwdForm){
+                that.pwdForm[i] = ''
+              }
             }else{
               this.$message.error(res.data.message);
             }
