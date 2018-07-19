@@ -114,7 +114,7 @@
         this.checkRow = v;
       },
       editClick(){
-        this.$router.push('/commodity/categorySelection?a=1')
+        this.$router.push('/commodity/categorySelection?CTid=1')
       },
       //发布商品
       importProduct(){

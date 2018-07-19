@@ -120,10 +120,10 @@
       pageTitle
     },
     mounted(){
-      if(this.$route.query.PRid){
-        this.getCategory();
+      if(this.$route.query.CTid){
+        this.getProductSelect(this.$route.query.CTid);
       }else{
-        this.getFirstCategory();
+        this.getChildCategory('',0);
       }
       this.getProductList('')
 
@@ -186,25 +186,6 @@
         })
       },
       /*获取类目*/
-      getFirstCategory(){
-        let that = this;
-        that.category_list = [];
-        let _arr = that.category_list;
-        console.log(localStorage.getItem('token'))
-        axios.get(api.get_first_category ,{params:{
-          // token:this.$store.state.token
-            token:localStorage.getItem('token')
-        }}).then(res => {
-          if(res.data.status == 200){
-            _arr[0] = res.data.data ;
-            that.category_list = [].concat(_arr);
-          }else{
-            this.$message.error(res.data.message);
-          }
-        },error => {
-          this.$message.error(error.data.message);
-        })
-      },
       getChildCategory(id,i){
         let that = this;
         let _arr = that.category_list;
@@ -215,7 +196,11 @@
           if(res.data.status == 200){
             if(res.data.data.length <1){
             }else{
-              _arr[i+1] = res.data.data ;
+              if(i ==0){
+                _arr[0] = res.data.data ;
+              }else{
+                _arr[i] = res.data.data ;
+              }
               that.category_list = [].concat(_arr);
             }
           }else{
@@ -235,15 +220,15 @@
            }
          }
         this.select_category = [].concat(_arr);
-        this.getChildCategory(v.CTid,i);
+        this.getChildCategory(v.CTid,i+1);
       },
       /*带参获取类目信息*/
       getCategory(){
         for(let i=0;i< this.select_category.length;i++){
           if(i ==0 ){
-            this.getFirstCategory();
+            this.getChildCategory('',0);
           }else{
-            this.getChildCategory(this.select_category[i-1].CTid,i-1);
+            this.getChildCategory(this.select_category[i-1].CTid,i);
           }
         }
       },
