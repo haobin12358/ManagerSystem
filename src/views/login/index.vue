@@ -84,6 +84,7 @@
                 this.$store.state.side = res.data.data.side;
                 this.$store.state.role = res.data.data.MAidentity;
                 this.$store.state.token = res.data.data.token;
+                localStorage.setItem('token', res.data.data.token);
                 if(res.data.data.MAidentity.indexOf('管理员') != -1){
                   this.$router.push({ path: '/index/adminIndex' });
                 }else{

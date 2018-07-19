@@ -8,16 +8,16 @@
         </div>
         <div class="m-one-part">
           <h3>类目选择</h3>
-          <el-form-item label="类目搜索:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
-            <el-input v-model="form.name" class="m-input-l" ></el-input>
+          <el-form-item label="类目搜索:" >
+            <el-input v-model="form.name" class="m-input-l" placeholder="请输入商品名"></el-input>
             <span class="m-btn">搜索</span>
           </el-form-item>
-          <el-form-item label="快速选择:" :rules="[{ required: true, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
-            <el-select v-model="form.select" class="m-input-l">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
-          </el-form-item>
+          <!--<el-form-item label="快速选择:" :rules="[{ required: true, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">-->
+            <!--<el-select v-model="form.select" class="m-input-l">-->
+              <!--<el-option label="区域一" value="shanghai"></el-option>-->
+              <!--<el-option label="区域二" value="beijing"></el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
           <el-form-item label="商品类目:" :rules="[{ required: true}]">
             <div class="m-select-box">
               <p class="m-alert">错误填写商品属性，可能会引起商品下架或搜索流量减少，影响您的正常销售，请认真准确填写！</p>
@@ -67,9 +67,7 @@
           </el-form-item>
         </div>
         <div class="m-goodsImported-foot">
-          <router-link to="/commodity/goodsImported">
-          <span class="m-foot-btn">下一步</span>
-          </router-link>
+          <span class="m-foot-btn" @click="nextClick">下一步</span>
         </div>
       </div>
     </el-form>
@@ -133,8 +131,11 @@
         let that = this;
         that.category_list = [];
         let _arr = that.category_list;
+        console.log(localStorage.getItem('token'))
         axios.get(api.get_first_category ,{params:{
-          token:this.$store.state.token}}).then(res => {
+          // token:this.$store.state.token
+            token:localStorage.getItem('token')
+        }}).then(res => {
           if(res.data.status == 200){
             _arr[0] = res.data.data ;
             that.category_list = [].concat(_arr);
@@ -145,7 +146,8 @@
         let that = this;
         let _arr = that.category_list;
         axios.get(api.get_child_category,{params:{
-            token:this.$store.state.token,
+            // token:this.$store.state.token
+            token:localStorage.getItem('token'),
             CTid:id}}).then(res => {
           if(res.data.status == 200){
             if(res.data.data.length <1){
@@ -193,6 +195,10 @@
         //待判断右终点
         this.scroll_index = this.scroll_index + Number(v);
         _scroll.style.marginLeft = this.scroll_index * -2.08 +'rem';
+      },
+      /*下一步*/
+      nextClick(){
+        this.$router.push('/commodity/goodsImported');
       }
     },
     created() {
