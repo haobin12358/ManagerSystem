@@ -285,6 +285,9 @@
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
+  import axios from 'axios';
+  import api from '../../api/api';
+  import {Message} from 'element-ui';
     export default {
         data() {
             return {
@@ -319,6 +322,14 @@
         pageTitle
       },
         methods: {
+          getCategorybrands(id){
+            axios.get(api.get_categorybrands,{params:{
+              CTid:id,
+                token:localStorage.getItem('token')
+              }}).then(res => {
+                console.log(res)
+            })
+          },
           freshClick(){
             console.log('fresh');
           },
@@ -339,20 +350,6 @@
               document.documentElement.scrollTop = document.getElementById('otherInfo').offsetTop - 229;
             }
           },
-          //显示更多
-          showMore(v){
-            this[v] = !this[v];
-          },
-        //  发布
-          issueClick(){
-            this.$router.push('/commodity/commodityManagement')
-          },
-          outImg(){
-            this.$message({
-              message: '上传图片超出数量限制',
-              type: 'warning'
-            });
-          },
           handleScroll(){
             if(document.getElementById('otherInfo') && document.getElementById('priceInfo') ){
               if((document.getElementById('otherInfo').offsetTop <= document.documentElement.scrollTop + 230 ) ){
@@ -366,13 +363,30 @@
               return
             }
 
+          },
+          //显示更多
+          showMore(v){
+            this[v] = !this[v];
+          },
+          //  发布
+          issueClick(){
+            this.$router.push('/commodity/commodityManagement')
+          },
+          outImg(){
+            this.$message({
+              message: '上传图片超出数量限制',
+              type: 'warning'
+            });
           }
         },
         created() {
 
         },
       mounted(){
-        window.addEventListener('scroll',this.handleScroll)
+        window.addEventListener('scroll',this.handleScroll);
+        if(this.$route.query.CTid){
+          this.getCategorybrands(this.$route.query.CTid);
+        }
       },
     }
 </script>

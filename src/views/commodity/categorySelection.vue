@@ -198,7 +198,15 @@
       },
       /*下一步*/
       nextClick(){
-        this.$router.push('/commodity/goodsImported');
+        if(!this.checked){
+          this.$message.error('请先阅读以上规则');
+          return false;
+        }
+        if(this.select_category.length < this.category_list.length){
+          this.$message.error('请先选择具体类目');
+          return false;
+        }
+        this.$router.push({path:'/commodity/goodsImported',query:{CTid:this.select_category[this.select_category.length -1].CTid}});
       }
     },
     created() {
