@@ -105,7 +105,8 @@
             }
           }]
         },
-        value7: ''
+        value7: '',
+        value: ''
       }
     },
     components: {
