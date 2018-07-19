@@ -14,7 +14,7 @@ class SProducts(SBase):
     def get_product_by_maid(self, maid):
         return self.session.query(
             Products.PRid, Products.PRname, Products.PRvideo, Products.PRimage, Products.PRtype,
-            Products.PRaboimage, Products.PRinfo,  Products.PRbrand, Products.PRvideostart
+            Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart
         ).filter(Products.MAid == maid).all()
 
     @close_session
@@ -29,11 +29,11 @@ class SProducts(SBase):
     @close_session
     def get_product_by_pbid_filters(self, pbid):
         return self.session.query(
-            PB.PRid, PB.BRid,PB.PBunit, PB.PBprice,
-            PB.PBsalesvolume, PB.PBscore,PB.PBimage)\
+            PB.PRid, PB.BRid, PB.PBunit, PB.PBprice,
+            PB.PBsalesvolume, PB.PBscore, PB.PBimage) \
             .filter_by(PBstatus=201).filter_by(PBid=pbid).first()
 
-    @ close_session
+    @close_session
     def get_all_brand_by_brid_last(self, brid):
         brand_list = {}
         while brid != "0":
@@ -46,14 +46,15 @@ class SProducts(SBase):
 
     @close_session
     def get_brand_by_brid(self, brid):
-        return self.session.query(Brands.BRfromid, Brands.BRkey, Brands.BRvalue)\
+        return self.session.query(Brands.BRfromid, Brands.BRkey, Brands.BRvalue) \
             .filter_by(BRid=brid).first()
 
     @close_session
     def get_product_by_prid(self, prid):
         return self.session.query(Products.PRname, Products.PRbrand, Products.PRinfo,
                                   Products.PRvideo, Products.PRtype, Products.PRimage,
-                                  Products.PRaboimage, Products.PRvideostart, Products.PRtime).filter_by(PRid=prid).first()
+                                  Products.PRaboimage, Products.PRvideostart, Products.PRtime).filter_by(
+            PRid=prid).first()
 
     @close_session
     def get_pbimg_by_prid(self, prid):
@@ -73,8 +74,8 @@ class SProducts(SBase):
         return pbid
 
     @close_session
-    def get_all_prid(self, start_num, page_size, maid):
-        return self.session.query(Products.PRid).filter(Products.MAid == maid).offset(start_num).limit(page_size).all()
+    def get_all_prid(self, start_num, page_size, pro_fillter):
+        return self.session.query(Products.PRid).filter(*pro_fillter).offset(start_num).limit(page_size).all()
 
     @close_session
     def get_brid_by_key_value(self, key, value):
@@ -86,12 +87,13 @@ class SProducts(SBase):
 
     @close_session
     def get_pball_by_brid(self, brid):
-        return self.session.query(PB.PBimage, PB.PBunit,PB.PBprice, PB.PBscore,
+        return self.session.query(PB.PBimage, PB.PBunit, PB.PBprice, PB.PBscore,
                                   PB.PBsalesvolume, PB.PBid).filter_by(BRid=brid).first()
+
     @close_session
     def get_pball_by_prid(self, prid):
         return self.session.query(
-            PB.PBimage, PB.PBunit,PB.PBprice, PB.PBscore, PB.PBstatus,
+            PB.PBimage, PB.PBunit, PB.PBprice, PB.PBscore, PB.PBstatus,
             PB.PBsalesvolume, PB.PBid).filter(PB.PRid == prid, PB.PBstatus != 207).all()
 
     @close_session
@@ -103,7 +105,7 @@ class SProducts(SBase):
     def get_volue_score_by_pbid(self, pbid):
         volue_score = None
         try:
-            volue_score = self.session.query(PB.PBsalesvolume, PB.PBscore)\
+            volue_score = self.session.query(PB.PBsalesvolume, PB.PBscore) \
                 .filter_by(PBid=pbid).first()
         except Exception as e:
             print e.message
@@ -171,7 +173,7 @@ class SProducts(SBase):
     def get_product_by_pbid(self, pbid):
         return self.session.query(
             PB.PRid, PB.BRid, PB.PBunit, PB.PBprice,
-            PB.PBsalesvolume, PB.PBscore,PB.PBimage).filter_by(PBid=pbid).first()
+            PB.PBsalesvolume, PB.PBscore, PB.PBimage).filter_by(PBid=pbid).first()
 
     @close_session
     def update_product(self, prid, product):
@@ -183,4 +185,6 @@ class SProducts(SBase):
 
     @close_session
     def get_product_by_filter(self, pr_filter):
-        return self.session.query(Products.PRname, Products.PRid, Products.CTid).filter(*pr_filter).all()
+        return self.session.query(
+            Products.PRid, Products.PRname, Products.PRvideo, Products.PRimage, Products.PRtype,
+            Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart).filter(*pr_filter).all()

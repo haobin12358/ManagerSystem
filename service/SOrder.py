@@ -63,3 +63,10 @@ class SOrder(SBase):
     @close_session
     def update_order(self, omid, ordermain):
         return self.session.query(OrderMain).filter(OrderMain.OMid == omid).update(ordermain)
+
+    @close_session
+    def get_om_by_filter(self, omfilter):
+        return self.session.query(
+            OrderMain.OMid, OrderMain.LOid, OrderMain.COid, OrderMain.USid,
+            OrderMain.OMabo, OrderMain.OMcointype, OrderMain.OMstatus,
+            OrderMain.OMtime, OrderMain.OMprice, OrderMain.OMlogisticsName).filter(*omfilter).all()

@@ -26,12 +26,12 @@ class CCategory():
         if "token" not in args:
             return PARAMS_MISS
 
-        
+
         category_filter = {
             Category.CTfromid == "0"
         }
         try:
-            cate_list = tolist(self.scategory.get_category_by_filter(category_filter))
+            cate_list = tolist(self.scategory.get_category_by_or_filter(category_filter))
             log.info("cate list", cate_list)
             response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
             response["data"] = cate_list
@@ -43,15 +43,20 @@ class CCategory():
     def get_child(self):
         args = request.args.to_dict()
         log.info("args", args)
-        if "token" not in args or "CTid" not in args:
+        if "token" not in args:
             return PARAMS_MISS
 
-        ctid = get_str(args, "CTid")
+        ctid = get_str(args, "CTid", "0")
+        if not ctid:
+            ctid = "0"
+
         try:
             category_filter = {
                 Category.CTfromid == ctid
             }
-            ct_list = tolist(self.scategory.get_category_by_filter(category_filter))
+            if "category_filter" in args:
+                category_filter.add(Category.CTname.like("%{0}%".format(get_str(args, "category_filter"))))
+            ct_list = tolist(self.scategory.get_category_by_and_filter(category_filter))
             log.info("ct_list", ct_list)
             response =get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
             response["data"] = ct_list
@@ -132,7 +137,7 @@ class CCategory():
         ctname_list = []
         for pr in pr_list:
             ct_filter = {Category.CTid == pr.get("CTid")}
-            ct_name = tolist(self.scategory.get_category_by_filter(ct_filter))[0]
+            ct_name = tolist(self.scategory.get_category_by_or_filter(ct_filter))[0]
             log.info("ct name", ct_name)
             if ct_name in ctname_list:
                 continue
@@ -150,12 +155,12 @@ class CCategory():
         ct_filter = {
             Category.CTid == args.get("CTid")
         }
-        parentid_list = [ct.get("CTfromid") for ct in tolist(self.scategory.get_category_by_filter(set()))]
+        parentid_list = [ct.get("CTfromid") for ct in tolist(self.scategory.get_category_by_or_filter(set()))]
         if args.get("CTid") in parentid_list:
             return get_response("ERROR_MESSAGE_DB_ERROR", "MANAGERSYSTEMERROR", "ERROR_CODE_DB_ERROR")
         ct_list = []
         while True:
-            ct = tolist(self.scategory.get_category_by_filter(ct_filter))[0]
+            ct = tolist(self.scategory.get_category_by_or_filter(ct_filter))[0]
             ct_list.insert(0, ct)
             if ct.get("CTfromid") == "0":
                 break

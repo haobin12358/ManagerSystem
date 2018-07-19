@@ -116,7 +116,7 @@ class CProducts():
 
         pn, count = self.check_page_value(page_num, page_size, "model.Products.PRid", pro_fillter)
         start_num = (pn - 1) * page_size
-        PRid_list = [products.PRid for products in self.sproduct.get_all_prid(start_num, page_size, maid)]
+        PRid_list = [products.PRid for products in self.sproduct.get_all_prid(start_num, page_size, pro_fillter)]
         log.info("PRid list", PRid_list)
         pbstatus = get_str(args, "PBstatus")
         # todo 增加遍历输出所有图片
