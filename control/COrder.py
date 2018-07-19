@@ -32,9 +32,6 @@ class COrder():
             log.info("args", args)
             if "token" not in args or "page_size" not in args or "page_num" not in args:
                 return PARAMS_MISS
-            omfilterkeylist = [
-                "OMstatus", "OMlogisticsName"
-            ]
             page_size = int(args.get("page_size"))
             page_num = int(args.get("page_num"))
             maid = token_to_usid(args.get("token"))
@@ -42,10 +39,10 @@ class COrder():
             product_filter = {
                 Products.MAid == maid
             }
-            if "PRname" in args:
+            if args.get("PRname"):
                 product_filter.add(Products.PRname.like("%{0}%".format(args.get("PRname"))))
 
-            product_list = tolist(self.sproduct.get_product_by_filter())
+            product_list = tolist(self.sproduct.get_product_by_filter(product_filter))
             log.info("product list ", product_list)
             pb_list = []
             for product in product_list:
@@ -60,14 +57,14 @@ class COrder():
             om_id_dict = {}
             from ManagerSystem.models.model import OrderMain
             omfilter = set()
-            for key in omfilterkeylist:
-                if key in args:
-                    param = eval("OrderMain.{0}".format(key))
-                    omfilter.add(param == args.get(key))
-
-            if "OMstartTime" in args:
+            if args.get("OMstatus"):
+                omstatus = cvs.conversion_OMstatus_reverse.get(get_str(args, "OMstatus"))
+                omfilter.add(OrderMain.OMstatus == omstatus)
+            if args.get("OMlogisticsName"):
+                omfilter.add(OrderMain.OMlogisticsName == get_str(args, "OMlogisticsName"))
+            if args.get("OMstartTime"):
                 omfilter.add(OrderMain.OMtime >= TimeManager.get_db_time_str(args.get("OMstartTime")))
-            if "OMendTime" in args:
+            if args.get("OMendTime"):
                 omfilter.add(OrderMain.OMtime <= TimeManager.get_db_time_str(args.get("OMendTime")))
 
             for pb in pb_list:
@@ -80,9 +77,15 @@ class COrder():
                         om_id_dict[op_pb.get("OMid")] = [op_pb]
             log.info("om_id_dict", om_id_dict)
             for om_id in om_id_dict:
-                if "OMid" in args and args.get("OMid") not in om_id:
+                if args.get("OMid") and args.get("OMid") not in om_id:
                     continue
-                om_dict = todict(self.sorder.get_om_by_filter(om_id))
+                omfilter_tmp  = omfilter.copy()
+                omfilter_tmp.add(OrderMain.OMid == om_id)
+                om_dict = tolist(self.sorder.get_om_by_filter(omfilter_tmp))
+
+                if not om_dict:
+                    continue
+                om_dict = om_dict[0]
                 om_dict.update({"order_item": om_id_dict.get(om_id)})
                 om_dict.update(todict(self.sorder.get_location_by_usid(om_dict.pop("USid"))))
                 om_dict["OMcointype"] = cvs.conversion_PBunit.get(om_dict.get("OMcointype"), "其他币种")
@@ -96,7 +99,12 @@ class COrder():
             page_num = page_num if page_num > 0 else 1
             om_list = om_list[(page_num - 1) * page_size: page_num * page_size]
             data = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
-            data["data"] = om_list
+            data["data"] = {
+                "count": count,
+                "page_num": page_num,
+                "page_size": page_size,
+                "OrderMains": om_list
+            }
             return data
         except Exception as e:
             log.error("get order list", e.message)

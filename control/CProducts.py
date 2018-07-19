@@ -163,7 +163,9 @@ class CProducts():
         response_of_product = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
         response_of_product["data"] = {
             "count": count,
-            "products":product_infos
+            "page_num": page_num,
+            "page_size": page_size,
+            "products": product_infos
         }
         log.info("response", response_of_product)
         return response_of_product
