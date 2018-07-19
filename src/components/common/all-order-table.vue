@@ -6,22 +6,24 @@
       <el-table-column type="expand" width="30">
         <template slot-scope="scope">
           <el-table class="demo-table-expand" :data="scope.row.order_item" border style="width: 100%" stripe size="mini">
-            <el-table-column align="center" prop="goodsName" label="商品">
-              <img style="width: 0.3rem;height: 0.3rem" src="../../assets/logo.png"/>
+            <el-table-column align="center" prop="PBimage" label="商品图片">
+              <template slot-scope="scope">
+                <img  :src="scope.row.PBimage" alt="" style="width: 0.5rem;height: 0.5rem">
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="PRname" label="商品名称">
             </el-table-column>
             <el-table-column align="center" prop="PBprice" label="单价">
             </el-table-column>
-            <el-table-column align="center" prop="goodsNumber" label="数量">
+            <el-table-column align="center" prop="PRnumber" label="数量">
             </el-table-column>
-            <el-table-column align="center" prop="afterSales" label="售后">
+            <el-table-column align="center" prop="PBunit" label="价格单位">
             </el-table-column>
-            <el-table-column align="center" prop="buyer" label="买家">
+            <el-table-column align="center" prop="PRinfo" label="商品简介">
             </el-table-column>
-            <el-table-column align="center" prop="orderTime" label="下单时间">
+            <el-table-column align="center" prop="PRtype" label="商品类型">
             </el-table-column>
-            <el-table-column align="center" prop="status" label="订单状态">
-            </el-table-column>
-            <el-table-column align="center" prop="realPay" label="实付金额">
+            <el-table-column align="center" prop="PRbrand" label="商品分类">
             </el-table-column>
           </el-table>
         </template>
@@ -66,7 +68,7 @@
         total_page:1,
         current_page:1,
         total_num:0,
-        page_size:10
+        page_size:10,
       }
     },
     components: {
@@ -104,7 +106,7 @@
         }
         this.current_page = v;
         this.getData(v);
-      }
+      },
     },
     mounted() {
       this.orderList = allOrder;
