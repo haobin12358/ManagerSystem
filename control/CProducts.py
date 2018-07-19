@@ -105,7 +105,16 @@ class CProducts():
         page_num = int(args.get("page_num"))
         maid = token_to_usid(args.get("token"))
         from ManagerSystem.models.model import Products
-        pn, count = self.check_page_value(page_num, page_size, "model.Products.PRid", {Products.MAid == maid})
+        pro_fillter = {Products.MAid == maid}
+        if args.get("product_filter"):
+            product_filter = get_str(args, "product_filter")
+            sub_filter = {
+                Products.PRname.like("%{0}%".format(product_filter)),
+                Products.PRinfo.like("%{0}%".format(product_filter))
+            }
+            pro_fillter.update(sub_filter)
+
+        pn, count = self.check_page_value(page_num, page_size, "model.Products.PRid", pro_fillter)
         start_num = (pn - 1) * page_size
         PRid_list = [products.PRid for products in self.sproduct.get_all_prid(start_num, page_size, maid)]
         log.info("PRid list", PRid_list)
@@ -148,7 +157,7 @@ class CProducts():
             # product_infos.extend(pb_list)
             product["PRsalesvolume"] = saleamount
             product["PRstock"] = stockamout
-            product["PRstaus"] = PRstatus
+            product["PRstatus"] = PRstatus
             product_infos.append(product)
 
         response_of_product = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
@@ -383,6 +392,7 @@ class CProducts():
 
 
         prid = data.get("PRid")
+        # todo 拆分更新
         prid = prid if prid else str(uuid.uuid1())
         try:
             if not self.add_brands(prid, data.get("brands"), data.get("brands_key")):
@@ -411,6 +421,7 @@ class CProducts():
     def update_product_status(self):
         args = request.args.to_dict()
         log.info("args", args)
+        maid = token_to_usid(args.get("token"))
         if "token" not in args:
             return PARAMS_MISS
         data = json.loads(request.data, encoding="utf8")
@@ -420,17 +431,30 @@ class CProducts():
         prstatus = get_str(data, "PRstatus")
         pridlist = data.get("PRid")
 
-        self.on_or_off_shelves(pridlist, conversion_PBstatus_reverse.get(prstatus))
+        self.on_or_off_shelves(pridlist, conversion_PBstatus_reverse.get(prstatus), maid)
         return get_response("SUCCESS_MESSAGE_UPDATE_DATA", "OK")
 
-
-    def on_or_off_shelves(self, prid_list, PBstatus):
+    def on_or_off_shelves(self, prid_list, PBstatus, maid):
         for prid in prid_list:
             pbid_list = [pb.PBid for pb in self.sproduct.get_pbid_by_prid(prid)]
             for pbid in pbid_list:
                 pb = {
                     "PBstatus": PBstatus
                 }
+                # todo 增加审批流
+                if PBstatus == 205:
+                    from ManagerSystem.service.SApproval import SApproval
+                    sapproval = SApproval()
+                    receive_list = sapproval.get_permission_by_petype_pesublevel(304, 1)
+                    for pe in receive_list:
+                        approval = {
+                            "APid": str(uuid.uuid1()),
+                            "APname": "发布商品",
+                            "APstart": maid,
+                            "APreceive": pe.MAid,
+                            "PEtype": 302,
+                        }
+                        self.sproduct.add_model("Approval", approval)
                 update_result =self.sproduct.update_pb(pbid, pb)
                 log.info("update result", update_result)
                 if not update_result:
@@ -443,6 +467,10 @@ class CProducts():
         log.info("data", data)
         if "token" not in args:
             return PARAMS_MISS
+
+        if  "PRid" not in data:
+            return PARAMS_MISS
+        prid = data.get("PRid")
 
 
 
@@ -492,8 +520,13 @@ class CProducts():
             if not brid:
                 brid = BRfromid
             from ManagerSystem.config.conversion import conversion_PBstatus_reverse
+            stid = str(uuid.uuid1())
+            pbid = str(uuid.uuid1())
+
+            self.stock.add_model("Stocks", STid=stid, STname="库存"+prid, STamout=10 * 10 * 10 * 10 * 10 * 10)
+            self.stock.add_model("StocksProducts", SPid=str(uuid.uuid1()), STid=stid, PBid=pbid, PBnumber=i.get("PBnumber"))
             self.sproduct.add_model("ProductsBrands", **{
-                "PBid": str(uuid.uuid1()),
+                "PBid": pbid,
                 "PRid": prid,
                 "BRid": brid,
                 "PBprice": i.get("PBprice"),

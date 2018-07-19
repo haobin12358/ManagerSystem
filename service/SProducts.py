@@ -180,3 +180,7 @@ class SProducts(SBase):
     @close_session
     def update_pb(self, pbid, pb):
         return self.session.query(PB).filter_by(PBid=pbid).update(pb)
+
+    @close_session
+    def get_product_by_filter(self, pr_filter):
+        return self.session.query(Products.PRname, Products.PRid, Products.CTid).filter(*pr_filter).all()

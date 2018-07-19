@@ -18,7 +18,9 @@ class MSCategory(Resource):
         action = {
             "get_first": "self.ccategory.get_first()",
             "get_child": "self.ccategory.get_child()",
-            "get_categorybrands": "self.ccategory.get_categorybrands()"
+            "get_categorybrands": "self.ccategory.get_categorybrands()",
+            "get_category_by_prname": "self.ccategory.get_category_by_prname()",
+            "get_ctlist_by_ctid": "self.ccategory.get_ctlist_by_ctid()",
         }
         if category in action:
             return eval(action.get(category))
@@ -29,7 +31,7 @@ class MSCategory(Resource):
     def post(self, category):
         log.info("get api", category)
         action = {
-            "add_category": "self.ccategory.add_category()"
+            "add_category": "self.ccategory.add_category()",
         }
         if category in action:
             return eval(action.get(category))
