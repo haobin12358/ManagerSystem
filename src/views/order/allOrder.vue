@@ -14,17 +14,11 @@
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
             </el-select>
           </div>
           <div class="search-text-input">
             <div class="search-text">付款方式：</div>
             <el-select v-model="value" placeholder="请选择" size="mini">
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
@@ -42,17 +36,11 @@
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
             </el-select>
           </div>
           <div class="search-text-input">
             <div class="search-text">订单类型：</div>
             <el-select v-model="value" placeholder="请选择" size="mini">
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
@@ -125,7 +113,8 @@
                 }
               }]
             },
-            value7: ''
+            value7: '',
+            value: ''
           }
       },
       components: {
