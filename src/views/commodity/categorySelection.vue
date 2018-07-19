@@ -34,7 +34,7 @@
                       <div class="m-one-category" v-for="(items,index) in category_list" :key="Math.random()">
                         <div class="m-search-box">
                           <span class="icon icon-search"></span>
-                          <input type="text" placeholder="">
+                          <input type="text" v-model="category_input[index]" placeholder=""  @change="changeInput(index)">
                         </div>
                         <div class="m-classify">
                           <ul>
@@ -113,7 +113,8 @@
             CTid: "10",
             CTname: "小龙虾"
           }
-        ]
+        ],
+        category_input:[]
       }
     },
     components:{
@@ -186,23 +187,27 @@
         })
       },
       /*获取类目*/
-      getChildCategory(id,i){
+      getChildCategory(id,i,code){
         let that = this;
         let _arr = that.category_list;
         axios.get(api.get_child_category,{params:{
             // token:this.$store.state.token
             token:localStorage.getItem('token'),
-            CTid:id}}).then(res => {
+            CTid:id,
+            category_filter:code
+          }}).then(res => {
           if(res.data.status == 200){
-            if(res.data.data.length <1){
-            }else{
-              if(i ==0){
-                _arr[0] = res.data.data ;
+              if(res.data.data.length < 1 && !code ){
+                that.$message({
+                  message:'已经达到最后一层',
+                  type:'warning'
+                })
               }else{
-                _arr[i] = res.data.data ;
+                  _arr[i] = res.data.data ;
+                that.category_list = [].concat(_arr);
               }
-              that.category_list = [].concat(_arr);
-            }
+
+
           }else{
             this.$message.error(res.data.message);
           }
@@ -259,6 +264,15 @@
           return false;
         }
         this.$router.push({path:'/commodity/goodsImported',query:{CTid:this.select_category[this.select_category.length -1].CTid}});
+      },
+      changeInput(i){
+        console.log(i)
+        if(i == 0){
+          this.getChildCategory('',0,this.category_input[i]);
+        }else{
+          this.getChildCategory(this.select_category[i-1].CTid,i,this.category_input[i]);
+        }
+
       }
     },
     created() {

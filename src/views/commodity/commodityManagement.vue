@@ -35,11 +35,11 @@
           </el-table-column>
           <el-table-column align="center" prop="PRsalesvolume" label="总销量" ></el-table-column>
           <el-table-column align="center" prop="PRtime" width="160" label="创建时间" ></el-table-column>
-          <el-table-column align="center" prop="PRstaus" label="状态概况"
+          <el-table-column align="center" prop="PRstatus" label="状态概况"
                            :filters="[{ text: '全部', value: '' }, { text: '预售状态', value: '预售状态' }, { text: '在售状态', value: '在售状态' },{ text: '未发布', value: '未发布' }, { text: '下架状态', value: '下架状态' }]"
                            :filter-method="filterTag">
             <template slot-scope="scope">
-              <span :class="scope.row.PRstaus == '全部售罄'? 'm-alert': ''">{{scope.row.PRstaus}}</span>
+              <span :class="scope.row.PRstatus == '全部售罄'? 'm-alert': ''">{{scope.row.PRstatus}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作" >
