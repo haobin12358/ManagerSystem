@@ -11,6 +11,8 @@ const api={
   update_product: title + 'product/update_product',//上架/下架商品
   get_first_category: title + 'category/get_first',//获取类目
   get_child_category:title + 'category/get_child',//获取子类目
+  get_categorybrands: title + 'category/get_categorybrands',//根据类目id获取商品属性
+
 }
 
 export default api
