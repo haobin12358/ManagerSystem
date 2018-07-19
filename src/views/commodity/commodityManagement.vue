@@ -4,13 +4,13 @@
     <div class="m-content">
       <div class="m-top">
         <div class="m-top-search">
-          <div class="m-search-box">
-            <span class="icon icon-search"></span>
-            <input type="text" placeholder="搜索">
-          </div>
-          <!--<div class="m-top-text">用户名：</div>-->
-          <!--<el-input class="m-top-input" v-model="inputName" size="mini"></el-input>-->
-          <!--<el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>-->
+          <!--<div class="m-search-box">-->
+            <!--<span class="icon icon-search"></span>-->
+            <!--<input type="text" placeholder="搜索">-->
+          <!--</div>-->
+          <div class="m-top-text">商品名称：</div>
+          <el-input class="m-input-m" v-model="inputName" ></el-input>
+          <el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>
         </div>
         <div class="m-top-button">
           <el-button class="m-top-button-button" size="mini" @click="importProduct">发布商品</el-button>
@@ -234,13 +234,8 @@
         }
         .m-top-text {
           float: left;
-          line-height: 0.27rem;
+          line-height: 0.3rem;
           font-size: 0.14rem;
-        }
-        .m-top-input {
-          float: left;
-          width: 12%;
-          margin-right: 0.15rem;
         }
         .m-top-search-button {
           background: @btnActiveColor;
@@ -309,5 +304,8 @@
   }
   .m-alert{
     color: red;
+  }
+  .m-input-m{
+    width: 1.6rem;
   }
 </style>

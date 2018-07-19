@@ -22,96 +22,30 @@
             <div class="m-select-box">
               <p class="m-alert">错误填写商品属性，可能会引起商品下架或搜索流量减少，影响您的正常销售，请认真准确填写！</p>
               <div class="m-selects">
-                <div class="m-left-right"><span class="m-btn-img m-left-btn-img" @click="scroll(-1)"></span></div>
+                <div class="m-left-right"><span class="m-btn-img m-left-btn-img" :class="scroll_index>0? 'active':''" @click="scroll(-1)"></span></div>
                 <div class="m-category-content">
                   <div id="m-scroll">
-                    <div class="m-one-category">
-                      <div class="m-search-box">
-                        <span class="icon icon-search"></span>
-                        <input type="text" placeholder="">
+                      <div class="m-one-category" v-for="(items,index) in category_list" :key="Math.random()">
+                        <div class="m-search-box">
+                          <span class="icon icon-search"></span>
+                          <input type="text" placeholder="">
+                        </div>
+                        <div class="m-classify">
+                          <ul>
+                            <template v-for="(item,i) in items">
+                              <!--<template v-for="(itemss,i) in item">-->
+                                <li :class="select_category[index] && select_category[index].CTid == item.CTid? 'active':''"  :key="Math.random()" @click="selectCategory(item,index)">
+                                  <span>{{item.CTname}}</span>
+                                  <i class="el-icon-arrow-right"></i>
+                                </li>
+                              <!--</template>-->
+                            </template>
+                          </ul>
+                        </div>
                       </div>
-                      <div class="m-classify">
-                        <ul>
-                          <li class="active">
-                            <span>游戏话费</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                          <li>
-                            <span>游戏话费</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                          <li>
-                            <span>游戏话费</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="m-one-category">
-                      <div class="m-search-box">
-                        <span class="icon icon-search"></span>
-                        <input type="text" placeholder="">
-                      </div>
-                      <div class="m-classify">
-                        <ul>
-                          <li>
-                            <span>游戏话费</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                          <li>
-                            <span>游戏话费</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="m-one-category">
-                      <div class="m-search-box">
-                        <span class="icon icon-search"></span>
-                        <input type="text" placeholder="">
-                      </div>
-                      <div class="m-classify">
-                        <ul>
-                          <li>
-                            <span>游戏话费</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                          <li>
-                            <span>游戏话费</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                          <li>
-                            <span>梳子/便携用镜</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="m-one-category">
-                      <div class="m-search-box">
-                        <span class="icon icon-search"></span>
-                        <input type="text" placeholder="">
-                      </div>
-                      <div class="m-classify">
-                        <ul>
-                          <li>
-                            <span>游戏话费</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                          <li>
-                            <span>游戏话费</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                          <li>
-                            <span>梳子/便携用镜</span>
-                            <i class="el-icon-arrow-right"></i>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
                   </div>
                 </div>
-                <div class="m-left-right"><span class="m-btn-img m-right-btn-img active" @click="scroll(1)"></span></div>
+                <div class="m-left-right"><span class="m-btn-img m-right-btn-img" :class="category_list.length > 3 ? 'active':''" @click="scroll(1)"></span></div>
               </div>
               <div class="m-now-select">
                 <p>当前选择类目：<span >家庭/个人清洁工具 > 个人洗护清洁用具 > 梳子/便携用镜 > 镜梳套装 > 礼盒/套装</span></p>
@@ -140,6 +74,9 @@
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
+  import api from '../../api/api';
+  import { Message} from 'element-ui';
+  import axios from 'axios';
   export default {
     data() {
       return {
@@ -148,35 +85,66 @@
           name:'',
           select:''
         },
-        dialogImageUrl: '',
-        dialogVisible: false,
         checked:true,
-        radio:0,
-        linkTo:'basicInfo',
-        scroll_index:0
+        scroll_index:0,
+        category_list:[],
+        select_category:[]
       }
     },
     components:{
       pageTitle
     },
+    mounted(){
+      this.getFirstCategory()
+    },
     methods: {
       freshClick(){
         console.log('fresh');
       },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
+      /*获取类目*/
+      getFirstCategory(){
+        let that = this;
+        that.category_list = [];
+        axios.get(api.get_first_category ,{params:{
+          token:this.$store.state.token}}).then(res => {
+          if(res.data.status == 200){
+            that.category_list.push(res.data.data) ;
+          }
+        })
       },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
+      getChildCategory(id,i){
+        let that = this;
+        let _arr = that.category_list;
+        axios.get(api.get_child_category,{params:{
+            token:this.$store.state.token,
+            CTid:id}}).then(res => {
+          if(res.data.status == 200){
+            if(res.data.data.length <1){
+
+            }else{
+              _arr[i+1] = res.data.data ;
+              that.category_list = [].concat(_arr);
+            }
+          }
+        })
       },
+      /*获取子类目*/
+      selectCategory(v,i){
+        let _arr = this.select_category;
+         _arr[i] = v;
+        this.select_category = [].concat(_arr);
+        this.getChildCategory(v.CTid,i);
+      },
+      /*类目滚动*/
       sideClick(v){
         this.linkTo = v;
       },
       scroll(v){
-
         let _scroll = document.getElementById('m-scroll');
         if(v == -1 && this.scroll_index == 0){
+          return false;
+        }
+        if(v == 1 && (this.scroll_index == this.category_list.length || this.category_list.length <=3)){
           return false;
         }
         //待判断右终点
@@ -282,11 +250,12 @@
               height: 0.6rem;
               background: url("../../common/images/icon-left.png");
               background-size: 100% 100%;
-              cursor: pointer;
+              cursor: not-allowed;
               &.m-left-btn-img{
                 &.active{
                   background: url("../../common/images/icon-left-active.png");
                   background-size: 100% 100%;
+                  cursor: pointer;
                 }
               }
               &.m-right-btn-img{
@@ -295,6 +264,7 @@
                 &.active{
                   background: url("../../common/images/icon-right-active.png");
                   background-size: 100% 100%;
+                  cursor: pointer;
                 }
               }
             }
@@ -356,6 +326,7 @@
                     .flex-row(space-between);
                     padding: 0 0.1rem 0.1rem;
                     color: @greyColor;
+                    cursor: pointer;
                     &.active{
                       color: @sidebarChildColor;
                     }
