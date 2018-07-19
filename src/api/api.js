@@ -12,6 +12,7 @@ const api={
   get_first_category: title + 'category/get_first',//获取类目
   get_child_category:title + 'category/get_child',//获取子类目
   get_categorybrands: title + 'category/get_categorybrands',//根据类目id获取商品属性
+  get_category_by_prname: title + 'category/get_category_by_prname',//搜索商品对应的类目
 
 }
 
