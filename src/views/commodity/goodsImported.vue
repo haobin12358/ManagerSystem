@@ -20,24 +20,20 @@
           <div class="m-select-box">
             <p class="m-alert">错误填写商品属性，可能会引起商品下架或搜索流量减少，影响您的正常销售，请认真准确填写！</p>
             <div class="m-selects">
-              <el-form-item label="活动名称名:" class="m-form-item" :rules="[{ required: false}]">
-                <el-input v-model="form.select" class="m-input-s" ></el-input>
-              </el-form-item>
-              <el-form-item label="姓名：" class="m-form-item" :rules="[{ required: false}]">
-                <el-select v-model="form.select" class="m-input-s" >
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="活动名称名:" class="m-form-item" :rules="[{ required: false}]">
-                <el-input v-model="form.select" class="m-input-s" ></el-input>
-              </el-form-item>
-              <el-form-item label="姓名：" class="m-form-item" :rules="[{ required: false}]">
-                <el-select v-model="form.select" class="m-input-s" >
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
-              </el-form-item>
+              <template v-for="(item,index) in brand_list">
+                <el-form-item v-if="item.CBvalue == ''" :label="item.CBname" class="m-form-item">
+                  <el-input v-model="form.select" class="m-input-s" ></el-input>
+                </el-form-item>
+                <el-form-item v-else :label="item.CBname" class="m-form-item" >
+                  <el-select v-model="form.select" class="m-input-s" >
+                    <el-option
+                      v-for="items in item.CBvalue"
+                      :key="items"
+                      :label="items"
+                      :value="items"></el-option>
+                  </el-select>
+                </el-form-item>
+              </template>
             </div>
           </div>
         </el-form-item>
@@ -308,6 +304,7 @@
                   PRaboimage:''
                 }
               },
+              brand_list:[],
               dialogImageUrl: '',
               dialogVisible: false,
               checked:true,
@@ -323,11 +320,18 @@
       },
         methods: {
           getCategorybrands(id){
+            let that = this;
             axios.get(api.get_categorybrands,{params:{
               CTid:id,
                 token:localStorage.getItem('token')
               }}).then(res => {
-                console.log(res)
+                if(res.data.status == 200){
+                  that.brand_list = res.data.data;
+                }else{
+                  that.$message.error(res.data.message)
+                }
+            },error => {
+              that.$message.error(error.data.message)
             })
           },
           freshClick(){
