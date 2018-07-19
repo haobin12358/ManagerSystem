@@ -322,7 +322,7 @@
           getCategorybrands(id){
             let that = this;
             axios.get(api.get_categorybrands,{params:{
-              CTid:id,
+                CTid:id,
                 token:localStorage.getItem('token')
               }}).then(res => {
                 if(res.data.status == 200){

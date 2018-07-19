@@ -9,8 +9,14 @@
         <div class="m-one-part">
           <h3>类目选择</h3>
           <el-form-item label="类目搜索:" >
-            <el-input v-model="form.name" class="m-input-l" placeholder="请输入商品名"></el-input>
-            <span class="m-btn">搜索</span>
+              <el-select v-model="form.CTid" filterable remote :remote-method="productBlur" class="m-input-s" >
+                <el-option
+                  v-for="(items,index) in product_list"
+                  :key="index"
+                  :label="items.CTname"
+                  :value="items.CTid"></el-option>
+              </el-select>
+            <span class="m-btn" @click="search">搜索</span>
           </el-form-item>
           <!--<el-form-item label="快速选择:" :rules="[{ required: true, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">-->
             <!--<el-select v-model="form.select" class="m-input-l">-->
@@ -84,11 +90,11 @@
       return {
         name:'商品发布',
         form:{
-          name:'',
-          select:''
+          CTid:''
         },
         checked:true,
         scroll_index:0,
+        product_list:[],
         category_list:[],
         select_category:[],
         select_category1:[
@@ -119,12 +125,65 @@
       }else{
         this.getFirstCategory();
       }
+      this.getProductList('')
 
       //
     },
     methods: {
       freshClick(){
         console.log('fresh');
+      },
+      search(){
+        let that = this;
+        if(!that.form.CTid){
+          return false;
+        }else{
+          that.getProductSelect(that.form.CTid)
+        }
+      },
+      productBlur(e){
+        this.getProductList(e)
+      },
+      /*获取商品*/
+      getProductList(name){
+        let that = this;
+        that.product_list = [];
+        let _arr = that.product_list;
+        axios.get(api.get_category_by_prname ,{params:{
+            // token:this.$store.state.token
+            token:localStorage.getItem('token'),
+            PRname:name
+          }}).then(res => {
+          if(res.data.status == 200){
+            _arr = res.data.data ;
+            that.product_list = [].concat(_arr);
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
+      },
+      /*获取CTid对应商品*/
+      getProductSelect(id){
+        let that = this;
+        that.select_category = [];
+        let _arr = that.select_category;
+        axios.get(api.get_ctlist_by_ctid ,{params:{
+            // token:this.$store.state.token
+            token:localStorage.getItem('token'),
+            CTid:id
+          }}).then(res => {
+          if(res.data.status == 200){
+            _arr = res.data.data ;
+            that.select_category = [].concat(_arr);
+            that.getCategory()
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
       },
       /*获取类目*/
       getFirstCategory(){
@@ -139,7 +198,11 @@
           if(res.data.status == 200){
             _arr[0] = res.data.data ;
             that.category_list = [].concat(_arr);
+          }else{
+            this.$message.error(res.data.message);
           }
+        },error => {
+          this.$message.error(error.data.message);
         })
       },
       getChildCategory(id,i){
@@ -155,7 +218,11 @@
               _arr[i+1] = res.data.data ;
               that.category_list = [].concat(_arr);
             }
+          }else{
+            this.$message.error(res.data.message);
           }
+        },error => {
+          this.$message.error(error.data.message);
         })
       },
       /*获取子类目*/
