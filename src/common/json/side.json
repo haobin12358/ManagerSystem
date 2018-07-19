@@ -1,85 +1,85 @@
 {
   "side":[
     {
-      "name":"用户权限",
-      "url":"/jurisdiction",
-      "icon":"icon-person-side",
+      "MNname":"用户权限",
+      "MNurl":"/jurisdiction",
+      "MNicon":"icon-person-side",
       "children":[
         {
-          "name":"管理员管理",
-          "url":"admin",
-          "icon":"none"
+          "MNname":"管理员管理",
+          "MNurl":"admin",
+          "MNicon":"none"
         },
         {
-          "name":"用户数据管理",
-          "url":"user",
-          "icon":"none"
+          "MNname":"用户数据管理",
+          "MNurl":"user",
+          "MNicon":"none"
         }
       ]
     },
     {
-      "name":"产品管理",
-      "url":"/commodity",
-      "icon":"icon-product",
+      "MNname":"产品管理",
+      "MNurl":"/commodity",
+      "MNicon":"icon-product",
       "children":[
         {
-          "name":"商品管理",
-          "url":"commodityManagement",
-          "icon":"none"
+          "MNname":"商品管理",
+          "MNurl":"commodityManagement",
+          "MNicon":"none"
         },
         {
-          "name":"商品发布",
-          "url":"categorySelection",
-          "icon":"none"
+          "MNname":"商品发布",
+          "MNurl":"categorySelection",
+          "MNicon":"none"
         },
         {
-          "name":"商品分组",
-          "url":"commodityGroup",
-          "icon":"none"
+          "MNname":"商品分组",
+          "MNurl":"commodityGroup",
+          "MNicon":"none"
         }
       ]
     },
     {
-      "name":"订单管理",
-      "url":"/order",
-      "icon":"icon-order",
+      "MNname":"订单管理",
+      "MNurl":"/order",
+      "MNicon":"icon-order",
       "children":[
         {
-          "name":"订单概况",
-          "url":"orderIndex",
-          "icon":"none"
+          "MNname":"订单概况",
+          "MNurl":"orderIndex",
+          "MNicon":"none"
         },
         {
-          "name":"所有订单",
-          "url":"allOrder",
-          "icon":"none"
+          "MNname":"所有订单",
+          "MNurl":"allOrder",
+          "MNicon":"none"
         },
         {
-          "name":"退款维权",
-          "url":"refund",
-          "icon":"none"
+          "MNname":"退款维权",
+          "MNurl":"refund",
+          "MNicon":"none"
         }
       ]
     },
     {
-      "name":"活动中心",
-      "url":"/activity",
-      "icon":"icon-activity",
+      "MNname":"活动中心",
+      "MNurl":"/activity",
+      "MNicon":"icon-activity",
       "children":[
         {
-          "name":"单品活动",
-          "url":"productActivity",
-          "icon":"none"
+          "MNname":"单品活动",
+          "MNurl":"productActivity",
+          "MNicon":"none"
         },
         {
-          "name":"店铺活动",
-          "url":"storeActivity",
-          "icon":"none"
+          "MNname":"店铺活动",
+          "MNurl":"storeActivity",
+          "MNicon":"none"
         },
         {
-          "name":"优惠券",
-          "url":"discountCoupon",
-          "icon":"none"
+          "MNname":"优惠券",
+          "MNurl":"discountCoupon",
+          "MNicon":"none"
         }
       ]
     }

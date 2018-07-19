@@ -48,7 +48,11 @@
                 <div class="m-left-right"><span class="m-btn-img m-right-btn-img" :class="category_list.length > 3 ? 'active':''" @click="scroll(1)"></span></div>
               </div>
               <div class="m-now-select">
-                <p>当前选择类目：<span >家庭/个人清洁工具 > 个人洗护清洁用具 > 梳子/便携用镜 > 镜梳套装 > 礼盒/套装</span></p>
+                <p>当前选择类目：
+                 <template v-for="(item,index) in select_category">
+                   <span>{{item.CTname}} <i v-if="index+1 < select_category.length"> > </i></span>
+                 </template>
+                </p>
               </div>
               <div class="m-rule-box">
                 <h3>规则</h3>
@@ -88,14 +92,37 @@
         checked:true,
         scroll_index:0,
         category_list:[],
-        select_category:[]
+        select_category:[],
+        select_category1:[
+          {
+            CTfromid: "0",
+            CTid: "1",
+            CTname: "百货食品"
+          },
+          {
+            CTfromid: "1",
+            CTid: "4",
+            CTname: "生鲜"
+          },
+          {
+            CTfromid: "2",
+            CTid: "10",
+            CTname: "小龙虾"
+          }
+        ]
       }
     },
     components:{
       pageTitle
     },
     mounted(){
-      this.getFirstCategory()
+      if(this.$route.query.PRid){
+        this.getCategory();
+      }else{
+        this.getFirstCategory();
+      }
+
+      //
     },
     methods: {
       freshClick(){
@@ -105,10 +132,12 @@
       getFirstCategory(){
         let that = this;
         that.category_list = [];
+        let _arr = that.category_list;
         axios.get(api.get_first_category ,{params:{
           token:this.$store.state.token}}).then(res => {
           if(res.data.status == 200){
-            that.category_list.push(res.data.data) ;
+            _arr[0] = res.data.data ;
+            that.category_list = [].concat(_arr);
           }
         })
       },
@@ -120,7 +149,6 @@
             CTid:id}}).then(res => {
           if(res.data.status == 200){
             if(res.data.data.length <1){
-
             }else{
               _arr[i+1] = res.data.data ;
               that.category_list = [].concat(_arr);
@@ -132,8 +160,23 @@
       selectCategory(v,i){
         let _arr = this.select_category;
          _arr[i] = v;
+         for(let j=0;j<_arr.length;j++){
+           if(j > i){
+             _arr = _arr.slice(0,j)
+           }
+         }
         this.select_category = [].concat(_arr);
         this.getChildCategory(v.CTid,i);
+      },
+      /*带参获取类目信息*/
+      getCategory(){
+        for(let i=0;i< this.select_category.length;i++){
+          if(i ==0 ){
+            this.getFirstCategory();
+          }else{
+            this.getChildCategory(this.select_category[i-1].CTid,i-1);
+          }
+        }
       },
       /*类目滚动*/
       sideClick(v){

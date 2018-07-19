@@ -44,9 +44,7 @@
           </el-table-column>
           <el-table-column align="center" label="操作" >
             <template slot-scope="scope">
-              <router-link to="/commodity/categorySelection" >
-                <span class=" m-table-link">编辑</span>
-              </router-link>
+                <span class=" m-table-link" @click="editClick">编辑</span>
             </template>
           </el-table-column>
         </el-table>
@@ -114,6 +112,9 @@
       },
       changeFun(v){
         this.checkRow = v;
+      },
+      editClick(){
+        this.$router.push('/commodity/categorySelection?a=1')
       },
       //发布商品
       importProduct(){

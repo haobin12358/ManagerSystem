@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import side from '../common/json/side';
 
 
 Vue.use(Vuex);
@@ -8,9 +9,9 @@ let store= new Vuex.Store({
 	state: {
 	  side:null,
     role:'',
-	    route: {},
-	    now:null,
-	    number:0,
+    route: null,
+    now:null,
+    number:0,
     isCollapse:false,
     token:''
 	},
