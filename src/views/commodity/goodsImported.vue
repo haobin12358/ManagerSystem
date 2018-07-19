@@ -22,10 +22,10 @@
             <div class="m-selects">
               <template v-for="(item,index) in brand_list">
                 <el-form-item v-if="item.CBvalue == ''" :label="item.CBname" class="m-form-item">
-                  <el-input v-model="form.select" class="m-input-s" ></el-input>
+                  <el-input v-model="form.PRbrand[index]" class="m-input-s" ></el-input>
                 </el-form-item>
                 <el-form-item v-else :label="item.CBname" class="m-form-item" >
-                  <el-select v-model="form.select" class="m-input-s" >
+                  <el-select v-model="form.PRbrand[index]" class="m-input-s" >
                     <el-option
                       v-for="items in item.CBvalue"
                       :key="items"
@@ -291,7 +291,7 @@
               form:{
                 PRname:'',
                 PRinfo:'',
-                PRbrand:'',
+                PRbrand:[],
                 PRimage:'',
                 brands_key:'',
                 brands:{
