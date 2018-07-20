@@ -8,7 +8,7 @@
           <span class="m-progress-circle">{{index+1}}</span>
           <span class="m-progress-line" :class="item.next?'active':''"></span>
         </div>
-        <div style="height: 0.1rem">
+        <div style="height: 0.15rem">
           <div class="time">{{item.time}}</div>
         </div>
       </div>

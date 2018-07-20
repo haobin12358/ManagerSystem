@@ -10,20 +10,22 @@
           <h4>订单详情</h4>
           <div class="order-info-part">
             <div class="left-text-div">
-              <div class="left-text" style="margin-top: 0.1rem">订单编号：</div>
+              <div class="left-text">订单编号：</div>
               <div class="left-text">订单状态：</div>
               <div class="left-text" style="margin-left: 0.38rem;">买 家：</div>
+              <div class="left-text">联系方式：</div>
               <div class="left-text">快递方式：</div>
               <div class="left-text">收货地址：</div>
-              <div class="left-text" style="margin-top: 0.27rem">买家留言：</div>
+              <div class="left-text">买家留言：</div>
             </div>
             <div class="left-value-div">
-              <div class="left-text" style="margin-top: 0.1rem">{{order.OMid}}</div>
+              <div class="left-text">{{order.OMid}}</div>
               <div class="left-text">{{order.OMstatus}}</div>
               <div class="left-text">{{order.LOname}}</div>
+              <div class="left-text">{{order.LOtelphone}}</div>
               <div class="left-text">{{order.OMlogisticsName}}</div>
               <div class="left-text">{{order.LOdetail}}</div>
-              <div class="left-text" style="margin-top: 0.25rem">{{order.OMabo}}</div>
+              <div class="left-text">{{order.OMabo}}</div>
             </div>
           </div>
         </div>
@@ -34,7 +36,7 @@
             <div class="left-icon"><img src="../../assets/images/toSend.png" height="50"/></div>
             <div class="right-text">
               <div class="right-top">订单状态：{{orderStatus}}</div>
-              <div class="right-bottom">{{reminder}}</div>
+              <!--<div class="right-bottom">{{reminder}}</div>-->
             </div>
           </div>
           <div class="right-middle">
@@ -103,8 +105,11 @@
               <el-button class="right-button" @click="searchWhere=true">查看物流进度</el-button>
             </div>
             <div v-if="order.OMstatus=='未支付'">
-              <el-button class="right-button" @click="toSendForm=true">发 货</el-button>
-              <el-button class="right-button" @click="" style="margin-left: 0.2rem;" @click="memoForm=true">备 注</el-button>
+              <div style="height: 0.3rem">等待用户支付</div>
+            </div>
+            <div v-if="order.OMstatus=='已支付'">
+               <el-button class="right-button" @click="toSendForm=true">发 货</el-button>
+               <el-button class="right-button" @click="" style="margin-left: 0.2rem;" @click="memoForm=true">备 注</el-button>
             </div>
           </div>
           <div class="right-bottom-text">
@@ -116,8 +121,8 @@
         </div>
       </div>
       <div class="details-bottom">
-        <div class="bottom-total">订单共计4件商品，总计：159.00元（含运费￥0.00元）</div>
-        <el-table class="details-table" :data="order.order_item" border style="width: 100%" stripe size="mini">
+        <div class="bottom-total">总计：{{order.OMprice}}元</div>
+        <el-table class="details-table" :data="order.order_abo" border style="width: 100%" stripe size="mini">
           <el-table-column align="center" prop="PBimage" label="商品图片">
             <template slot-scope="scope">
               <img  :src="scope.row.PBimage" alt="" style="width: 0.5rem;height: 0.5rem">
@@ -128,8 +133,6 @@
           <el-table-column align="center" prop="PBprice" label="单价">
           </el-table-column>
           <el-table-column align="center" prop="PRnumber" label="数量">
-          </el-table-column>
-          <el-table-column align="center" prop="PBunit" label="价格单位">
           </el-table-column>
           <el-table-column align="center" prop="PRinfo" label="商品简介">
           </el-table-column>
@@ -159,8 +162,7 @@
         order: '',
         OMid: '',
         step:[],
-        orderStatus: '买家已付款，等待卖家发货',
-        reminder: '买家已付款至待结算账户，请尽快发货，否则买家有权利申请退款',
+        orderStatus: '',
         searchWhere: false,
         whereList: [
           "2018-07-15 14:25:23 快递已到达杭州萧山分拨中心",
@@ -203,34 +205,21 @@
         axios.get(api.get_order_by_LOid,{params:params}).then(res => {
           if(res.data.status == 200) {
             this.order =res.data.data
-            console.log(this.order)
+            // console.log(this.order)
             if(this.order.OMstatus == '未支付') {
               this.step = [
-                {
-                  name:'买家下单',
-                  time: this.order.OMtime,
-                  active:true,
-                  next:true
-                },
-                {
-                  name:'买家付款',
-                  time: '待付款',
-                  active:false,
-                  next:false
-                },
-                {
-                  name:'商家发货',
-                  time: '待发货',
-                  active:false,
-                  next:false
-                },
-                {
-                  name:'交易完成',
-                  time: '未完成',
-                  active:false,
-                  next:false
-                }
-              ]
+                { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+                { name:'买家支付', time: '待付款', active:false, next:false },
+                { name:'商家发货', time: '待发货', active:false, next:false },
+                { name:'交易完成', time: '未完成', active:false, next:false }]
+              this.orderStatus = this.order.OMstatus
+            }else if(this.order.OMstatus == '已发货') {
+              this.step = [
+                { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+                { name:'买家支付', time: '已支付', active:true, next:true },
+                { name:'商家发货', time: this.order.OMstatus, active:true, next:true },
+                { name:'交易完成', time: '未完成', active:false, next:false }]
+              this.orderStatus = this.order.OMstatus
             }
           }else{
             this.$message.error(res.data.message);
@@ -241,35 +230,6 @@
       },
       toSend() {
         this.toSendForm = false
-        this.step = [
-          {
-            name:'买家下单',
-            time: '2018-07-12 14:25:20',
-            active:true,
-            next:true
-          },
-          {
-            name:'买家付款',
-            time: '2018-07-12 14:34:37',
-            active:true,
-            next:true
-          },
-          {
-            name:'商家发货',
-            time: '2018-07-13 10:20:05',
-            active:true,
-            next:true
-          },
-          {
-            name:'交易完成',
-            time: '未完成',
-            active:false,
-            next:false
-          }
-        ]
-        this.orderStatus = '卖家已发货，等待买家签收'
-        this.reminder = '卖家已发货，请关注物流进度'
-        order.OMstatus = '已发货'
       }
     },
     created() {
@@ -321,15 +281,15 @@
             .left-icon {
               width: 10%;
               float: left;
-              margin-left: 10px;
-              margin-top: 10px;
+              margin-left: 0.1rem;
+              margin-top: 0.1rem;
             }
             .right-text {
               float: left;
               .right-top {
                 font-size: 18px;
                 font-weight:bold;
-                margin-bottom: 20px;
+                margin-top: 0.17rem;
               }
             }
           }
@@ -404,7 +364,7 @@
         .bottom-total {
           float: right;
           font-size: 16px;
-          margin-bottom: 0.1rem;
+          margin: 0 0.1rem 0.1rem 0;
         }
       }
     }
