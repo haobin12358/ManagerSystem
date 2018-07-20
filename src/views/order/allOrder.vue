@@ -9,45 +9,27 @@
             <el-input size="mini"></el-input>
           </div>
           <div class="search-text-input">
-            <div class="search-text">维权状态：</div>
+            <div class="search-text">订单状态：</div>
             <el-select v-model="value" placeholder="请选择" size="mini">
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
             </el-select>
           </div>
-          <div class="search-text-input">
-            <div class="search-text">付款方式：</div>
-            <el-select v-model="value" placeholder="请选择" size="mini">
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-            </el-select>
-          </div>
-        </div>
-        <div class="order-search-two">
           <div class="search-text-input">
             <div class="search-text">商品名称：</div>
             <el-input size="mini"></el-input>
           </div>
-          <div class="search-text-input">
-            <div class="search-text">物流方式：</div>
-            <el-select v-model="value" placeholder="请选择" size="mini">
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-            </el-select>
-          </div>
-          <div class="search-text-input">
-            <div class="search-text">订单类型：</div>
-            <el-select v-model="value" placeholder="请选择" size="mini">
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-            </el-select>
-          </div>
         </div>
-        <div class="order-search-three">
+        <div class="order-search-two">
+          <div class="search-text-input">
+            <div class="search-text">快递方式：</div>
+            <el-select v-model="value" placeholder="请选择" size="mini">
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+              <el-option label="中通快递" value="中通快递"></el-option>
+            </el-select>
+          </div>
           <div class="search-text-input" style="width: 5rem">
             <div class="search-text">退款时间：</div>
             <div class="block">
@@ -58,21 +40,36 @@
           </div>
         </div>
         <div class="search-buttons">
-          <el-button class="search-button" size="mini">筛选</el-button>
+          <el-button class="search-button" size="mini">查询</el-button>
           <el-button class="search-button" size="mini">批量导出</el-button>
         </div>
       </div>
       <div class="all-order-tabs">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="全部" name="one">
-            <all-order-table></all-order-table>
+          <el-tab-pane label="已取消" name="one">
+            <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="待付款" name="two">待付款</el-tab-pane>
-          <el-tab-pane label="待发货" name="three">待发货</el-tab-pane>
-          <el-tab-pane label="已发货" name="four">已发货</el-tab-pane>
-          <el-tab-pane label="已完成" name="five">已完成</el-tab-pane>
-          <el-tab-pane label="已关闭" name="six">已关闭</el-tab-pane>
-          <el-tab-pane label="退款中" name="seven">退款中</el-tab-pane>
+          <el-tab-pane label="未支付" name="two">
+            <all-order-table ref="child"></all-order-table>
+          </el-tab-pane>
+          <el-tab-pane label="已支付" name="three">
+            <all-order-table ref="child"></all-order-table>
+          </el-tab-pane>
+          <el-tab-pane label="已接单" name="four">
+            <all-order-table ref="child"></all-order-table>
+          </el-tab-pane>
+          <el-tab-pane label="配送中" name="five">
+            <all-order-table ref="child"></all-order-table>
+          </el-tab-pane>
+          <el-tab-pane label="已装箱" name="six">
+            <all-order-table ref="child"></all-order-table>
+          </el-tab-pane>
+          <el-tab-pane label="已完成" name="seven">
+            <all-order-table ref="child"></all-order-table>
+          </el-tab-pane>
+          <el-tab-pane label="已评价" name="eight">
+            <all-order-table ref="child"></all-order-table>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -125,8 +122,8 @@
         freshClick(){
           console.log('fresh');
         },
-        handleClick(tab, event) {
-          // console.log(tab, event);
+        handleClick(tab) {
+          this.$refs.child.changeOMstatus(tab.index)
         }
       },
       created() {
@@ -141,13 +138,14 @@
     .all-order-content {
       background-color: @bgMainColor;
       .all-order-search {
-        height: 1rem;
+        height: 0.75rem;
         padding: 0.2rem 0.3rem 0 0.3rem;
         margin: 0.15rem 0.2rem 0 0.2rem;
         border-radius: 0.1rem;
         background-color: @borderColor;
         .search-buttons {
           float: right;
+          margin-top: -0.3rem;
           margin-right: 1.15rem;
           .search-button {
             background-color: @btnActiveColor;

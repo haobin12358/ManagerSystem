@@ -11,19 +11,19 @@
           <div class="order-info-part">
             <div class="left-text-div">
               <div class="left-text" style="margin-top: 0.1rem">订单编号：</div>
-              <div class="left-text">付款方式：</div>
+              <div class="left-text">订单状态：</div>
               <div class="left-text" style="margin-left: 0.38rem;">买 家：</div>
-              <div class="left-text">配送方式：</div>
+              <div class="left-text">快递方式：</div>
               <div class="left-text">收货地址：</div>
-              <div class="left-text" style="margin-top: 0.25rem">买家留言：</div>
+              <div class="left-text" style="margin-top: 0.27rem">买家留言：</div>
             </div>
             <div class="left-value-div">
-              <div class="left-text" style="margin-top: 0.1rem">{{order.orderNo}}</div>
-              <div class="left-text">{{order.payType}}</div>
-              <div class="left-text">{{order.buyer}}</div>
-              <div class="left-text">{{order.sendType}}</div>
-              <div class="left-text">{{order.buyerAddress}}</div>
-              <div class="left-text" style="margin-top: 0.25rem">{{order.memo}}</div>
+              <div class="left-text" style="margin-top: 0.1rem">{{order.OMid}}</div>
+              <div class="left-text">{{order.OMstatus}}</div>
+              <div class="left-text">{{order.LOname}}</div>
+              <div class="left-text">{{order.OMlogisticsName}}</div>
+              <div class="left-text">{{order.LOdetail}}</div>
+              <div class="left-text" style="margin-top: 0.25rem">{{order.OMabo}}</div>
             </div>
           </div>
         </div>
@@ -38,6 +38,7 @@
             </div>
           </div>
           <div class="right-middle">
+            <!--发货弹出框-->
             <el-dialog title="收货地址" :visible.sync="toSendForm" style="padding: 0">
               <div class="buyer-info">
                 <div class="buyer-info-title">买家收货信息</div>
@@ -76,6 +77,7 @@
                 <el-button class="right-button" @click="toSend">确 定</el-button>
               </div>
             </el-dialog>
+            <!--备注弹出框-->
             <el-dialog title="备 注" :visible.sync="memoForm" width="4rem">
               <el-form :model="memoForms">
                 <el-form-item label="备 注：" :label-width="formLabelWidth">
@@ -87,6 +89,7 @@
                 <el-button class="right-button" @click="memoForm = false">确 定</el-button>
               </div>
             </el-dialog>
+            <!--显示物流信息弹出框-->
             <el-dialog title="物流信息" :visible.sync="searchWhere" width="4rem">
               <div v-for="where in whereList" class="where-list">
                 {{where}}
@@ -95,11 +98,11 @@
                 <el-button class="right-button" @click="searchWhere=false">确 定</el-button>
               </span>
             </el-dialog>
-
-            <div v-if="toSendStatus">
+            <!--判断订单状态后显示相应的操作按钮-->
+            <div v-if="order.OMstatus=='已发货'">
               <el-button class="right-button" @click="searchWhere=true">查看物流进度</el-button>
             </div>
-            <div v-if="!toSendStatus">
+            <div v-if="order.OMstatus=='未支付'">
               <el-button class="right-button" @click="toSendForm=true">发 货</el-button>
               <el-button class="right-button" @click="" style="margin-left: 0.2rem;" @click="memoForm=true">备 注</el-button>
             </div>
@@ -114,16 +117,25 @@
       </div>
       <div class="details-bottom">
         <div class="bottom-total">订单共计4件商品，总计：159.00元（含运费￥0.00元）</div>
-        <el-table class="details-table" :data="order.goods" border style="width: 100%" stripe size="mini">
-          <el-table-column align="center" prop="goodsName" label="商品">
+        <el-table class="details-table" :data="order.order_item" border style="width: 100%" stripe size="mini">
+          <el-table-column align="center" prop="PBimage" label="商品图片">
+            <template slot-scope="scope">
+              <img  :src="scope.row.PBimage" alt="" style="width: 0.5rem;height: 0.5rem">
+            </template>
           </el-table-column>
-          <el-table-column align="center" prop="goodsPrice" label="价格（元）">
+          <el-table-column align="center" prop="PRname" label="商品名称">
           </el-table-column>
-          <el-table-column align="center" prop="goodsNumber" label="数量">
+          <el-table-column align="center" prop="PBprice" label="单价">
           </el-table-column>
-          <el-table-column align="center" prop="afterSales" label="优惠">
+          <el-table-column align="center" prop="PRnumber" label="数量">
           </el-table-column>
-          <el-table-column align="center" prop="realPay" label="小计">
+          <el-table-column align="center" prop="PBunit" label="价格单位">
+          </el-table-column>
+          <el-table-column align="center" prop="PRinfo" label="商品简介">
+          </el-table-column>
+          <el-table-column align="center" prop="PRtype" label="商品类型">
+          </el-table-column>
+          <el-table-column align="center" prop="PRbrand" label="商品分类">
           </el-table-column>
         </el-table>
       </div>
@@ -132,45 +144,23 @@
 </template>
 
 <script>
-  // 1、待付款，2、待发货，3、已发货，4、已完成，5、已关闭，6、退款中
+  // 订单状态 0 : 已取消, 7 : 未支付, 14 : 已支付, 21 : 已接单, 28 : 配送中, 35 : 已装箱, 42 : 已完成, 49 : 已评价
   import allOrder from "../../common/json/allOrder";
   import pageTitle from '../../components/common/title';
   import step from '../../components/common/step';
+  import api from '../../api/api';
+  import {Message} from 'element-ui';
+  import axios from 'axios';
   export default {
     name: "orderDetails",
     data() {
       return {
         name: '所有订单 > 订单详情',
         order: '',
-        step:[
-          {
-            name:'买家下单',
-            time: '2018-07-12 14:25:20',
-            active:true,
-            next:true
-          },
-          {
-            name:'买家付款',
-            time: '2018-07-12 14:34:21',
-            active:true,
-            next:true
-          },
-          {
-            name:'商家发货',
-            time: '待发货',
-            active:false,
-            next:false
-          },
-          {
-            name:'交易完成',
-            time: '未完成',
-            active:false,
-            next:false
-          }
-        ],
+        OMid: '',
+        step:[],
         orderStatus: '买家已付款，等待卖家发货',
         reminder: '买家已付款至待结算账户，请尽快发货，否则买家有权利申请退款',
-        toSendStatus: false,
         searchWhere: false,
         whereList: [
           "2018-07-15 14:25:23 快递已到达杭州萧山分拨中心",
@@ -205,6 +195,50 @@
       freshClick(){
         console.log('fresh');
       },
+      getData(OMid){
+        let params = {
+          token: localStorage.getItem('token'),
+          OMid: OMid
+        };
+        axios.get(api.get_order_by_LOid,{params:params}).then(res => {
+          if(res.data.status == 200) {
+            this.order =res.data.data
+            console.log(this.order)
+            if(this.order.OMstatus == '未支付') {
+              this.step = [
+                {
+                  name:'买家下单',
+                  time: this.order.OMtime,
+                  active:true,
+                  next:true
+                },
+                {
+                  name:'买家付款',
+                  time: '待付款',
+                  active:false,
+                  next:false
+                },
+                {
+                  name:'商家发货',
+                  time: '待发货',
+                  active:false,
+                  next:false
+                },
+                {
+                  name:'交易完成',
+                  time: '未完成',
+                  active:false,
+                  next:false
+                }
+              ]
+            }
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
+      },
       toSend() {
         this.toSendForm = false
         this.step = [
@@ -235,12 +269,14 @@
         ]
         this.orderStatus = '卖家已发货，等待买家签收'
         this.reminder = '卖家已发货，请关注物流进度'
-        this.toSendStatus = true
+        order.OMstatus = '已发货'
       }
     },
     created() {
-      this.order = this.$route.query.order;
-      // console.log(this.order)
+      // this.order = this.$route.query.order;
+      this.OMid = this.$route.params.OMid;
+      this.getData(this.OMid)
+      // console.log(this.OMid)
     }
   }
 </script>
@@ -268,6 +304,7 @@
             float: right;
           }
           .left-text {
+            width: 90%;
             font-size: 14px;
             color: @greyColor;
             line-height: 0.12rem;
@@ -288,7 +325,6 @@
               margin-top: 10px;
             }
             .right-text {
-              width: 85%;
               float: left;
               .right-top {
                 font-size: 18px;
