@@ -79,8 +79,8 @@
                 <div>
                   <span class="m-img-label">库存:</span>
                   <el-input v-model="form.brands[index].PBnumber" placeholder="输入商品该规格库存" class="m-input-m" ></el-input>
+                  <p class="m-alert" style="margin-left: 0.6rem;">库存为0时，会放入已售罄列表中</p>
                 </div>
-
               </div>
               <div>
                 <el-upload
@@ -90,7 +90,8 @@
                   :on-remove="handleRemove"
                   class="m-img-xl"
                   :limit="1"
-                  :on-exceed="outImg">
+                  :on-exceed="outImg"
+                  :on-success="imgUp">
                   <span>+添加图片</span>
                 </el-upload>
                 <!--<el-dialog :visible.sync="!form.brands[index].PBimage">-->
@@ -287,7 +288,6 @@
                   BRands:['',''],
                   PBnumber:''
                 }],
-                PRtype:'',
                 PRvideo:'',
                 PRaboimage:'',
                 PRfrankingR:true,
@@ -399,6 +399,9 @@
           //  发布
           issueClick(){
             this.$router.push('/commodity/commodityManagement')
+          },
+          imgUp(response, file, fileList){
+            console.log(response)
           },
           submitClick(){
             let that = this;

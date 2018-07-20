@@ -1,6 +1,6 @@
 
 <template>
-  <div class="m-age">
+  <div class="m-age" v-if="total != 0">
     <div v-if="num">
       <div class="page-total">
         记录数 {{num}} 个
