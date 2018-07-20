@@ -73,7 +73,7 @@ class CProducts():
         product_info["PRaboimage"] = list(PRABOIMAGE.get(PRid))
         PRbrand = product.PRbrand
         PRtype = product.PRtype
-        product_info["PRbrand"] = conversion_PRbrand.get(PRbrand)
+        product_info["PRbrand"] = json.loads(PRbrand)
         product_info["PRtype"] = conversion_PRtype.get(PRtype)
         product_info["PBimage"] = list(PRSWINGIMAGE.get(PRid))
         product_info["PRquality"] = {}
@@ -106,17 +106,17 @@ class CProducts():
         maid = token_to_usid(args.get("token"))
         from ManagerSystem.models.model import Products
         pro_fillter = {Products.MAid == maid}
+        sub_filter = set()
         if args.get("product_filter"):
             product_filter = get_str(args, "product_filter")
             sub_filter = {
                 Products.PRname.like("%{0}%".format(product_filter)),
                 Products.PRinfo.like("%{0}%".format(product_filter))
             }
-            pro_fillter.update(sub_filter)
 
-        pn, count = self.check_page_value(page_num, page_size, "model.Products.PRid", pro_fillter)
+        pn, count = self.check_page_value(page_num, page_size, "model.Products.PRid", pro_fillter, sub_filter)
         start_num = (pn - 1) * page_size
-        PRid_list = [products.PRid for products in self.sproduct.get_all_prid(start_num, page_size, pro_fillter)]
+        PRid_list = [products.PRid for products in self.sproduct.get_all_prid(start_num, page_size, pro_fillter, sub_filter)]
         log.info("PRid list", PRid_list)
         pbstatus = get_str(args, "PBstatus")
         # todo 增加遍历输出所有图片
@@ -134,7 +134,7 @@ class CProducts():
             product["PRimage"] = product.get("PRimage").format(hdp)
             product["PRtype"] = conversion_PRtype.get(get_str(product, "PRtype"))
             product["PRtime"] = TimeManager.get_web_time_str(product.get("PRtime"))
-            product["PRbrand"] = conversion_PRbrand.get(get_str(product, "PRbrand"))
+            product["PRbrand"] = json.loads(product.get("PRbrand"))
             log.info("pbstatus", pbstatus)
             saleamount = 0
             stockamout = 0
@@ -147,7 +147,7 @@ class CProducts():
             for pb in pb_list:
                 saleamount += int(pb.get("PBsalesvolume"))
                 PRstatus = conversion_PBstatus.get(pb.get("PBstatus"))
-                stockamout += sum([int(st.get("PBnumber")) for st in tolist(self.stock.get_stocks_by_PBid(pb.get("PBid")))])
+                stockamout += sum([int(st.get("PBnumber", 0)) for st in tolist(self.stock.get_stocks_by_PBid(pb.get("PBid")))])
                 pb.update(product)
 
             if not PRstatus:
@@ -170,8 +170,8 @@ class CProducts():
         log.info("response", response_of_product)
         return response_of_product
 
-    def check_page_value(self, page_num, page_size, model_name, params):
-        count = self.sproduct.get_count_by_or_filter(model_name, params)
+    def check_page_value(self, page_num, page_size, model_name, and_params, or_params):
+        count = self.sproduct.get_count_by_or_filter(model_name, and_params, or_params)
         if page_size * page_num > count:
             page_num = count / page_size
         page_num = page_num if page_num > 0 else 1
@@ -380,7 +380,7 @@ class CProducts():
     def add_product(self):
         args = request.args.to_dict()
         log.info("args", args)
-        data = json.loads(request.data, encoding="utf8")
+        data = json.loads(request.data)
         log.info("data", data)
         if "token" not in args:
             return PARAMS_MISS
@@ -409,10 +409,11 @@ class CProducts():
                 "PRvideostart": data.get("PRvideostart", ""),
                 "MAid": maid,
                 "PRtype": conversion_PRtype_reverse.get(get_str(data, "PRtype", "自营")),
-                "PRbrand": conversion_PRbrand_reverse.get(get_str(data, "PRbrand", "美妆类")),
+                "PRbrand": json.dumps(data.get("PRbrand")),
                 "PRtime": TimeManager.get_db_time_str(),
                 "CTid": data.get("CTid")
             }
+
             self.sproduct.add_model("Products", **product)
             return get_response("SUCCESS_MESSAGE_ADD_DATA", "OK")
         except Exception as e:

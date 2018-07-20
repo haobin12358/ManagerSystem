@@ -3,7 +3,7 @@ import os
 
 sys.path.append(os.path.dirname(os.getcwd()))
 
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from SBase import SBase, close_session
 from ManagerSystem.models.model import Products
 from ManagerSystem.models.model import Brands
@@ -75,8 +75,8 @@ class SProducts(SBase):
         return pbid
 
     @close_session
-    def get_all_prid(self, start_num, page_size, pro_fillter):
-        return self.session.query(Products.PRid).filter(or_(*pro_fillter)).offset(start_num).limit(page_size).all()
+    def get_all_prid(self, start_num, page_size, and_filter, or_fillter):
+        return self.session.query(Products.PRid).filter(and_(*and_filter), or_(*or_fillter)).offset(start_num).limit(page_size).all()
 
     @close_session
     def get_brid_by_key_value(self, key, value):

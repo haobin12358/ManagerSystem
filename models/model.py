@@ -60,7 +60,7 @@ class Products(Base):
     PRaboimage = Column(Text)                    # 商品详情图存放地址
     PRinfo = Column(Text)                        # 商品介绍
     PRtype = Column(Integer, nullable=False)     # 营销类型 {501自营， 502非自营}
-    PRbrand = Column(Integer, nullable=False)    # 类目 {601美妆类， 602 3C类}
+    PRbrand = Column(Text, nullable=False)    # 类目 {601美妆类， 602 3C类}
     PRvideostart = Column(Text)                  # 商品视频未启动图片
     MAid = Column(String(64))                    # 商家id
     PRtime = Column(String(14))                  # 创建时间
