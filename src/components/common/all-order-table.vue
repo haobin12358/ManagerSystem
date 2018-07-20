@@ -28,11 +28,11 @@
           </el-table>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="订单号" prop="OMid">
+      <el-table-column align="center" label="订单号" prop="OMid" width="350">
       </el-table-column>
-      <el-table-column align="center" label="订单状态" prop="OMstatus" width="150">
+      <el-table-column align="center" label="订单状态" prop="OMstatus" width="100">
       </el-table-column>
-      <el-table-column align="center" label="订单价格" prop="OMprice" width="150">
+      <el-table-column align="center" label="订单价格" prop="OMprice" width="100">
       </el-table-column>
       <el-table-column align="center" label="下单时间" prop="OMtime" width="200">
       </el-table-column>
@@ -65,10 +65,11 @@
       return {
         expandAll: false,
         orderList: [],
-        total_page:1,
-        current_page:1,
-        total_num:0,
-        page_size:10,
+        total_page: 1,
+        current_page: 0,
+        total_num: 0,
+        page_size: 10,
+        OMstatus: 0
       }
     },
     components: {
@@ -76,17 +77,24 @@
     },
     methods: {
       orderDetails(order) {
-        this.$router.push({path: '/order/orderDetails', query: {order}});
+        // console.log(order.LOid)
+        // this.$router.push({path: '/order/orderDetails', query: {order}});
+        this.$router.push({name: 'orderDetails', params: {OMid: order.OMid}});
+      },
+      changeOMstatus(OMstatus) {
+        this.OMstatus = OMstatus*7
+        console.log('OMstatus', this.OMstatus)
       },
       getData(v){
         let params = {
-          token:localStorage.getItem('token'),
-          OMstatus:'7'
+          token: localStorage.getItem('token'),
+          // OMstatus: this.OMstatus,
+          page_num: v,
+          page_size: this.page_size
         };
         axios.get(api.get_all_order,{params:params}).then(res => {
-          console.log(res.data.data)
           if(res.data.status == 200) {
-            this.orderList = res.data.data;
+            this.orderList = res.data.data.OrderMains;
             this.total_num = res.data.data.count;
             this.total_page = Math.ceil(this.total_num / this.page_size);
           }else{
@@ -108,9 +116,10 @@
         this.getData(v);
       },
     },
-    mounted() {
-      this.orderList = allOrder;
-      this.pageChange(2)
+    created() {
+      // console.log(this.OMstatus)
+      // this.orderList = allOrder;
+      this.pageChange(1)
     }
   }
 </script>

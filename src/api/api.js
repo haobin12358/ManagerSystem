@@ -6,6 +6,7 @@ const api={
   changePwd: title + 'user/update_user',//修改密码
 
   get_all_order: title + 'order/order_list',//获取所有订单
+  get_order_by_LOid: title + 'order/order_abo',//获取订单详情
 
   get_all_product: title + 'product/get_all',//获取所有商品
   update_product: title + 'product/update_product',//上架/下架商品
