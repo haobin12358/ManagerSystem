@@ -1,6 +1,6 @@
 <template>
 <div class="m-goodsImported">
-  <el-form ref="form" :model="form" label-width="1.2rem">
+  <el-form ref="form" :model="form" :rules="rules" label-width="1.2rem" class="demo-ruleForm">
     <page-title :title="name" @freshClick="freshClick"></page-title>
     <div class="m-goodsImported-content">
       <div class="m-edit-btn">
@@ -9,37 +9,39 @@
       <a name="basicInfo"></a>
       <div class="m-one-part">
         <h3 id="basicInfo">基本信息</h3>
-        <el-form-item label="商品名称:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
-          <el-input v-model="form.name" class="m-input-l" ></el-input>
+        <el-form-item label="商品名称:" prop="PRname">
+          <el-input v-model="form.PRname" class="m-input-l" ></el-input>
         </el-form-item>
-        <el-form-item label="添加描述:" :rules="[{ required: true, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
-          <el-input v-model="form.name" class="m-input-l" ></el-input>
+        <el-form-item label="添加描述:" prop="PRinfo">
+          <el-input v-model="form.PRinfo" class="m-input-l" ></el-input>
           <p class="m-alert">建议描述文字在36字以内</p>
         </el-form-item>
-        <el-form-item label="商品属性:" :rules="[{ required: false}]">
+        <el-form-item label="商品属性:" prop="PRbrand">
           <div class="m-select-box">
             <p class="m-alert">错误填写商品属性，可能会引起商品下架或搜索流量减少，影响您的正常销售，请认真准确填写！</p>
             <div class="m-selects">
               <template v-for="(item,index) in brand_list">
-                <el-form-item v-if="item.CBvalue == ''" :label="item.CBname" class="m-form-item">
+                <div v-if="item.CBvalue == ''"  class="m-form-item">
+                  <span class=" m-label">{{item.CBname}}</span>
                   <el-input v-model="form.PRbrand[index]" class="m-input-s" ></el-input>
-                </el-form-item>
-                <el-form-item v-else :label="item.CBname" class="m-form-item" >
-                  <el-select v-model="form.PRbrand[index]" class="m-input-s" >
+                </div>
+                <div  class="m-form-item" >
+                  <span class=" m-label">{{item.CBname}}</span>
+                  <el-select v-model="form.PRbrand[index]" clearable class="m-input-s" >
                     <el-option
                       v-for="items in item.CBvalue"
                       :key="items"
                       :label="items"
                       :value="items"></el-option>
                   </el-select>
-                </el-form-item>
+                </div>
               </template>
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="商品照片:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
+        <el-form-item label="商品照片:" prop="PRimage">
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://120.79.182.43:7443/sharp/manager/file/upload_image"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
@@ -49,30 +51,34 @@
             <span>+添加图片</span>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="">
+            <img width="100%" :src="form.PRimage" alt="">
           </el-dialog>
           <p class="m-img-p">建议尺寸：700*700像素，可以通过拖动图片调整前后顺序，最多上传5张商品图片</p>
         </el-form-item>
 
-        <el-form-item label="商品样式及价格:" :rules="[{ required: true}]">
+        <el-form-item label="商品样式及价格:" prop="brands">
           <div class="m-product-style">
             <div>
-              <span class="m-img-label">A:</span> <el-input v-model="form.name" placeholder="输入商品属性" class="m-input-s" ></el-input>
-              <span class="m-img-label">B:</span> <el-input v-model="form.name" placeholder="输入商品属性" class="m-input-s" ></el-input>
+              <span class="m-img-label">A:</span> <el-input v-model="form.brands_key[0]" placeholder="输入商品属性" class="m-input-s" ></el-input>
+              <span class="m-img-label">B:</span> <el-input v-model="form.brands_key[1]" placeholder="输入商品属性" class="m-input-s" ></el-input>
             </div>
-            <div class="m-product">
+            <div class="m-product" v-for="(item,index) in brands">
               <div class="m-product-input">
                 <div>
                   <span class="m-img-label">A:</span>
-                  <el-input v-model="form.name" placeholder="输入商品颜色，如粉红色" class="m-input-m" ></el-input>
+                  <el-input v-model="form.brands[index].BRands[0]" placeholder="输入商品颜色，如粉红色" class="m-input-m" ></el-input>
                 </div>
                 <div>
                   <span class="m-img-label">B:</span>
-                  <el-input v-model="form.name" placeholder="输入商品规格，如进阶版" class="m-input-m" ></el-input>
+                  <el-input v-model="form.brands[index].BRands[1]" placeholder="输入商品规格，如进阶版" class="m-input-m" ></el-input>
                 </div>
                 <div>
                   <span class="m-img-label">价格:</span>
-                  <el-input v-model="form.name" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
+                  <el-input v-model="form.brands[index].PBprice" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
+                </div>
+                <div>
+                  <span class="m-img-label">库存:</span>
+                  <el-input v-model="form.brands[index].PBnumber" placeholder="输入商品该规格库存" class="m-input-m" ></el-input>
                 </div>
 
               </div>
@@ -82,43 +88,17 @@
                   list-type="picture-card"
                   :on-preview="handlePictureCardPreview"
                   :on-remove="handleRemove"
-                  class="m-img-l"
+                  class="m-img-xl"
                   :limit="1"
                   :on-exceed="outImg">
                   <span>+添加图片</span>
                 </el-upload>
+                <!--<el-dialog :visible.sync="!form.brands[index].PBimage">-->
+                  <!--<img width="100%" :src="form.brands[index].PBimage" alt="">-->
+                <!--</el-dialog>-->
               </div>
             </div>
-            <div class="m-product">
-              <div class="m-product-input">
-                <div>
-                  <span class="m-img-label">A:</span>
-                  <el-input v-model="form.name" placeholder="输入商品颜色，如粉红色" class="m-input-m" ></el-input>
-                </div>
-                <div>
-                  <span class="m-img-label">B:</span>
-                  <el-input v-model="form.name" placeholder="输入商品规格，如进阶版" class="m-input-m" ></el-input>
-                </div>
-                <div>
-                  <span class="m-img-label">价格:</span>
-                  <el-input v-model="form.name" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
-                </div>
-
-              </div>
-              <div>
-                <el-upload
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                  list-type="picture-card"
-                  :on-preview="handlePictureCardPreview"
-                  :on-remove="handleRemove"
-                  class="m-img-l"
-                  :limit="1"
-                  :on-exceed="outImg">
-                  <span>+添加图片</span>
-                </el-upload>
-              </div>
-            </div>
-            <p class="m-add-more">+查看更多</p>
+            <p class="m-add-more" @click="addMore">+查看更多</p>
             <p class="m-look-more" @click="showMore('show_basic_info')">更多基本信息设置</p>
           </div>
         </el-form-item>
@@ -220,8 +200,8 @@
       </div>
 
       <div class="m-goodsImported-foot">
-        <span class="m-foot-btn">保存</span>
-        <span class="m-foot-btn" @click="issueClick">发布</span>
+        <el-button type="primary" class="m-foot-btn" @click="submitClick">保存</el-button>
+        <el-button type="primary" class="m-foot-btn" @click="submitClick">发布</el-button>
       </div>
     </div>
     <div class="m-right-side">
@@ -272,7 +252,7 @@
         </ul>
       </div>
       <div class="m-side-btn">
-        <span class="m-btn">保存</span>
+        <span class="m-btn" @click="submitClick">保存</span>
       </div>
     </div>
   </el-form>
@@ -292,19 +272,52 @@
                 PRname:'',
                 PRinfo:'',
                 PRbrand:[],
-                PRimage:'',
+                PRimage:'xxxx',
+                brands_key:['',''],
+                brands:[{
+                  PBprice:'',
+                  PBunit:'$',
+                  PBimage:'',
+                  BRands:['',''],
+                  PBnumber:''
+                }],
+                PRtype:'',
+                PRvideo:'',
+                PRaboimage:''
+              },
+              rules:{
+                PRname:[
+                  { required: true, message: '请输入商品名称', trigger: 'blur' }
+                ],
+                PRinfo:[
+                  { required: true, message: '请添加商品描述', trigger: 'blur' }
+                ],
+                PRbrand:[
+                  { required: true, message: '请选择属性', trigger: 'blur' }
+                ],
+                PRimage:[
+                  { required: true, message: '请上传照片', trigger: 'blur' }
+                ],
                 brands_key:'',
-                brands:{
-                  PBprice:[],
-                  PBunit:[],
-                  PBimage:[],
-                  BRands:[],
-                  PRtype:'',
-                  PRvideo:'',
-                  PRaboimage:''
-                }
+                brands:[
+                  { required: true, message: '请填写商品样式及价格', trigger: 'blur' }
+                ],
+              },
+              brand_one:{
+                PBprice:'',
+                PBunit:'$',
+                PBimage:'zcxcz',
+                BRands:['',''],
+                PBnumber:''
               },
               brand_list:[],
+              brands:[{
+                PBprice:'',
+                PBunit:'$',
+                PBimage:'',
+                BRands:['',''],
+                PBnumber:''
+              }],
               dialogImageUrl: '',
               dialogVisible: false,
               checked:true,
@@ -341,7 +354,7 @@
             console.log(file, fileList);
           },
           handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
+            this.form.PRimage = file.url;
             this.dialogVisible = true;
           },
           sideClick(v){
@@ -376,11 +389,39 @@
           issueClick(){
             this.$router.push('/commodity/commodityManagement')
           },
+          submitClick(){
+            let that = this;
+
+            this.$refs['form'].validate((valid) => {
+                if (valid) {
+                  that.query(this.form)
+                }
+            })
+          },
+          query(params){
+            let _brands = [];
+            let _form = JSON.parse(JSON.stringify(params))
+            for(let i=0;i<this.form.PRbrand.length;i++){
+              if(_form.PRbrand[i] != undefined){
+                let _value = this.brand_list[i];
+                _value.CBvalue = _form.PRbrand[i];
+                _brands.push(_value);
+              }
+            }
+            _form.PRbrand = _brands;
+            console.log(_form)
+          },
           outImg(){
             this.$message({
               message: '上传图片超出数量限制',
-              type: 'warning'
+              type: 'warning',
+              duration:1000
             });
+          },
+          /*添加更多*/
+          addMore(){
+            this.brands.push(this.brand_one);
+            this.form.brands.push(this.brand_one)
           }
         },
         created() {
@@ -405,6 +446,17 @@
   }
   .m-input-s{
     width: 1.8rem;
+  }
+  .m-label{
+    width: 1.2rem;
+    text-align: right;
+    float: left;
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
   }
   .m-other{
     .m-input-s{
@@ -473,7 +525,6 @@
           .m-img-l{
             font-size: 0.14rem;
             color: @green;
-
           }
         }
       }
@@ -522,6 +573,8 @@
         font-size: 0.18rem;
         border-radius: 5px;
         background-color: @btnActiveColor;
+        cursor: pointer;
+        border: 1px solid @btnActiveColor;
       }
     }
    }
