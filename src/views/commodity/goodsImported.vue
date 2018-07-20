@@ -283,14 +283,14 @@
                 brands:[{
                   PBprice:'',
                   PBunit:'$',
-                  PBimage:'',
+                  PBimage:'xxxx',
                   BRands:['',''],
                   PBnumber:''
                 }],
                 PRtype:'',
                 PRvideo:'',
                 PRaboimage:'',
-                PRfrankingR:'',
+                PRfrankingR:true,
                 PRfranking:''
               },
               rules:{
@@ -420,7 +420,9 @@
               }
             }
             _form.PRbrand = _brands;
-            console.log(_form)
+            axios.post(api.release_product+'?token='+localStorage.getItem('token'),_form).then(res => {
+              console.log(res)
+            })
           },
           outImg(){
             this.$message({
