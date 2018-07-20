@@ -9,7 +9,7 @@ const api={
   get_order_by_LOid: title + 'order/order_abo',//获取订单详情
 
   get_all_product: title + 'product/get_all',//获取所有商品
-  update_product: title + 'product/update_product',//上架/下架商品
+  release_product: title + 'product/release',//上架/下架商品
   get_first_category: title + 'category/get_first',//获取类目
   get_child_category:title + 'category/get_child',//获取子类目
   get_categorybrands: title + 'category/get_categorybrands',//根据类目id获取商品属性
