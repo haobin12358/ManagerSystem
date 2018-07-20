@@ -87,7 +87,9 @@ class COrder():
                     continue
                 om_dict = om_dict[0]
                 om_dict.update({"order_item": om_id_dict.get(om_id)})
-                om_dict.update(todict(self.sorder.get_location_by_usid(om_dict.pop("USid"))))
+                location = todict(self.sorder.get_location_by_usid(om_dict.pop("USid")))
+                log.info("location", location)
+                om_dict.update(location)
                 om_dict["OMcointype"] = cvs.conversion_PBunit.get(om_dict.get("OMcointype"), "其他币种")
                 om_dict["OMstatus"] = cvs.conversion_OMstatus.get(om_dict.get("OMstatus"), 0)
                 om_dict["OMtime"] = TimeManager.get_web_time_str(om_dict.get("OMtime"))
@@ -95,7 +97,7 @@ class COrder():
             log.info("omlist", om_list)
             count = len(om_list)
             if page_size * page_num > count:
-                page_num = count / page_size
+                page_num = count / page_size + 1
             page_num = page_num if page_num > 0 else 1
             om_list = om_list[(page_num - 1) * page_size: page_num * page_size]
             data = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
@@ -124,6 +126,7 @@ class COrder():
                 return TOKEN_ERROR
 
             order_main = todict(self.sorder.get_order_main_by_om_id(get_str(args, "OMid")))
+            order_main.pop("USid")
 
             self._get_order_abo_by_order_main(order_main)
             log.info("order main", order_main)
