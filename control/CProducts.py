@@ -171,7 +171,7 @@ class CProducts():
         return response_of_product
 
     def check_page_value(self, page_num, page_size, model_name, params):
-        count = self.sproduct.get_count(model_name, params)
+        count = self.sproduct.get_count_by_or_filter(model_name, params)
         if page_size * page_num > count:
             page_num = count / page_size
         page_num = page_num if page_num > 0 else 1

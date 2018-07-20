@@ -17,7 +17,8 @@ class MSOrder(Resource):
         log.info("get api", order)
         action = {
             "order_list": "self.corder.get_order_list()",
-            "order_abo": "self.corder.get_order_abo()"
+            "order_abo": "self.corder.get_order_abo()",
+            "get_omfilter": "self.corder.get_omfilter()"
         }
         if order in action:
             return eval(action.get(order))

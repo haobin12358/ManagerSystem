@@ -6,7 +6,7 @@ from ManagerSystem.models import model
 import time
 # 实例化session
 db_session = sessionmaker(bind=model.mysql_engine)
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 
 model_id = {
@@ -72,7 +72,7 @@ class SBase(object):
 
     # todo 修改mode_id
     @close_session
-    def get_count(self, model_name, params):
+    def get_count_by_or_filter(self, model_name, params):
         """
         获取某个数据表中的全部数据
         :param model_name:
@@ -82,4 +82,4 @@ class SBase(object):
         #     return 0
         model_id = eval(model_name)
 
-        return self.session.query(func.count(model_id)).filter(*params).scalar()
+        return self.session.query(func.count(model_id)).filter(or_(*params)).scalar()

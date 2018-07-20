@@ -201,6 +201,41 @@ class COrder():
             log.error("update order", e.message)
             return SYSTEM_ERROR
 
+    def get_omfilter(self):
+        response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
+        response["data"] = [
+            {
+                "name": "订单号",
+                "value": "",
+                "key": "OMid"
+            },
+            {
+                "name": "订单状态",
+                "value": cvs.conversion_OMstatus_reverse.keys(),
+                "key": "OMstatus"
+            },
+            {
+                "name": "下单时间",
+                "value": "",
+                "key": "OMstartTime"
+            },
+            {
+                "name": "下单时间",
+                "value": "",
+                "key": "OMendTime"
+            },
+            {
+                "name": "物流方式",
+                "value": ["顺丰速运"],
+                "key": "OMlogisticsName"
+            },
+            {
+                "name": "商品名称",
+                "value": "",
+                "key": "PRname"
+            },
+        ]
+        return response
 
 
 if __name__ == "__main__":
