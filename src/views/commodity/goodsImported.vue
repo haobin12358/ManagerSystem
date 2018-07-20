@@ -167,9 +167,14 @@
       <a name="otherInfo"></a>
       <div class="m-one-part m-other">
         <h3 id="otherInfo">其他信息</h3>
-        <el-form-item label="快递运费:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
-          <el-radio v-model="radio" label="1">统一邮费  </el-radio>
-          <el-input v-model="form.name" class="m-input-s" ></el-input>
+        <el-form-item label="快递运费:" prop="PRfrankingR">
+          <el-switch
+            v-model="form.PRfrankingR"
+            active-color="#9fd0bf"
+            inactive-color="#dbdcdc">
+          </el-switch>
+          <!--<el-radio v-model="form.PRfrankingR" label="">统一邮费  </el-radio>-->
+          <el-input v-model="form.PRfranking" class="m-input-s" ></el-input>
         </el-form-item>
         <el-form-item label="上架时间:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
           <div>
@@ -269,6 +274,7 @@
             return {
               name:'商品发布',
               form:{
+                CTid:0,
                 PRname:'',
                 PRinfo:'',
                 PRbrand:[],
@@ -283,7 +289,9 @@
                 }],
                 PRtype:'',
                 PRvideo:'',
-                PRaboimage:''
+                PRaboimage:'',
+                PRfrankingR:'',
+                PRfranking:''
               },
               rules:{
                 PRname:[
@@ -301,6 +309,9 @@
                 brands_key:'',
                 brands:[
                   { required: true, message: '请填写商品样式及价格', trigger: 'blur' }
+                ],
+                PRfrankingR:[
+                  { required: true, message: '请设置邮费', trigger: 'blur' }
                 ],
               },
               brand_one:{
@@ -431,6 +442,7 @@
         window.addEventListener('scroll',this.handleScroll);
         if(this.$route.query.CTid){
           this.getCategorybrands(this.$route.query.CTid);
+          this.form.CTid = this.$route.query.CTid;
         }
       },
     }
