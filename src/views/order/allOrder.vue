@@ -17,18 +17,18 @@
             </el-select>
           </div>
           <div class="search-text-input">
-            <div class="search-text">商品名称：</div>
-            <el-input size="mini"></el-input>
-          </div>
-        </div>
-        <div class="order-search-two">
-          <div class="search-text-input">
             <div class="search-text">快递方式：</div>
             <el-select v-model="value" placeholder="请选择" size="mini">
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
             </el-select>
+          </div>
+        </div>
+        <div class="order-search-two">
+          <div class="search-text-input">
+            <div class="search-text">商品名称：</div>
+            <el-input size="mini"></el-input>
           </div>
           <div class="search-text-input" style="width: 5rem">
             <div class="search-text">退款时间：</div>
