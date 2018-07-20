@@ -15,7 +15,7 @@ class SProducts(SBase):
     def get_product_by_maid(self, maid):
         return self.session.query(
             Products.PRid, Products.PRname, Products.PRvideo, Products.PRimage, Products.PRtype,
-            Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart
+            Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart, Products.PRfranking
         ).filter(Products.MAid == maid).all()
 
     @close_session
@@ -54,7 +54,8 @@ class SProducts(SBase):
     def get_product_by_prid(self, prid):
         return self.session.query(Products.PRname, Products.PRbrand, Products.PRinfo,
                                   Products.PRvideo, Products.PRtype, Products.PRimage,
-                                  Products.PRaboimage, Products.PRvideostart, Products.PRtime).filter_by(
+                                  Products.PRaboimage, Products.PRvideostart,
+                                  Products.PRtime, Products.PRfranking).filter_by(
             PRid=prid).first()
 
     @close_session
@@ -188,4 +189,5 @@ class SProducts(SBase):
     def get_product_by_filter(self, pr_filter):
         return self.session.query(
             Products.PRid, Products.PRname, Products.PRvideo, Products.PRimage, Products.PRtype, Products.CTid,
-            Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart).filter(*pr_filter).all()
+            Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart, Products.PRfranking
+        ).filter(*pr_filter).all()

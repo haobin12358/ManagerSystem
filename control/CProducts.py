@@ -407,6 +407,7 @@ class CProducts():
                 "PRaboimage": data.get("PRaboimage", ""),
                 "PRinfo": data.get("PRinfo", ""),
                 "PRvideostart": data.get("PRvideostart", ""),
+                "PRfranking": data.get("PRfranking", 0.0),
                 "MAid": maid,
                 "PRtype": conversion_PRtype_reverse.get(get_str(data, "PRtype", "自营")),
                 "PRbrand": json.dumps(data.get("PRbrand")),

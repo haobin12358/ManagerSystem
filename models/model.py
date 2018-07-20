@@ -65,6 +65,7 @@ class Products(Base):
     MAid = Column(String(64))                    # 商家id
     PRtime = Column(String(14))                  # 创建时间
     CTid = Column(String(64))                    # 类目id
+    PRfranking = Column(Float)                   # 邮费
 
 
 class ProductsBrands(Base):
