@@ -69,7 +69,7 @@
         current_page: 0,
         total_num: 0,
         page_size: 10,
-        OMstatus: 0
+        OMstatus: ''
       }
     },
     components: {
@@ -82,17 +82,19 @@
         this.$router.push({name: 'orderDetails', params: {OMid: order.OMid}});
       },
       changeOMstatus(OMstatus) {
-        this.OMstatus = OMstatus*7
-        console.log('OMstatus', this.OMstatus)
+        this.OMstatus = OMstatus
+        this.getData(1)
+        // console.log('OMstatus', this.OMstatus)
       },
       getData(v){
         let params = {
           token: localStorage.getItem('token'),
-          // OMstatus: this.OMstatus,
+          OMstatus: this.OMstatus,
           page_num: v,
           page_size: this.page_size
         };
         axios.get(api.get_all_order,{params:params}).then(res => {
+          console.log(params.OMstatus)
           if(res.data.status == 200) {
             this.orderList = res.data.data.OrderMains;
             this.total_num = res.data.data.count;

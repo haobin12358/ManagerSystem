@@ -46,28 +46,34 @@
       </div>
       <div class="all-order-tabs">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="已取消" name="one">
+          <el-tab-pane label="全部" name="one">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="未支付" name="two">
+          <el-tab-pane label="已取消" name="two">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已支付" name="three">
+          <el-tab-pane label="未支付" name="three">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已接单" name="four">
+          <el-tab-pane label="支付中" name="four">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="配送中" name="five">
+          <el-tab-pane label="已支付" name="five">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已装箱" name="six">
+          <el-tab-pane label="已发货" name="six">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已完成" name="seven">
+          <el-tab-pane label="已收货" name="seven">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已评价" name="eight">
+          <el-tab-pane label="已完成" name="eight">
+            <all-order-table ref="child"></all-order-table>
+          </el-tab-pane>
+          <el-tab-pane label="已评价" name="nine">
+            <all-order-table ref="child"></all-order-table>
+          </el-tab-pane>
+          <el-tab-pane label="退款中" name="ten">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
         </el-tabs>
@@ -84,31 +90,35 @@
             name: '所有订单',
             activeName: 'one',
             pickerOptions2: {
-              shortcuts: [{
-                text: '最近一周',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                  picker.$emit('pick', [start, end]);
+              shortcuts: [
+                {
+                  text: '最近一周',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },
+                {
+                  text: '最近一个月',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },
+                {
+                  text: '最近三个月',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                    picker.$emit('pick', [start, end]);
+                  }
                 }
-              }, {
-                text: '最近一个月',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                  picker.$emit('pick', [start, end]);
-                }
-              }, {
-                text: '最近三个月',
-                onClick(picker) {
-                  const end = new Date();
-                  const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                  picker.$emit('pick', [start, end]);
-                }
-              }]
+              ]
             },
             value7: '',
             value: ''
@@ -123,7 +133,7 @@
           console.log('fresh');
         },
         handleClick(tab) {
-          this.$refs.child.changeOMstatus(tab.index)
+          this.$refs.child.changeOMstatus(tab.label)
         }
       },
       created() {
