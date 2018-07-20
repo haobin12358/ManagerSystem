@@ -137,7 +137,10 @@ class CCategory():
         ctname_list = []
         for pr in pr_list:
             ct_filter = {Category.CTid == pr.get("CTid")}
-            ct_name = tolist(self.scategory.get_category_by_or_filter(ct_filter))[0]
+            ct_name = tolist(self.scategory.get_category_by_or_filter(ct_filter))
+            if not ct_name:
+                continue
+            ct_name = ct_name[0]
             log.info("ct name", ct_name)
             if ct_name in ctname_list:
                 continue

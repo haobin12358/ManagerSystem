@@ -40,7 +40,7 @@ class COrder():
                 Products.MAid == maid
             }
             if args.get("PRname"):
-                product_filter.add(Products.PRname.like("%{0}%".format(args.get("PRname"))))
+                product_filter.add(Products.PRname.like("%{0}%".format(get_str(args, "PRname"))))
 
             product_list = tolist(self.sproduct.get_product_by_filter(product_filter))
             log.info("product list ", product_list)
@@ -108,6 +108,8 @@ class COrder():
             return data
         except Exception as e:
             log.error("get order list", e.message)
+            import traceback
+            print(traceback.format_exc())
             return SYSTEM_ERROR
 
     def get_order_abo(self):

@@ -187,5 +187,5 @@ class SProducts(SBase):
     @close_session
     def get_product_by_filter(self, pr_filter):
         return self.session.query(
-            Products.PRid, Products.PRname, Products.PRvideo, Products.PRimage, Products.PRtype,
+            Products.PRid, Products.PRname, Products.PRvideo, Products.PRimage, Products.PRtype, Products.CTid,
             Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart).filter(*pr_filter).all()
