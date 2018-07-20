@@ -9,7 +9,7 @@
             <!--<input type="text" placeholder="搜索">-->
           <!--</div>-->
           <div class="m-top-text">商品名称：</div>
-          <el-input class="m-input-m" v-model="inputName" ></el-input>
+          <el-input class="m-input-m" v-model="productName" ></el-input>
           <el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>
         </div>
         <div class="m-top-button">
@@ -71,8 +71,7 @@
     data() {
       return {
         name: '商品管理',
-        inputID: '',
-        inputName: '',
+        productName:'',
         product_data: [],
         total_page:1,
         current_page:1,
@@ -98,8 +97,7 @@
         console.log('fresh');
       },
       topSearch() {
-        console.log('用户ID：', this.inputID)
-        console.log('用户名：', this.inputName)
+        this.getData(1,this.productName);
       },
       //表格筛选
       filterTag(value, row) {
@@ -155,12 +153,13 @@
           }
         })
       },
-      getData(v){
+      getData(v,code){
         let params = {
-          token:this.$store.state.token,
+          token:localStorage.getItem('token'),
           PRstatus:'',
           page_num: v || this.current_page,
-          page_size:this.page_size
+          page_size:this.page_size,
+          product_filter:code
         };
         axios.get(api.get_all_product,{params:params}).then(res => {
           if(res.data.status == 200) {

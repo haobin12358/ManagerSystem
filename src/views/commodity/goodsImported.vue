@@ -1,6 +1,6 @@
 <template>
 <div class="m-goodsImported">
-  <el-form ref="form" :model="form" label-width="1.2rem">
+  <el-form ref="form" :model="form" :rules="rules" label-width="1.2rem">
     <page-title :title="name" @freshClick="freshClick"></page-title>
     <div class="m-goodsImported-content">
       <div class="m-edit-btn">
@@ -9,14 +9,14 @@
       <a name="basicInfo"></a>
       <div class="m-one-part">
         <h3 id="basicInfo">基本信息</h3>
-        <el-form-item label="商品名称:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
-          <el-input v-model="form.name" class="m-input-l" ></el-input>
+        <el-form-item label="商品名称:">
+          <el-input v-model="form.PRname" class="m-input-l" ></el-input>
         </el-form-item>
-        <el-form-item label="添加描述:" :rules="[{ required: true, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
-          <el-input v-model="form.name" class="m-input-l" ></el-input>
+        <el-form-item label="添加描述:" >
+          <el-input v-model="form.PRinfo" class="m-input-l" ></el-input>
           <p class="m-alert">建议描述文字在36字以内</p>
         </el-form-item>
-        <el-form-item label="商品属性:" :rules="[{ required: false}]">
+        <el-form-item label="商品属性:" >
           <div class="m-select-box">
             <p class="m-alert">错误填写商品属性，可能会引起商品下架或搜索流量减少，影响您的正常销售，请认真准确填写！</p>
             <div class="m-selects">
@@ -37,7 +37,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="商品照片:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
+        <el-form-item label="商品照片:" >
           <el-upload
             action="https://jsonplaceholder.typicode.com/posts/"
             list-type="picture-card"
@@ -54,7 +54,7 @@
           <p class="m-img-p">建议尺寸：700*700像素，可以通过拖动图片调整前后顺序，最多上传5张商品图片</p>
         </el-form-item>
 
-        <el-form-item label="商品样式及价格:" :rules="[{ required: true}]">
+        <el-form-item label="商品样式及价格:" >
           <div class="m-product-style">
             <div>
               <span class="m-img-label">A:</span> <el-input v-model="form.name" placeholder="输入商品属性" class="m-input-s" ></el-input>
