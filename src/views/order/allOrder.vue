@@ -46,34 +46,34 @@
       </div>
       <div class="all-order-tabs">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="全部" name="one">
+          <el-tab-pane label="全部" name="全部" :lazy="lazyStatus">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已取消" name="two">
+          <el-tab-pane label="已取消" name="已取消" :lazy="lazyStatus">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="未支付" name="three">
+          <el-tab-pane label="未支付" name="未支付" :lazy="lazyStatus">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="支付中" name="four">
+          <el-tab-pane label="支付中" name="支付中" :lazy="lazyStatus">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已支付" name="five">
+          <el-tab-pane label="已支付" name="已支付" :lazy="lazyStatus">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已发货" name="six">
+          <el-tab-pane label="已发货" name="已发货" :lazy="lazyStatus">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已收货" name="seven">
+          <el-tab-pane label="已收货" name="已收货" :lazy="lazyStatus">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已完成" name="eight">
+          <el-tab-pane label="已完成" name="已完成" :lazy="lazyStatus">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已评价" name="nine">
+          <el-tab-pane label="已评价" name="已评价" :lazy="lazyStatus">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="退款中" name="ten">
+          <el-tab-pane label="退款中" name="退款中" :lazy="lazyStatus">
             <all-order-table ref="child"></all-order-table>
           </el-tab-pane>
         </el-tabs>
@@ -88,7 +88,7 @@
       data() {
           return {
             name: '所有订单',
-            activeName: 'one',
+            activeName: '全部',
             pickerOptions2: {
               shortcuts: [
                 {
@@ -121,7 +121,8 @@
               ]
             },
             value7: '',
-            value: ''
+            value: '',
+            lazyStatus: true
           }
       },
       components: {
