@@ -169,6 +169,16 @@
         user: user,
         option : {
           color:['#edb3b1'],
+          tooltip:{
+            show:true,
+            position: 'top',
+            padding: 10,
+            backgroundColor:'#edb3b1',
+            textStyle:{
+              color: '#fff',
+              fontSize:21
+            }
+          },
           xAxis: {
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
