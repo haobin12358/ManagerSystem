@@ -86,39 +86,16 @@
             end-placeholder="结束日期"
             :picker-options="pickerOptions2">
           </el-date-picker>
-          <span class="m-date-icon"></span>
+          <!--<span class="m-date-icon"></span>-->
         </p>
         <ul class="m-amount-sheet-ul">
-          <li class="m-amount-sheet">
-            <p>领取张数</p>
-            <p class="m-num">20</p>
-            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
-          </li>
-          <li class="m-amount-sheet">
-            <p>使用张数</p>
-            <p class="m-num">20</p>
-            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
-          </li>
-          <li class="m-amount-sheet">
-            <p>优惠金额</p>
-            <p class="m-num">20</p>
-            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
-          </li>
-          <li class="m-amount-sheet">
-            <p>支付买家数</p>
-            <p class="m-num">20</p>
-            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
-          </li>
-          <li class="m-amount-sheet">
-            <p>支付件数</p>
-            <p class="m-num">20</p>
-            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
-          </li>
-          <li class="m-amount-sheet active">
-            <p>交易金额</p>
-            <p class="m-num">20</p>
-            <p class="m-grey"><span>较前1日</span><span>↑</span></p>
-          </li>
+          <template v-for="(item,index) in data_detail">
+            <li class="m-amount-sheet" :class="item.click?'active':''" @click="numListClick(index)">
+              <p>{{item.name}}</p>
+              <p class="m-num">{{item.num}}</p>
+              <p class="m-grey"><span>较前1日</span><span>↑</span></p>
+            </li>
+          </template>
         </ul>
         <div class="m-discount-echart">
           <div id="echarts"></div>
@@ -154,6 +131,41 @@
             show:false
           }
         },
+        data_detail:[
+          {
+            name:'领取张数',
+            num:20,
+            down_up:'down',
+            click:true
+          }, {
+            name:'使用张数',
+            num:20,
+            down_up:'down',
+            click:false
+          }, {
+            name:'优惠金额',
+            num:20,
+            down_up:'down',
+            click:false
+          }, {
+            name:'支付买家数',
+            num:20,
+            down_up:'down',
+            click:false
+          },
+          {
+            name:'支付件数',
+            num:20,
+            down_up:'down',
+            click:false
+          },
+          {
+            name:'交易金额',
+            num:20,
+            down_up:'down',
+            click:false
+          }
+        ],
         user: user,
         option : {
           color:['#edb3b1'],
@@ -227,6 +239,12 @@
       },
       addNew(){
         this.$router.push('/activity/activityProductStepOne');
+      },
+      numListClick(v){
+        for(let i = 0;i<this.data_detail.length;i++){
+          this.data_detail[i].click = false;
+        }
+        this.data_detail[v].click = true;
       }
     },
     mounted(){
