@@ -4,12 +4,16 @@ const title = 'http://10.0.0.197:7443/sharp/manager/';
 const api={
   login: title + 'user/login',//用户登录
   changePwd: title + 'user/update_user',//修改密码
+  get_approval: title + 'approval/get_approval',//获取审批信息
+  update_approval:title + 'approval/update_approval',//同意/拒绝
 
   get_all_order: title + 'order/order_list',//获取所有订单
   get_order_by_LOid: title + 'order/order_abo',//获取订单详情
 
   get_all_product: title + 'product/get_all',//获取所有商品
-  release_product: title + 'product/release',//上架/下架商品
+  release_product: title + 'product/release',//发布商品商品
+  update_product : title + 'product/update_product',//上下架商品
+
   get_first_category: title + 'category/get_first',//获取类目
   get_child_category:title + 'category/get_child',//获取子类目
   get_categorybrands: title + 'category/get_categorybrands',//根据类目id获取商品属性

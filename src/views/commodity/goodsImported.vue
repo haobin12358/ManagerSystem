@@ -79,23 +79,26 @@
                 <div>
                   <span class="m-img-label">库存:</span>
                   <el-input v-model="form.brands[index].PBnumber" placeholder="输入商品该规格库存" class="m-input-m" ></el-input>
+                  <p class="m-alert" style="margin-left: 0.6rem;">库存为0时，会放入已售罄列表中</p>
                 </div>
-
               </div>
               <div>
                 <el-upload
                   action="https://jsonplaceholder.typicode.com/posts/"
                   list-type="picture-card"
                   :on-preview="handlePictureCardPreview"
-                  :on-remove="handleRemove"
                   class="m-img-xl"
                   :limit="1"
-                  :on-exceed="outImg">
+                  :on-exceed="outImg"
+                  :on-success="imgUp">
                   <span>+添加图片</span>
                 </el-upload>
                 <!--<el-dialog :visible.sync="!form.brands[index].PBimage">-->
                   <!--<img width="100%" :src="form.brands[index].PBimage" alt="">-->
                 <!--</el-dialog>-->
+              </div>
+              <div>
+                <span class="m-delete" @click="deleteOne(index)">删除</span>
               </div>
             </div>
             <p class="m-add-more" @click="addMore">+查看更多</p>
@@ -173,6 +176,7 @@
             active-color="#9fd0bf"
             inactive-color="#dbdcdc">
           </el-switch>
+          <span class="m-switch-label">统一邮费</span>
           <!--<el-radio v-model="form.PRfrankingR" label="">统一邮费  </el-radio>-->
           <el-input v-model="form.PRfranking" class="m-input-s" ></el-input>
         </el-form-item>
@@ -287,7 +291,6 @@
                   BRands:['',''],
                   PBnumber:''
                 }],
-                PRtype:'',
                 PRvideo:'',
                 PRaboimage:'',
                 PRfrankingR:true,
@@ -400,6 +403,9 @@
           issueClick(){
             this.$router.push('/commodity/commodityManagement')
           },
+          imgUp(response, file, fileList){
+            console.log(response)
+          },
           submitClick(){
             let that = this;
 
@@ -421,7 +427,22 @@
             }
             _form.PRbrand = _brands;
             axios.post(api.release_product+'?token='+localStorage.getItem('token'),_form).then(res => {
-              console.log(res)
+              if(res.data.status == 200){
+                this.$message({
+                  type: 'success',
+                  message: '处理成功 '
+                });
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            },error =>{
+              this.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
             })
           },
           outImg(){
@@ -430,6 +451,9 @@
               type: 'warning',
               duration:1000
             });
+          },
+          deleteOne(v){
+            this.brands.splice(v,1);
           },
           /*添加更多*/
           addMore(){
@@ -472,6 +496,9 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
   }
+  .m-switch-label{
+    color: #606266;
+  }
   .m-other{
     .m-input-s{
       margin-left: 0.1rem;
@@ -490,6 +517,11 @@
     color: @green;
     cursor: pointer;
     margin-top: 0.1rem;
+  }
+  .m-delete{
+    color: @greyColor;
+    margin-left: 0.4rem;
+    cursor: pointer;
   }
   .m-goodsImported-content{
     background-color: #fff;

@@ -44,6 +44,7 @@
           </el-table-column>
           <el-table-column align="center" label="操作" >
             <template slot-scope="scope">
+              <span class=" m-table-link" @click="checkClick">查看</span>
                 <span class=" m-table-link" @click="editClick">编辑</span>
             </template>
           </el-table-column>
@@ -59,6 +60,47 @@
           </div>
       </div>
     </div>
+    <transition name="fade">
+      <div class="m-modal" v-show="show_modal">
+        <div class="m-modal-state">
+          <div class="m-modal-head m-flex-between">
+            <span>商品详情</span>
+            <span class="m-close" @click="showModal(false)">X</span></div>
+          <div class="m-modal-content">
+            <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
+              <el-table :data="one_product" stripe style="width: 100%">
+                <el-table-column align="center" prop="userId" width="400" label="宝贝描述">
+                  <template slot-scope="scope">
+                    <div class="m-production-description">
+                      <p class="m-img"></p>
+                      <div>
+                        <p>商品1</p>
+                        <p>ID:5489798456151241</p>
+                      </div>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column align="center" prop="userId" label="价格" ></el-table-column>
+
+                <el-table-column align="center" prop="loginTime" label="库存" ></el-table-column>
+                <!--<el-table-column align="center" label="操作" >-->
+                <!--<template slot-scope="scope">-->
+                <!--<span class="m-link m-first">参加活动</span>-->
+                <!--</template>-->
+                <!--</el-table-column>-->
+              </el-table>
+            </div>
+            <div class="m-page-box">
+              <pagination :total="0" @pageChange="pageChange"></pagination>
+            </div>
+          </div>
+          <!--<div class="m-modal-foot">-->
+            <!--<span class="m-btn active">确认</span>-->
+            <!--<span class="m-btn">取消</span>-->
+          <!--</div>-->
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -73,11 +115,13 @@
         name: '商品管理',
         productName:'',
         product_data: [],
-        total_page:1,
+        total_page:0,
         current_page:1,
         total_num:0,
         page_size:10,
-        checkRow:[]
+        checkRow:[],
+        show_modal:false,
+        one_product:[],
       }
     },
     components:{
@@ -113,6 +157,12 @@
       },
       editClick(){
         this.$router.push('/commodity/categorySelection?CTid=1')
+      },
+      checkClick(){
+
+      },
+      showModal(v){
+        this.show_modal = v;
       },
       //发布商品
       importProduct(){
@@ -191,6 +241,7 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/_variate.less";
+  @import "../../common/css/modal";
   .m-content {
     padding: 0.2rem;
     background: @bgMainColor;
@@ -307,5 +358,8 @@
   }
   .m-input-m{
     width: 1.6rem;
+  }
+  .m-page-box{
+    margin-top: 0.2rem;
   }
 </style>
