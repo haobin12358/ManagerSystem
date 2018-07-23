@@ -427,7 +427,22 @@
             }
             _form.PRbrand = _brands;
             axios.post(api.release_product+'?token='+localStorage.getItem('token'),_form).then(res => {
-              console.log(res)
+              if(res.data.status == 200){
+                this.$message({
+                  type: 'success',
+                  message: '处理成功 '
+                });
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            },error =>{
+              this.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
             })
           },
           outImg(){

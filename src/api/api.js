@@ -4,7 +4,9 @@ const title = 'http://10.0.0.197:7443/sharp/manager/';
 const api={
   login: title + 'user/login',//用户登录
   changePwd: title + 'user/update_user',//修改密码
-  get_approval: title + 'get_approval',//获取审批信息
+  get_approval: title + 'approval/get_approval',//获取审批信息
+  update_approval:title + 'approval/update_approval',//同意/拒绝
+
   get_all_order: title + 'order/order_list',//获取所有订单
   get_order_by_LOid: title + 'order/order_abo',//获取订单详情
 

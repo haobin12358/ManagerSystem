@@ -6,7 +6,7 @@
         <div class="m-top-search">
           <div class="m-top-text">用户ID：</div>
           <el-input class="m-top-input" v-model="inputID" size="mini"></el-input>
-          <div class="m-top-text">用户名：</div>
+          <div class="m-top-text">审批名称：</div>
           <el-input class="m-top-input" v-model="inputName" size="mini"></el-input>
           <el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>
         </div>
@@ -18,32 +18,31 @@
       </div>
 
       <div class="m-middle" style="width: 100%;">
-        <el-table :data="user" stripe style="width: 100%">
-          <el-table-column align="center" prop="userId" label="用户ID" ></el-table-column>
-          <el-table-column align="center" prop="userName" label="用户名"></el-table-column>
-          <el-table-column align="center" prop="registerTime" label="审批分类"  :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"></el-table-column>
-          <el-table-column align="center" prop="email" label="时间" ></el-table-column>
-          <el-table-column align="center" prop="group" label="用户组" ></el-table-column>
-          <el-table-column align="center" prop="loginTime" label="状态" :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]">
+        <el-table :data="approval_data" stripe style="width: 100%">
+          <el-table-column align="center" prop="APstart" label="申请人" ></el-table-column>
+          <el-table-column align="center" prop="APname" label="审批名称"></el-table-column>
+          <el-table-column align="center" prop="PEtype" label="审批分类"  :filters="[{ text: '成为卖家审批', value: '成为卖家审批' }, { text: '类目使用审批', value: '类目使用审批' },{ text: '类目增设审批', value: '类目增设审批' }, { text: '商品发布审批', value: '商品发布审批' }, { text: '活动发起审批', value: '活动发起审批' }]"></el-table-column>
+          <el-table-column align="center" prop="APtime" label="时间" ></el-table-column>
+          <el-table-column align="center" prop="APstatus" label="状态" :filters="[{ text: '活动发起审批', value: '活动发起审批' },{ text: '待审批', value: '待审批' }, {text: '审批中', value: '审批中' } , {text: '审批结束', value: '审批结束' } , {text: '已拒绝', value: '已拒绝' } ]">
             <template slot-scope="scope">
-              <span class="m-wait">已处理</span>
+              <span :class="scope.row.APstatus == '待审批'? 'm-wait':''">{{scope.row.APstatus}}</span>
             </template>
           </el-table-column>
           <el-table-column align="center" label="操作" >
             <template slot-scope="scope">
               <el-button
                 size="mini" class="m-table-button"
-                @click="showModal(true)">详情</el-button>
+                @click="showModal(true,scope.row)">详情</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <div class="m-bottom">
-        <pagination></pagination>
+        <pagination :total="total_page" @pageChange="pageChange"></pagination>
       </div>
     </div>
     <transition name="fade">
-      <div class="m-modal" v-show="show_modal">
+      <div class="m-modal" v-show="show_modal" >
         <div class="m-modal-state">
           <div class="m-modal-head m-flex-between">
             <span>审批详情/活动审批</span>
@@ -53,29 +52,29 @@
               <thead>
               <tr>
                 <td>申请人</td>
-                <td>用户组</td>
+                <td>审批分类</td>
                 <td>状态</td>
                 <td>申请时间</td>
               </tr>
               </thead>
               <tbody>
               <tr>
-                <td>申请人</td>
-                <td>用户组</td>
-                <td>状态</td>
-                <td>申请时间</td>
+                <td>{{row_data.APstart}}</td>
+                <td>{{row_data.PEtype}}</td>
+                <td>{{row_data.APstatus}}</td>
+                <td>{{row_data.APtime}}</td>
               </tr>
               </tbody>
 
             </table>
             <div class="m-approve-box">
               <p>申请详情：</p>
-              <div class="m-approve-info">   申请详情xxxxx</div>
+              <div class="m-approve-info">   {{row_data.APremark}}</div>
             </div>
           </div>
-          <div class="m-modal-foot" v-show="role">
-            <span class="m-btn active">通过</span>
-            <span class="m-btn">否决</span>
+          <div class="m-modal-foot" v-show="role && row_data.APstatus == '待审批'">
+            <span class="m-btn active" @click="updateApproval('同意')">通过</span>
+            <span class="m-btn" @click="updateApproval('拒绝')">否决</span>
           </div>
         </div>
       </div>
@@ -85,8 +84,9 @@
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
-  import user from '../../common/json/userInfo';
-  import Pagination from "../../components/common/pages";
+  import Pagination from "../../components/common/page";
+  import axios from 'axios';
+  import api from '../../api/api';
   export default {
     data() {
       return {
@@ -94,27 +94,92 @@
         role:false,
         inputID: '',
         inputName: '',
-        user: user,
-        show_modal:false
+        approval_data: [],
+        show_modal:false,
+        row_data:{
+          APstart:'',
+          PEtype:'',
+          APstatus:'',
+          APtime:'',
+          APremark:''
+        },
+        total_page:0,
+        total_num:0,
+
       }
     },
     components:{
       pageTitle,
       Pagination
     },
+    mounted(){
+      this.queryData();
+      if(this.$store.state.role == '卖家'){
+        this.name = '审批中'
+      }
+    },
     methods: {
       freshClick(){
-        console.log('fresh');
+        this.queryData();
       },
       topSearch() {
-        console.log('用户ID：', this.inputID)
-        console.log('用户名：', this.inputName)
+
       },
       addUser() {
         console.log('添加用户')
       },
-      showModal(v){
+      showModal(v,row){
         this.show_modal = v;
+        if(row){
+          this.row_data = row;
+        }
+
+      },
+      queryData(){
+        let that = this;
+        axios.get(api.get_approval,{params:{
+          token:localStorage.getItem('token')
+          }}).then( res => {
+          if(res.data.status == 200){
+              that.approval_data = res.data.data;
+            // this.total_num = res.data.data.count;
+            // this.total_page = Math.ceil(this.total_num / this.page_size);
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
+      },
+      updateApproval(v){
+        let that = this;
+          this.$prompt('请输入'+ v +'同意理由', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+          }).then(({ value }) => {
+            axios.post(api.update_approval +'?token=' + localStorage.getItem('token'),{
+              APid:this.row_data.APid,
+              APaction:v,
+              APremark:value
+            }).then(res => {
+              if(res.data.status == 200){
+                that.show_modal = false;
+                that.queryData();
+                this.$message({
+                  type: 'success',
+                  message: '处理成功 '
+                });
+              }else{
+                this.$message.error(res.data.message);
+              }
+            },error => {
+              this.$message.error(error.data.message);
+            })
+          }).catch(() => {
+          });
+      },
+      pageChange(v){
+
       }
     },
     created() {

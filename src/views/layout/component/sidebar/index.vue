@@ -53,6 +53,8 @@
           indexClick(){
             if(this.$store.state.role.indexOf('管理员') != -1){
               this.$router.push('/index/adminIndex')
+            }else{
+              this.$router.push('/index/userIndex')
             }
 
           }
