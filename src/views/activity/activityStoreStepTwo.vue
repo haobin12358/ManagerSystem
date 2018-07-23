@@ -43,37 +43,43 @@
             <el-date-picker type="date"  placeholder="结束时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>
           </el-form-item>
 
-          <h4>优惠门槛及内容——层级1</h4>
-          <el-form-item label="优惠门槛：">
-            <span>满&nbsp;</span>
-            <el-input v-model="storeForm.name" class="m-input-s" placeholder="审批人"></el-input>
-            <span>&nbsp;件</span>
-          </el-form-item>
-          <el-form-item label="优惠内容：">
-            <p class="m-alert-box">
-              <el-radio v-model="radio" label="1">打</el-radio>
-              <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
-              <span>&nbsp;折</span>
-              <span class="m-alert-icon"></span>
-              <span class="m-alert-info m-alert-info-a">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
-            </p>
-            <p>
-              <el-radio v-model="radio" label="2">包邮</el-radio>
-            </p>
-            <p>
-              <el-radio v-model="radio" label="2">送赠品</el-radio>
-            </p>
-            <p>
-              <el-radio v-model="radio" label="2">送权益</el-radio>
-            </p>
-            <p>
-              <el-radio v-model="radio" label="2">送优惠券</el-radio>
-            </p>
-            <p class="m-alert-btn-box">
-              <span class="m-alert-btn active">+增加一级优惠</span>
-              <span class="m-alert-btn">删除一级优惠</span>
-            </p>
-          </el-form-item>
+          <template v-for="(item,index) in layer_data">
+            <div>
+              <h4>优惠门槛及内容——层级{{index+1}}</h4>
+              <el-form-item label="优惠门槛：">
+                <span>满&nbsp;</span>
+                <el-input v-model="storeForm.name" class="m-input-s" placeholder="审批人"></el-input>
+                <span>&nbsp;件</span>
+              </el-form-item>
+              <el-form-item label="优惠内容：">
+                <p class="m-alert-box">
+                  <el-radio v-model="radio" label="1">打</el-radio>
+                  <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
+                  <span>&nbsp;折</span>
+                  <span class="m-alert-icon"></span>
+                  <span class="m-alert-info m-alert-info-a">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
+                </p>
+                <p>
+                  <el-radio v-model="radio" label="2">包邮</el-radio>
+                </p>
+                <p>
+                  <el-radio v-model="radio" label="2">送赠品</el-radio>
+                </p>
+                <p>
+                  <el-radio v-model="radio" label="2">送权益</el-radio>
+                </p>
+                <p>
+                  <el-radio v-model="radio" label="2">送优惠券</el-radio>
+                </p>
+                <p class="m-alert-btn-box">
+                  <span class="m-alert-btn active" @click="addLayer">+增加一级优惠</span>
+                  <span class="m-alert-btn" @click="cutLayer(index)">删除一级优惠</span>
+                </p>
+              </el-form-item>
+            </div>
+          </template>
+
+
         </div>
         <div class="m-bottom-btn m-flex-center">
           <router-link to="/activity/activityStoreStepOne" >
@@ -121,6 +127,7 @@
             next:false
           }
         ],
+        layer_data:[1],
         storeForm:{
           name:'',
           date1:''
@@ -135,6 +142,34 @@
     methods: {
       freshClick(){
         console.log('fresh');
+      },
+      addLayer(){
+        this.layer_data.push(1);
+      },
+      cutLayer(v){
+        if(this.layer_data.length <=1 ){
+          this.$message({
+            type: 'warning',
+            message: '默认至少一个层级'
+          });
+          return false;
+        }
+        this.$confirm('此操作将永久删除该层级, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.layer_data.splice(v,1);
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
       },
       onSubmit(){
 

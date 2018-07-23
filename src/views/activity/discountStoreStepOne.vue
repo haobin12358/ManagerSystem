@@ -48,7 +48,7 @@
 
         <div class="m-bottom-btn m-flex-center">
           <router-link to="/activity/storeStepResult" >
-            <span class="m-btn">创建</span>
+            <span class="m-btn active">创建</span>
           </router-link>
 
         </div>

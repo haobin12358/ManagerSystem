@@ -321,8 +321,14 @@
           background: url("../../common/images/icon-more-info.png");
           background-size: 100% 100%;
           cursor: pointer;
+          &:hover{
+            &+.m-alert-info{
+              display: block;
+            }
+          }
         }
         .m-alert-info{
+          display: none;
           position: absolute;
           top:0;
           left: 1.4rem;
