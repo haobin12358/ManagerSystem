@@ -416,6 +416,7 @@ class CProducts():
             }
 
             self.sproduct.add_model("Products", **product)
+            self.add_approval(maid, prid)
             return get_response("SUCCESS_MESSAGE_ADD_DATA", "OK")
         except Exception as e:
             log.error("add pruduct error", e.message)
@@ -446,23 +447,33 @@ class CProducts():
                     "PBstatus": PBstatus
                 }
                 # todo 增加审批流
-                if PBstatus == 205:
-                    from ManagerSystem.service.SApproval import SApproval
-                    sapproval = SApproval()
-                    receive_list = sapproval.get_permission_by_petype_pesublevel(304, 1)
-                    for pe in receive_list:
-                        approval = {
-                            "APid": str(uuid.uuid1()),
-                            "APname": "发布商品",
-                            "APstart": maid,
-                            "APreceive": pe.MAid,
-                            "PEtype": 302,
-                        }
-                        self.sproduct.add_model("Approval", approval)
+
                 update_result =self.sproduct.update_pb(pbid, pb)
                 log.info("update result", update_result)
                 if not update_result:
                     raise Exception("update pb failed")
+
+            if PBstatus == 205:
+                self.add_approval(maid, prid)
+
+    def add_approval(self, maid, prid):
+        from ManagerSystem.service.SApproval import SApproval
+        sapproval = SApproval()
+        receive_list = sapproval.get_permission_by_petype_pesublevel(304, 1)
+        apname = "商品发布审批" + str(uuid.uuid1())
+        for pe in receive_list:
+            approval = {
+                "APid": str(uuid.uuid1()),
+                "APname": apname,
+                "APstart": maid,
+                "APreceive": pe.MAid,
+                "PEtype": 304,
+                "APcontent": prid,
+                "APremark": "",
+                "APstatus": 443,
+                "APtime": TimeManager.get_db_time_str()
+            }
+            sapproval.add_model("Approval", **approval)
 
     def update_pro_info(self):
         args = request.args.to_dict()

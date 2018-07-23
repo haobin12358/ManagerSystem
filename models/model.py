@@ -10,7 +10,7 @@ from ManagerSystem.config import dbconfig as cfg
 
 DB_PARAMS = "{0}://{1}:{2}@{3}/{4}?charset={5}".format(
     cfg.sqlenginename, cfg.username, cfg.password, cfg.host, cfg.database, cfg.charset)
-mysql_engine = create_engine(DB_PARAMS, echo=False)
+mysql_engine = create_engine(DB_PARAMS, echo=True)
 Base = declarative_base()
 
 
@@ -240,8 +240,9 @@ class Approval(Base):
     APremark = Column(Text)  # 审批备注
     APstart = Column(String(64))     # 发起人id
     APreceive = Column(String(64))   # 当前审批人id
-    APstatus = Column(Integer)       # 审批状态
+    APstatus = Column(Integer)       # 审批状态 {411: 发起, 412: 审批中, 413: 审批结束，414: 拒绝}
     PEtype = Column(Integer)         # 审批类型
+    APtime = Column(String(14))      # 发起时间
     APcontent = Column(String(64))   # 待审批活动/商品/类目
 
 

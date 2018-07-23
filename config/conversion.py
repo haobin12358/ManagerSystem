@@ -11,6 +11,7 @@ conversion_MAidentity = {100: "超级管理员", 101: "管理员", 102: "一级�
 conversion_MAstatus = {151: "可用", 152: "禁用", 153: "未激活"}
 conversion_PEtype = {301: "成为卖家审批", 302: "类目使用审批",
                      303: "类目增设审批", 304: "商品发布审批", 305: "活动发起审批"}
+conversion_APstatus = {441: "发起申请", 442: "审批中", 445: "审批结束", 444: "已拒绝", 443: "待审批"}
 
 # value 和 key 转置的dict
 conversion_OMstatus_reverse = {v: k for k, v in conversion_OMstatus.items()}
@@ -21,6 +22,7 @@ conversion_PBstatus_reverse = {v: k for k, v in conversion_PBstatus.items()}
 conversion_MAidentity_reverse = {v: k for k, v in conversion_MAidentity.items()}
 conversion_MAstatus_resverse = {v: k for k, v in conversion_MAstatus.items()}
 conversion_PEtype_resverse = {v: k for k, v in conversion_PEtype.items()}
+conversion_APstatus_resverse = {v: k for k, v in conversion_APstatus.items()}
 
 MTR = 1 / 6.3753
 RTM = 1 / 0.1569

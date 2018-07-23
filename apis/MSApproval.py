@@ -8,7 +8,7 @@ from ManagerSystem.control.CApproval import CApproval
 from ManagerSystem.config.response import APIS_WRONG
 from ManagerSystem.globals import log
 
-class AApproval(Resource):
+class MSApproval(Resource):
     def __init__(self):
         self.capproval = CApproval()
         # self.log = LOG()
@@ -28,7 +28,9 @@ class AApproval(Resource):
         log.info("get api", approval)
         action = {
             "add_approval": "self.capproval.add_approval()",
-            "update_approval": "self.capproval.update_approval()"
+            "update_approval": "self.capproval.update_approval()",
+            "add_permission": "self.capproval.add_permission()",
+            "update_permission": "self.capproval.update_permission()",
         }
         if approval in action:
             return eval(action.get(approval))

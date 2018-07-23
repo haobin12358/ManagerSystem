@@ -8,6 +8,7 @@ from ManagerSystem.apis.AStocks import AStocks
 from ManagerSystem.apis.AProducts import MSProduct
 from ManagerSystem.apis.AOrder import MSOrder
 from ManagerSystem.apis.ACotegory import MSCategory
+from ManagerSystem.apis.MSApproval import MSApproval
 
 
 sg = Flask(__name__)
@@ -19,6 +20,7 @@ api.add_resource(AStocks, "/sharp/manager/stock/<string:stock>")
 api.add_resource(MSProduct, "/sharp/manager/product/<string:product>")
 api.add_resource(MSOrder, "/sharp/manager/order/<string:order>")
 api.add_resource(MSCategory, "/sharp/manager/category/<string:category>")
+api.add_resource(MSApproval, "/sharp/manager/approval/<string:approval>")
 
 
 '''

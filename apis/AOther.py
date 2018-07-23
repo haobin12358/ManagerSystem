@@ -342,7 +342,7 @@ class AOther(Resource):
             return response
 
         if other == "logistics":
-            from config.logistics import LIST_LOGISTICS
+            from ManagerSystem.config.logistics import LIST_LOGISTICS
             data = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
             data["data"] = LIST_LOGISTICS
             return data
@@ -403,3 +403,7 @@ class AOther(Resource):
                 "return_code": "SUCCESS",
                 "return_msg": "OK"
             }
+        elif other == "upload_files":
+            data = request.form
+
+            contentid =

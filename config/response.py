@@ -7,7 +7,7 @@ PARAMS_MISS = {
 
 SYSTEM_ERROR = {
     "status": 404,
-    "message": "系统异常"
+    "message": "服务器繁忙"
 }
 
 APIS_WRONG = {

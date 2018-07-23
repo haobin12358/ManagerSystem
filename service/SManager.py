@@ -52,3 +52,10 @@ class SManager(SBase):
     @close_session
     def update_users_by_matel(self, matel):
         return self.session.query(Manager).filter(Manager.MAtelphone == matel).update(matel)
+
+    @close_session
+    def get_manager_by_name(self, name):
+        return self.session.query(Manager.MAid, Manager.MAname, Manager.MAbusinessLicense, Manager.MAcreatTime,
+            Manager.MAcredit, Manager.MAemail, Manager.MAendTime, Manager.MAidentity,
+            Manager.MAidImageFront, Manager.MAidImageReverse, Manager.MAidNumber,
+            Manager.MApassword, Manager.MAstatus, Manager.MAtelphone).filter(Manager.MAname.like("%{0}%".format(name))).all()

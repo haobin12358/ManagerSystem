@@ -90,7 +90,7 @@ class CManager():
         response = get_response("SUCCESS_MESSAGE_REGISTER", "OK")
         response["data"] = {
             "MAname": maname,
-            "MApassword": self.create_password()
+            "MApassword": manager["MApassword"]
         }
         return response
 
@@ -142,7 +142,7 @@ class CManager():
         for key in param_keys:
             if key not in data:
                 return PARAMS_MISS
-        name = data.get("MAname")
+        name = get_str(data, "MAname")
         password = data.get("MApassword")
 
         if not name or not password:
