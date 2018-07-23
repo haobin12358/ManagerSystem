@@ -4,17 +4,17 @@
     <div class="m-content">
       <div class="m-top">
         <div class="m-top-search">
-          <div class="m-top-text">用户ID：</div>
-          <el-input class="m-top-input" v-model="inputID" size="mini"></el-input>
+          <div class="m-top-text">申请人：</div>
+          <el-input class="m-top-input" v-model="APstart" size="mini"></el-input>
           <div class="m-top-text">审批名称：</div>
-          <el-input class="m-top-input" v-model="inputName" size="mini"></el-input>
+          <el-input class="m-top-input" v-model="APname" size="mini"></el-input>
           <el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>
         </div>
-        <div class="m-top-button">
-          <el-button class="m-top-button-button active" size="mini" @click="addUser">全部</el-button>
-          <el-button class="m-top-button-button" size="mini" @click="addUser">卖家</el-button>
-          <el-button class="m-top-button-button" size="mini" @click="addUser">管理员</el-button>
-        </div>
+        <!--<div class="m-top-button">-->
+          <!--<el-button class="m-top-button-button active" size="mini" @click="addUser">全部</el-button>-->
+          <!--<el-button class="m-top-button-button" size="mini" @click="addUser">卖家</el-button>-->
+          <!--<el-button class="m-top-button-button" size="mini" @click="addUser">管理员</el-button>-->
+        <!--</div>-->
       </div>
 
       <div class="m-middle" style="width: 100%;">
@@ -92,8 +92,8 @@
       return {
         name: '管理员首页',
         role:false,
-        inputID: '',
-        inputName: '',
+        APname: '',
+        APstart: '',
         approval_data: [],
         show_modal:false,
         row_data:{
@@ -105,6 +105,7 @@
         },
         total_page:0,
         total_num:0,
+        page_size:10
 
       }
     },
@@ -113,17 +114,17 @@
       Pagination
     },
     mounted(){
-      this.queryData();
+      this.queryData(1);
       if(this.$store.state.role == '卖家'){
         this.name = '审批中'
       }
     },
     methods: {
       freshClick(){
-        this.queryData();
+        this.queryData(1);
       },
       topSearch() {
-
+        this.queryData(1);
       },
       addUser() {
         console.log('添加用户')
@@ -135,15 +136,19 @@
         }
 
       },
-      queryData(){
+      queryData(v,name,start){
         let that = this;
         axios.get(api.get_approval,{params:{
-          token:localStorage.getItem('token')
+          token:localStorage.getItem('token'),
+            page_size:that.page_size,
+            page_num:v,
+            APname:that.APname,
+            APstart:that.APstart
           }}).then( res => {
           if(res.data.status == 200){
-              that.approval_data = res.data.data;
-            // this.total_num = res.data.data.count;
-            // this.total_page = Math.ceil(this.total_num / this.page_size);
+            that.approval_data = res.data.data.approvals;
+            that.total_num = res.data.data.count;
+            that.total_page = Math.ceil(that.total_num / that.page_size);
           }else{
             this.$message.error(res.data.message);
           }
@@ -164,7 +169,7 @@
             }).then(res => {
               if(res.data.status == 200){
                 that.show_modal = false;
-                that.queryData();
+                that.queryData(1);
                 this.$message({
                   type: 'success',
                   message: '处理成功 '
@@ -179,7 +184,7 @@
           });
       },
       pageChange(v){
-
+        this.queryData(v);
       }
     },
     created() {
