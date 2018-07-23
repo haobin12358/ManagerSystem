@@ -53,7 +53,6 @@
 
 <script>
   // 1、待付款，2、待发货，3、已发货，4、已完成，5、已关闭，6、退款中
-  import allOrder from "../../common/json/allOrder";
   import Pagination from "../../components/common/page";
   import api from '../../api/api';
   import {Message} from 'element-ui';
@@ -82,9 +81,13 @@
         this.$router.push({name: 'orderDetails', params: {OMid: order.OMid}});
       },
       changeOMstatus(OMstatus) {
-        this.OMstatus = OMstatus
+        if(OMstatus == '全部') {
+          this.OMstatus = ''
+        }else {
+          this.OMstatus = OMstatus
+        }
         this.getData(1)
-        // console.log('OMstatus', this.OMstatus)
+        console.log('this.OMstatus', this.OMstatus)
       },
       getData(v){
         let params = {
@@ -94,9 +97,10 @@
           page_size: this.page_size
         };
         axios.get(api.get_all_order,{params:params}).then(res => {
-          console.log(params.OMstatus)
+          console.log('params.OMstatus', params.OMstatus)
           if(res.data.status == 200) {
             this.orderList = res.data.data.OrderMains;
+            console.log(this.orderList)
             this.total_num = res.data.data.count;
             this.total_page = Math.ceil(this.total_num / this.page_size);
           }else{
@@ -116,12 +120,13 @@
         }
         this.current_page = v;
         this.getData(v);
+        console.log('page')
       },
     },
     created() {
-      // console.log(this.OMstatus)
+      console.log('created')
       // this.orderList = allOrder;
-      this.pageChange(1)
+      this.getData(1)
     }
   }
 </script>
