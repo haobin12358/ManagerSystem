@@ -87,7 +87,6 @@
                   action="https://jsonplaceholder.typicode.com/posts/"
                   list-type="picture-card"
                   :on-preview="handlePictureCardPreview"
-                  :on-remove="handleRemove"
                   class="m-img-xl"
                   :limit="1"
                   :on-exceed="outImg"
@@ -97,6 +96,9 @@
                 <!--<el-dialog :visible.sync="!form.brands[index].PBimage">-->
                   <!--<img width="100%" :src="form.brands[index].PBimage" alt="">-->
                 <!--</el-dialog>-->
+              </div>
+              <div>
+                <span class="m-delete" @click="deleteOne(index)">删除</span>
               </div>
             </div>
             <p class="m-add-more" @click="addMore">+查看更多</p>
@@ -174,6 +176,7 @@
             active-color="#9fd0bf"
             inactive-color="#dbdcdc">
           </el-switch>
+          <span class="m-switch-label">统一邮费</span>
           <!--<el-radio v-model="form.PRfrankingR" label="">统一邮费  </el-radio>-->
           <el-input v-model="form.PRfranking" class="m-input-s" ></el-input>
         </el-form-item>
@@ -434,6 +437,9 @@
               duration:1000
             });
           },
+          deleteOne(v){
+            this.brands.splice(v,1);
+          },
           /*添加更多*/
           addMore(){
             this.brands.push(this.brand_one);
@@ -475,6 +481,9 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
   }
+  .m-switch-label{
+    color: #606266;
+  }
   .m-other{
     .m-input-s{
       margin-left: 0.1rem;
@@ -493,6 +502,11 @@
     color: @green;
     cursor: pointer;
     margin-top: 0.1rem;
+  }
+  .m-delete{
+    color: @greyColor;
+    margin-left: 0.4rem;
+    cursor: pointer;
   }
   .m-goodsImported-content{
     background-color: #fff;

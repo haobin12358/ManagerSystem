@@ -120,7 +120,7 @@
         total_num:0,
         page_size:10,
         checkRow:[],
-        show_modal:true,
+        show_modal:false,
         one_product:[],
       }
     },
