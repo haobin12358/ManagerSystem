@@ -7,7 +7,7 @@ from flask_restful import Resource, request
 from ManagerSystem.config.response import PARAMS_MISS
 from ManagerSystem.common.ImportManager import get_response
 from ManagerSystem.config.response import SYSTEM_ERROR
-
+from ManagerSystem.globals import log
 
 class AOther(Resource):
     def __init__(self):
@@ -404,6 +404,28 @@ class AOther(Resource):
                 "return_msg": "OK"
             }
         elif other == "upload_files":
-            data = request.form
-
-            contentid =
+            formdata = request.form
+            files = request.files.get("files")
+            import platform
+            from ManagerSystem.config import Inforcode
+            if platform.system() == "Windows":
+                rootdir = Inforcode.WindowsRoot
+            else:
+                rootdir = Inforcode.LinuxRoot + Inforcode.LinuxImgs
+            if not os.path.isdir(rootdir):
+                os.mkdir(rootdir)
+            if "FileType" not in formdata or "contentId" not in formdata:
+                return PARAMS_MISS
+            filespath = os.path.join(rootdir, formdata.get("contentId"))
+            if not os.path.isdir(filespath):
+                os.mkdir(filespath)
+            filessuffix = str(files.filename).split(".")[-1]
+            index = formdata.get("index", 1)
+            filename = formdata.get("FileType") + str(index) + "." + filessuffix
+            filespath = os.path.join(filespath, filename)
+            log.info("filespath", filespath)
+            files.save(filespath)
+            response = get_response("SUCCESS_MESSAGE_SAVE_FILE", "OK")
+            url = Inforcode.ip + Inforcode.LinuxImgs + "/" + formdata.get("contentId") + "/" + filename
+            response["data"] = url
+            return response
