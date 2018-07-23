@@ -17,32 +17,35 @@
             <el-date-picker type="date"  placeholder="结束时间" v-model="storeForm.date2" style="width: 2rem;"></el-date-picker>
           </el-form-item>
         </div>
-        <div class="m-step-part">
-          <h3 class="m-step-h3 m-flex-between">
-            <span>面额信息——面额1</span>
-            <div>
-              <span class="m-step-top-edit active">+增加新面额</span>
-              <span class="m-step-top-edit">-删除此面额</span>
-            </div>
-          </h3>
-          <el-form-item label="优惠金额：">
-            <el-input v-model="storeForm.name" class="m-input-l" placeholder="审批人"></el-input>
-            <span>&nbsp; 元</span>
-          </el-form-item>
-          <el-form-item label="使用门槛：">
-            <span>满 &nbsp;</span>
-            <el-input v-model="storeForm.name" class="m-input-special" placeholder="审批人"></el-input>
-            <span>&nbsp; 元</span>
-          </el-form-item>
-          <el-form-item label="发行量：">
-            <el-input v-model="storeForm.name" class="m-input-l " placeholder="审批人"></el-input>
-            <span>&nbsp; 张</span>
-          </el-form-item>
-          <el-form-item label="每人限额：">
-            <el-input v-model="storeForm.name" class="m-input-l" placeholder="审批人"></el-input>
-            <span>&nbsp; 张</span>
-          </el-form-item>
-        </div>
+        <template v-for="(item,index) in denomination_data">
+          <div class="m-step-part">
+            <h3 class="m-step-h3 m-flex-between">
+              <span>面额信息——面额{{index + 1}}</span>
+              <div>
+                <span class="m-step-top-edit active" @click="addDenomination">+增加新面额</span>
+                <span class="m-step-top-edit" @click="cutDenomination(index)">-删除此面额</span>
+              </div>
+            </h3>
+            <el-form-item label="优惠金额：">
+              <el-input v-model="storeForm.name" class="m-input-l" placeholder="审批人"></el-input>
+              <span>&nbsp; 元</span>
+            </el-form-item>
+            <el-form-item label="使用门槛：">
+              <span>满 &nbsp;</span>
+              <el-input v-model="storeForm.name" class="m-input-special" placeholder="审批人"></el-input>
+              <span>&nbsp; 元</span>
+            </el-form-item>
+            <el-form-item label="发行量：">
+              <el-input v-model="storeForm.name" class="m-input-l " placeholder="审批人"></el-input>
+              <span>&nbsp; 张</span>
+            </el-form-item>
+            <el-form-item label="每人限额：">
+              <el-input v-model="storeForm.name" class="m-input-l" placeholder="审批人"></el-input>
+              <span>&nbsp; 张</span>
+            </el-form-item>
+          </div>
+        </template>
+
         <div class="m-bottom-btn m-flex-center">
           <router-link to="/activity/storeStepResult" >
             <span class="m-btn">创建</span>
@@ -82,6 +85,7 @@
             next:false
           }
         ],
+        denomination_data:[1],
         storeForm:{
           name:''
         }
@@ -94,6 +98,35 @@
     methods: {
       freshClick(){
         console.log('fresh');
+      },
+      addDenomination(){
+        this.denomination_data.push(1)
+      },
+      cutDenomination(v){
+        if(this.denomination_data.length <=1 ){
+          this.$message({
+            type: 'warning',
+            message: '默认至少一个面额'
+          });
+          return false;
+        }
+        this.$confirm('此操作将永久删除该面额, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.denomination_data.splice(v,1)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+
       },
       onSubmit(){
 
