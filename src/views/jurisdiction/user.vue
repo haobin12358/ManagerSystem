@@ -200,7 +200,7 @@
         .m-top-text {
           float: left;
           font-size: 14px;
-          line-height: 0.2rem;
+          line-height: 0.25rem;
         }
         .m-top-input {
           float: left;

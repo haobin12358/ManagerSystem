@@ -21,7 +21,7 @@
           <el-table-column align="center" prop="MAidentity" label="身份描述" width="120"></el-table-column>
           <el-table-column align="center" prop="MAcreatTime" label="创建时间" width="160"></el-table-column>
           <el-table-column align="center" prop="MAloginTime" label="最近登录" width="160"></el-table-column>
-          <el-table-column align="center" prop="MAstatus" label="状态" width="70" fixed="right"></el-table-column>
+          <el-table-column align="center" prop="MAstatus" label="状态" width="70"></el-table-column>
           <el-table-column align="center" label="操作" fixed="right" width="90">
             <template slot-scope="scope">
               <el-button class="edit-admin-button" type="text" @click="editAdmin(scope.row)">编辑管理员</el-button>
@@ -302,7 +302,7 @@
         width: 85%;
         .m-top-text {
           float: left;
-          line-height: 0.2rem;
+          line-height: 0.25rem;
           font-size: 14px;
         }
         .m-top-input {
