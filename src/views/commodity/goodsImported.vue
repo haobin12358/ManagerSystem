@@ -41,7 +41,7 @@
         </el-form-item>
         <el-form-item label="商品照片:" prop="PRimage">
           <el-upload
-            action="http://120.79.182.43:7443/sharp/manager/file/upload_image"
+            action="http://120.79.182.43:7443/sharp/manager/other/upload_files"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"

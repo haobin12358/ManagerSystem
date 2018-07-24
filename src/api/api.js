@@ -17,6 +17,7 @@ const api={
   get_all_product: title + 'product/get_all',//获取所有商品
   release_product: title + 'product/release',//发布商品商品
   update_product : title + 'product/update_product',//上下架商品
+  upload_files: title +'other/upload_files',//上传图片
 
   get_first_category: title + 'category/get_first',//获取类目
   get_child_category:title + 'category/get_child',//获取子类目
