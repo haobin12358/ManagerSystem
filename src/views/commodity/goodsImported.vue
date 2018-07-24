@@ -43,6 +43,7 @@
           <el-upload
             action="http://120.79.182.43:7443/sharp/manager/other/upload_files"
             list-type="picture-card"
+            :http-request="imgUpload"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
           class="m-img-l"
@@ -370,6 +371,22 @@
           handlePictureCardPreview(file) {
             this.form.PRimage = file.url;
             this.dialogVisible = true;
+          },
+          imgUpload(params){
+            console.log(params)
+            let _params ={};
+            let form = new FormData();
+            form.append("file", params.file);
+            // _params.file = params.file;
+            form.append("FileType", 'PRimage');
+            form.append("contentId", '123');
+            form.append("index", 1);
+            // _params.FileType = 'PRimage';
+            // _params.contentId = '123';
+            // _params.index = 1;
+            axios.post(api.upload_files,form).then(res => {
+              console.log(res)
+            })
           },
           sideClick(v){
             this.linkTo = v;
