@@ -69,8 +69,8 @@ class CProducts():
         product_info["PRvideo"] = product.PRvideo
         product_info["PRinfo"] = product.PRinfo
         product_info["PRvideostart"] = product.PRvideostart
-        product_info["PRimage"] = product.PRimage
-        product_info["PRaboimage"] = list(PRABOIMAGE.get(PRid))
+        product_info["PRimage"] = json.loads(product.PRimage)
+        product_info["PRaboimage"] = json.loads(product.PRaboimage)
         PRbrand = product.PRbrand
         PRtype = product.PRtype
         product_info["PRbrand"] = json.loads(PRbrand)
@@ -131,7 +131,8 @@ class CProducts():
                 return SYSTEM_ERROR
 
             product["PRid"] = PRid
-            product["PRimage"] = product.get("PRimage").format(hdp)
+            product["PRimage"] = json.loads(product.get("PRimage"))
+            product["PRaboimage"] = json.loads(product.get("PRaboimage"))
             product["PRtype"] = conversion_PRtype.get(get_str(product, "PRtype"))
             product["PRtime"] = TimeManager.get_web_time_str(product.get("PRtime"))
             product["PRbrand"] = json.loads(product.get("PRbrand"))
@@ -403,8 +404,8 @@ class CProducts():
                 "PRid": prid,
                 "PRname": data.get("PRname", ""),
                 "PRvideo": data.get("PRvideo", ""),
-                "PRimage": data.get("PRimage", ""),
-                "PRaboimage": data.get("PRaboimage", ""),
+                "PRimage": json.dumps(data.get("PRimage", [])),
+                "PRaboimage": json.dumps(data.get("PRaboimage", "")),
                 "PRinfo": data.get("PRinfo", ""),
                 "PRvideostart": data.get("PRvideostart", ""),
                 "PRfranking": data.get("PRfranking", 0.0),
