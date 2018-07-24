@@ -21,25 +21,15 @@
           <el-table-column align="center" prop="MAidentity" label="身份描述" width="120"></el-table-column>
           <el-table-column align="center" prop="MAcreatTime" label="创建时间" width="160"></el-table-column>
           <el-table-column align="center" prop="MAloginTime" label="最近登录" width="160"></el-table-column>
-          <el-table-column align="center" prop="MAstatus" label="状态" width="70"></el-table-column>
-          <el-table-column align="center" label="操作">
+          <el-table-column align="center" prop="MAstatus" label="状态" width="70" fixed="right"></el-table-column>
+          <el-table-column align="center" label="操作" fixed="right" width="90">
             <template slot-scope="scope">
               <el-button class="edit-admin-button" type="text" @click="editAdmin(scope.row)">编辑管理员</el-button>
-              <!--<el-dropdown size="mini" split-button @click="lockAdmin(scope.row)">查看
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>
-                    <el-button type="text" class="el-crud" @click="editAdmin(scope.row)">编辑管理员信息</el-button>
-                  </el-dropdown-item>
-                  <el-dropdown-item>
-                    <el-button type="text" class="el-crud" @click="lockAdmin(scope.row)">封禁管理员</el-button>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>-->
             </template>
           </el-table-column>
         </el-table>
         <!--编辑管理员弹出框-->
-        <el-dialog :title="editAdminTitle" :visible.sync="editAdminVisible" width="30%" show-close center>
+        <el-dialog :title="editAdminTitle" :visible.sync="editAdminVisible" width="40%" show-close center>
           <div v-if="dialog=='index'">
             <div class="edit-dialog" style="margin-top: 0.25rem">
               <div class="change" @click="dialog='changePicture'">
@@ -51,19 +41,19 @@
                 <div>修改管理员密码</div>
               </div>
               <div v-if="row.MAstatus == '可用'">
-                <div class="change" @click="lockAdmin('封禁', '封禁')">
+                <div class="change" @click="lockAdmin('封禁')">
                   <img class="change-pictures" src="../../assets/images/changGroup.png"/>
                   <div>封禁管理员</div>
                 </div>
               </div>
               <div v-if="row.MAstatus == '禁用'">
-                <div class="change" @click="lockAdmin('可用', '解封')">
+                <div class="change" @click="lockAdmin('解封')">
                   <img class="change-pictures" src="../../assets/images/changGroup.png"/>
                   <div>解封管理员</div>
                 </div>
               </div>
               <div v-if="row.MAstatus == '未激活'">
-                <div class="change" @click="lockAdmin('可用', '激活')">
+                <div class="change" @click="lockAdmin('激活')">
                   <img class="change-pictures" src="../../assets/images/changGroup.png"/>
                   <div>激活管理员</div>
                 </div>
@@ -79,7 +69,7 @@
               </el-upload>
               <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.2rem">
                 <el-button @click="dialog='index'">取 消</el-button>
-                <el-button type="primary" @click="dialog='index'">确 定</el-button>
+                <el-button class="m-top-button-button" @click="dialog='index'">确 定</el-button>
               </div>
             </div>
           </div>
@@ -98,28 +88,19 @@
               </el-form>
               <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.1rem">
                 <el-button @click="dialog='index'" size="mini">取 消</el-button>
-                <el-button type="primary" @click="changePwDone" size="mini">确 定</el-button>
+                <el-button class="m-top-button-button" @click="changePwDone" size="mini">确 定</el-button>
               </div>
             </div>
           </div>
-          <!--<div v-if="dialog=='changeGroup'">
-            <div class="edit-dialog" style="margin-top: 0.25rem">
-              <el-form :model="groupForm">
-                <el-form-item label="活动区域" :label-width="formLabelWidth">
-                  <el-select v-model="groupForm.group" placeholder="请选择分组">
-                    <el-option label="管理员分组1" value="1"></el-option>
-                    <el-option label="管理员分组2" value="2"></el-option>
-                    <el-option label="管理员分组3" value="3"></el-option>
-                    <el-option label="管理员分组4" value="4"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-form>
-              <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.6rem">
+          <div v-if="dialog=='changeMAstatus'">
+            <div class="edit-dialog" style="margin-top: 0.25rem;height: 1.2rem">
+              <div style="text-align: center;font-size: 18px">确认{{operation}}该管理员吗？</div>
+              <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.4rem">
                 <el-button @click="dialog='index'">取 消</el-button>
-                <el-button type="primary" @click="dialog='index'">确 定</el-button>
+                <el-button class="m-top-button-button" @click="changeMAstatus">确 定</el-button>
               </div>
             </div>
-          </div>-->
+          </div>
         </el-dialog>
         <!--添加管理员弹出框-->
         <el-dialog title="添加管理员" :visible.sync="addAdminVisible" width="30%" center>
@@ -147,7 +128,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.3rem">
               <el-button @click="addAdminVisible=false" size="mini">取 消</el-button>
-              <el-button type="primary" @click="addAdminVisible=false" size="mini">确 定</el-button>
+              <el-button class="m-top-button-button" @click="addAdminVisible=false" size="mini">确 定</el-button>
             </div>
           </div>
         </el-dialog>
@@ -181,9 +162,6 @@
           newPw: '',
           againNewPw: '',
         },
-        groupForm: {
-          group: ''
-        },
         addForm: {
           userName: '',
           nickName: '',
@@ -199,13 +177,16 @@
         total_num: 0,
         page_size: 10,
         searchText: '',
-        row: []
+        row: [],
+        operation: '',
+        MAid: ''
       }
     },
     components:{
       Pagination, pageTitle
     },
     methods: {
+      // 获取管理员数据的方法
       getData(v, searchText){
         let params = {
           token: localStorage.getItem('token'),
@@ -226,6 +207,7 @@
           this.$message.error(error.data.message);
         })
       },
+      // 分页提示的方法
       pageChange(v){
         if(v == this.current_page){
           this.$message({ message: '这已经是第'+v+'页数据了', type: 'warning' });
@@ -234,38 +216,44 @@
         this.current_page = v;
         this.getData(v, '');
       },
+      // 页面刷新的方法
       freshClick(){
         console.log('fresh');
       },
+      // 头部的模糊查询
       topSearch() {
-        console.log('searchText', this.searchText);
+        // console.log('searchText', this.searchText);
         this.getData(1, this.searchText)
       },
+      // 点击编辑管理员数据按钮所对应的方法
       editAdmin(row) {
         this.row = row
         this.editAdminVisible = true;
         this.dialog = 'index';
         this.editAdminTitle = row.MAid+' 管理员数据管理';
       },
-      lockAdmin(MAstatus, title) {
-        this.$confirm('确认'+title+'编号为 ' + this.row.MAid + ' 的管理员吗？', '提示', {
-          confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning', center: true
-        }).then(() => {
-          this.changeMAstatus(MAstatus)
-        }).catch(() => {
-          this.$message({ type: 'info', message: '操作取消' });
-        });
-        // console.log(this.row.MAid)
+      // 点击封禁、解封、激活管理员产生的Dialog变化
+      lockAdmin(title) {
+        this.operation = title
+        this.dialog = 'changeMAstatus'
       },
-      changeMAstatus(MAstatus) {
+      // 封禁、解封、激活管理员的方法
+      changeMAstatus() {
         let that = this
+        let MAstatus = ''
+        if(this.row.MAstatus == '未激活' || this.row.MAstatus == '禁用') {
+          MAstatus = '可用'
+        }else if(this.row.MAstatus == '可用') {
+          MAstatus = '禁用'
+        }
         let params = {
-          MAtelphone: row.MAtelphone,
+          MAtelphone: this.row.MAtelphone,
           MAstatus: MAstatus
         }
-        axios.post(api.update_users+'?token='+localStorage.getItem('token'), params).then(res => {
+        axios.post(api.update_manager_by_matel+'?token='+localStorage.getItem('token'), params).then(res => {
           console.log(res)
           if(res.data.status == 200){
+            this.editAdminVisible = false
             this.$message({ message:res.data.message, type:'success' });
             that.getData();
           }
@@ -287,6 +275,7 @@
         }
         return isJPG && isLt2M;
       },
+      // 更改密码
       changePwDone() {
         if(this.form.againNewPw != this.form.newPw) {
           this.$message.error('两次密码输入不一致！');
@@ -328,12 +317,13 @@
           font-size: 14px;
         }
       }
-      .m-top-button-button {
-        background-color: @btnActiveColor;
-        color: @bgMainColor;
-        float: right;
-        font-size: 14px;
-      }
+    }
+    .m-top-button-button {
+      background-color: @btnActiveColor;
+      border-color: @btnActiveColor;
+      color: @bgMainColor;
+      float: right;
+      font-size: 14px;
     }
     .m-middle {
       .edit-admin-button {
@@ -373,10 +363,10 @@
           height: 0.85rem;
           display: block;
         }
-        height: 1.3rem;
+        height: 1.6rem;
         .change {
           float: left;
-          width: 27%;
+          width: 28%;
           margin-left: 0.2rem;
           text-align: center;
           .change-pictures {

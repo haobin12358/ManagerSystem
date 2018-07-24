@@ -112,6 +112,7 @@
           Pagination, pageTitle
         },
         methods: {
+          // 获取用户数据的方法
           getData(v, searchText){
             let params = {
               token: localStorage.getItem('token'),
@@ -132,6 +133,7 @@
               this.$message.error(error.data.message);
             })
           },
+          // 分页提示的方法
           pageChange(v){
             if(v == this.current_page){
               this.$message({
@@ -143,12 +145,15 @@
             this.current_page = v;
             this.getData(v, '');
           },
+          // 页面刷新的方法
           freshClick(){
             console.log('fresh');
           },
+          // 头部模糊查询的方法
           topSearch() {
             this.getData(1, this.searchText)
           },
+          // 封禁、解封、激活用户的方法
           lockUser(row, USstatus) {
             console.log(row)
             this.userName = row.USname
@@ -171,6 +176,7 @@
               this.$message({ type: 'info', message: '操作取消' });
             });
           },
+          // 添加用户的方法
           addUser() {
             console.log('添加用户');
           }
