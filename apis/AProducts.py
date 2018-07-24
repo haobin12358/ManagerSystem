@@ -31,7 +31,8 @@ class MSProduct(Resource):
         log.info("get api: ", product)
         apis = {
             "get_abo": "self.control_product.get_info_by_id()",
-            "get_all": "self.control_product.get_all()"
+            "get_all": "self.control_product.get_all()",
+            "get_prid": "self.control_product.get_prid()"
         }
         if product in apis:
             return eval(apis[product])

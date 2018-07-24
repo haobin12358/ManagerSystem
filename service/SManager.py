@@ -3,10 +3,10 @@ import sys
 import os
 
 sys.path.append(os.path.dirname(os.getcwd()))
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from SBase import SBase, close_session
 
-from ManagerSystem.models.model import Manager, IdentifyingCode
+from ManagerSystem.models.model import Manager, IdentifyingCode, Users
 
 class SManager(SBase):
 
@@ -69,6 +69,9 @@ class SManager(SBase):
 
     @close_session
     def get_users(self, start_num, page_size, or_filter):
-        from ManagerSystem.models.model import Users
         return self.session.query(Users.USname, Users.UStelphone, Users.UScreateTime, Users.USloginTime, Users.USsex)\
             .filter(or_(*or_filter)).offset(start_num).limit(page_size).all()
+
+    @close_session
+    def update_user_by_filter(self, and_filter, user):
+        return self.session.query(Users).filter(and_(and_filter)).update(user)

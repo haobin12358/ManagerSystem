@@ -171,6 +171,7 @@ class CCategory():
                 Category.CTid == ct.get("CTfromid")
             }
         response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
+
         response["data"] = ct_list
         return response
 

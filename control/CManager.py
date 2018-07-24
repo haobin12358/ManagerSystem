@@ -377,7 +377,7 @@ class CManager():
     def check_page_value(self, page_num, page_size, model_name, and_params, or_params):
         count = self.smanager.get_count_by_or_filter(model_name, and_params, or_params)
         if page_size * page_num > count:
-            page_num = count / page_size
+            page_num = count / page_size + 1
         page_num = page_num if page_num > 0 else 1
         return page_num, count
 
@@ -421,4 +421,23 @@ class CManager():
             return response
         except Exception as e:
             log.error("get users", e.message)
+            return SYSTEM_ERROR
+
+    def update_users(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        if "token" not in args:
+            return PARAMS_MISS
+        data = json.loads(request.data)
+        log.info("data", data)
+        if "USid" not in data:
+            return PARAMS_MISS
+        maid = token_to_usid(args.get("token"))
+        manager = self.smanager.get_manager_by_maid(maid)
+        if manager.MAidentity > 101:
+            return get_response("ERROR_MESSAGE_NO_PERMISSION", "MANAGERSYSTEMERROR", "ERROR_CODE_NO_PERMISSION")
+        try:
+            update_result = tolist(self.smanager.update_user_by_filter())
+        except Exception as e:
+            log.error("update users", e.message)
             return SYSTEM_ERROR

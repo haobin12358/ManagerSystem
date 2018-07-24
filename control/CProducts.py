@@ -174,7 +174,7 @@ class CProducts():
     def check_page_value(self, page_num, page_size, model_name, and_params, or_params):
         count = self.sproduct.get_count_by_or_filter(model_name, and_params, or_params)
         if page_size * page_num > count:
-            page_num = count / page_size
+            page_num = count / page_size + 1
         page_num = page_num if page_num > 0 else 1
         return page_num, count
 
@@ -488,9 +488,6 @@ class CProducts():
             return PARAMS_MISS
         prid = data.get("PRid")
 
-
-
-
     def add_brands(self, prid, brands, brands_key):
         if not isinstance(brands, list):
             return False
@@ -554,3 +551,9 @@ class CProducts():
             })
 
         return True
+
+    def get_prid(self):
+        prid = str(uuid.uuid1())
+        response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
+        response["data"] = prid
+        return response

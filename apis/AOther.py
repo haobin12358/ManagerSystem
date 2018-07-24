@@ -406,7 +406,7 @@ class AOther(Resource):
         elif other == "upload_files":
             formdata = request.form
             log.info("formdata", formdata)
-            files = request.files.get("files")
+            files = request.files.get("file")
 
             import platform
             from ManagerSystem.config import Inforcode
