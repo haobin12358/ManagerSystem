@@ -45,7 +45,7 @@
           <el-table-column align="center" label="操作" >
             <template slot-scope="scope">
               <span class=" m-table-link" @click="checkClick">查看</span>
-                <span class=" m-table-link" @click="editClick">编辑</span>
+                <span class=" m-table-link" @click="editClick(scope.row)">编辑</span>
             </template>
           </el-table-column>
         </el-table>
@@ -155,8 +155,8 @@
       changeFun(v){
         this.checkRow = v;
       },
-      editClick(){
-        this.$router.push('/commodity/categorySelection?CTid=1')
+      editClick(row){
+        this.$router.push('/commodity/goodsImported?PRid=' + row.PRid);
       },
       checkClick(){
 

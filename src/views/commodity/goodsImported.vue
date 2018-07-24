@@ -10,10 +10,10 @@
       <div class="m-one-part">
         <h3 id="basicInfo">基本信息</h3>
         <el-form-item label="商品名称:" prop="PRname">
-          <el-input v-model="form.PRname" class="m-input-l" ></el-input>
+          <el-input v-model="form.PRname" class="m-input-l" :disable="disable"></el-input>
         </el-form-item>
         <el-form-item label="添加描述:" prop="PRinfo">
-          <el-input v-model="form.PRinfo" class="m-input-l" ></el-input>
+          <el-input v-model="form.PRinfo" class="m-input-l" :disable="disable"></el-input>
           <p class="m-alert">建议描述文字在36字以内</p>
         </el-form-item>
         <el-form-item label="商品属性:" prop="PRbrand">
@@ -43,9 +43,10 @@
           <el-upload
             action="http://120.79.182.43:7443/sharp/manager/other/upload_files"
             list-type="picture-card"
-            :http-request="imgUpload"
+            :http-request="imgUploadTop"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
+            :file-list="form.PRimage"
           class="m-img-l"
             :limit="5"
             :on-exceed="outImg">
@@ -54,7 +55,7 @@
           <el-dialog :visible.sync="dialogVisible">
             <img width="100%" :src="form.PRimage" alt="">
           </el-dialog>
-          <p class="m-img-p">建议尺寸：700*700像素，可以通过拖动图片调整前后顺序，最多上传5张商品图片</p>
+          <p class="m-img-p">建议尺寸：700*700像素，最多上传5张商品图片</p>
         </el-form-item>
 
         <el-form-item label="商品样式及价格:" prop="brands">
@@ -83,20 +84,37 @@
                   <p class="m-alert" style="margin-left: 0.6rem;">库存为0时，会放入已售罄列表中</p>
                 </div>
               </div>
-              <div>
-                <el-upload
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                  list-type="picture-card"
-                  :on-preview="handlePictureCardPreview"
-                  class="m-img-xl"
-                  :limit="1"
-                  :on-exceed="outImg"
-                  :on-success="imgUp">
-                  <span>+添加图片</span>
-                </el-upload>
-                <!--<el-dialog :visible.sync="!form.brands[index].PBimage">-->
-                  <!--<img width="100%" :src="form.brands[index].PBimage" alt="">-->
+              <div class="m-up-img-box">
+                <!--<el-upload-->
+                  <!--action="http://120.79.182.43:7443/sharp/manager/other/upload_files"-->
+                  <!--list-type="picture-card"-->
+                  <!--:data="{FileType:'PBimage',contentId:'123',index:img_index}"-->
+                  <!--:on-preview="handlePictureCardPreviewDetail"-->
+                  <!--:on-remove="handleRemove"-->
+                  <!--:file-list="form.brands[index].PBimage"-->
+                  <!--:limit="1"-->
+                  <!--:on-exceed="outImg"-->
+                  <!--:on-success="imgUp">-->
+                  <!--<span>+添加图片</span>-->
+                <!--</el-upload>-->
+                <!--<el-dialog :visible.sync="dialogVisible">-->
+                  <!--<img width="100%" :src="image" alt="">-->
                 <!--</el-dialog>-->
+                <div class="inputbg m-img-xl el-upload-list--picture-card" v-if="form.brands[index].PBimage">
+                  <img :src="form.brands[index].PBimage" style="width: 1.7rem;height:1.7rem;"/>
+                  <span class="el-upload-list__item-actions">
+                      <span class="el-upload-list__item-preview" @click="CardPreview(index)">
+                        <i class="el-icon-zoom-in"></i>
+                      </span>
+                      <span class="el-upload-list__item-delete" @click="imgRemove(index)">
+                        <i class="el-icon-delete"></i>
+                      </span>
+                    </span>
+                </div>
+                <div class="inputbg m-img-xl"><span>+添加图片</span><input type="file" :id="index" accept="image/*" @change="imgUploadDetail($event,index)"></div>
+                <el-dialog :visible.sync="dialogVisible">
+                   <img width="100%" :src="image" alt="">
+                </el-dialog>
               </div>
               <div>
                 <span class="m-delete" @click="deleteOne(index)">删除</span>
@@ -113,10 +131,10 @@
           </el-form-item>
           <el-form-item label="商品视频:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
             <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
-              list-type="picture-card"
+              action="http://120.79.182.43:7443/sharp/manager/other/upload_files"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
+              :http-request="imgUploadVideo"
               class="m-img-l">
               <span>+添加视频</span>
             </el-upload>
@@ -127,17 +145,20 @@
           </el-form-item>
           <el-form-item label="商品详情:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
             <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="http://120.79.182.43:7443/sharp/manager/other/upload_files"
               list-type="picture-card"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove"
-              class="m-img-l">
+              :http-request="imgUploadAbo"
+              :on-preview="handleAboPictureCardPreview"
+              :on-remove="handleAboRemove"
+              :file-list="form.PRaboimage"
+              class="m-img-l"
+              :on-exceed="outImg">
               <span>+添加图片</span>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
+              <img width="100%" :src="image" alt="">
             </el-dialog>
-            <p class="m-img-p">建议尺寸：700*700像素，可以通过拖动图片调整前后顺序</p>
+            <p class="m-img-p">建议尺寸：700*700像素</p>
           </el-form-item>
         </div>
 
@@ -278,22 +299,26 @@
         data() {
             return {
               name:'商品发布',
+              img_index:0,
+              image:'',
+              disable:false,
               form:{
+                PRid:null,
                 CTid:0,
                 PRname:'',
                 PRinfo:'',
                 PRbrand:[],
-                PRimage:'xxxx',
+                PRimage:[],
                 brands_key:['',''],
                 brands:[{
                   PBprice:'',
                   PBunit:'$',
-                  PBimage:'xxxx',
+                  PBimage:'',
                   BRands:['',''],
                   PBnumber:''
                 }],
                 PRvideo:'',
-                PRaboimage:'',
+                PRaboimage:[],
                 PRfrankingR:true,
                 PRfranking:''
               },
@@ -321,7 +346,7 @@
               brand_one:{
                 PBprice:'',
                 PBunit:'$',
-                PBimage:'zcxcz',
+                PBimage:'',
                 BRands:['',''],
                 PBnumber:''
               },
@@ -347,6 +372,32 @@
         pageTitle
       },
         methods: {
+          getPrid(){
+            axios.get(api.get_prid).then(res => {
+              if(res.data.status == 200) {
+                this.form.PRid = res.data.data;
+              }else{
+              this.$message.error(res.data.message)
+                      }
+                },error => {
+              this.$message.error(error.data.message)
+            })
+          },
+          getAbo(id){
+            let that = this;
+            axios.get(api.get_abo,{params:{
+                PRid:id,
+                token:localStorage.getItem('token')
+              }}).then(res => {
+              if(res.data.status == 200){
+                that.brand_list = res.data.data.category;
+              }else{
+                that.$message.error(res.data.message)
+              }
+            },error => {
+              that.$message.error(error.data.message)
+            })
+          },
           getCategorybrands(id){
             let that = this;
             axios.get(api.get_categorybrands,{params:{
@@ -366,26 +417,135 @@
             console.log('fresh');
           },
           handleRemove(file, fileList) {
-            console.log(file, fileList);
+            let _arr = [];
+            for(let i=0;i<fileList.length;i++){
+              _arr[i] = {name:fileList[i].name,url:fileList[i].url}
+            }
+            this.form.PRimage = [].concat(_arr)
           },
-          handlePictureCardPreview(file) {
-            this.form.PRimage = file.url;
+          handleAboRemove(file, fileList) {
+            let _arr = [];
+            for(let i=0;i<fileList.length;i++){
+              _arr[i] = {name:fileList[i].name,url:fileList[i].url}
+            }
+            this.form.PRaboimage = [].concat(_arr)
+          },
+          imgRemove(index){
+            this.form.brands[index].PBimage = '';
+            var file = document.getElementById(index);
+            file.value ='';
+          },
+          CardPreview(index){
+            this.image = this.form.brands[index].PBimage;
             this.dialogVisible = true;
           },
-          imgUpload(params){
-            console.log(params)
-            let _params ={};
+          handlePictureCardPreview(file) {
+            this.image = file.url;
+            this.dialogVisible = true;
+          },
+          handleAboPictureCardPreview(file) {
+            this.image = file.url;
+            this.dialogVisible = true;
+          },
+          imgUploadTop(params){
             let form = new FormData();
             form.append("file", params.file);
-            // _params.file = params.file;
             form.append("FileType", 'PRimage');
-            form.append("contentId", '123');
-            form.append("index", 1);
-            // _params.FileType = 'PRimage';
-            // _params.contentId = '123';
-            // _params.index = 1;
+            form.append("contentId",  this.form.PRid);
+            form.append("index", this.img_index);
             axios.post(api.upload_files,form).then(res => {
-              console.log(res)
+              if(res.data.status == 200){
+                this.form.PRimage.push({name:params.file.name,url:res.data.data});
+                this.img_index ++ ;
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            },error =>{
+              this.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
+            })
+          },
+          imgUploadDetail(event,index){
+            if(this.form.brands[index].PBimage.length > 0){
+              this.$message({
+                type:'warning',
+                message:'一个类型只能上传一张照片'
+              });
+              return false;
+            }
+            let form = new FormData();
+            form.append("file", event.target.files[0]);
+            form.append("FileType", 'PBimage');
+            form.append("contentId",  this.form.PRid);
+            form.append("index", this.img_index);
+            axios.post(api.upload_files,form).then(res => {
+              if(res.data.status == 200){
+                this.form.brands[index].PBimage = res.data.data;
+                var file = document.getElementById(index);
+                file.value ='';
+                this.img_index ++ ;
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            },error =>{
+              this.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
+            })
+          },
+          imgUploadVideo(params){
+            let form = new FormData();
+            form.append("file", params.file);
+            form.append("FileType", 'PRvideo');
+            form.append("contentId",  this.form.PRid);
+            form.append("index", this.img_index);
+            axios.post(api.upload_files,form).then(res => {
+              if(res.data.status == 200){
+                this.form.PRvideo = res.data.data;
+                this.img_index ++ ;
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            },error =>{
+              this.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
+            })
+          },
+          imgUploadAbo(params){
+            let form = new FormData();
+            form.append("file", params.file);
+            form.append("FileType", 'PRaboimage');
+            form.append("contentId", this.form.PRid);
+            form.append("index", this.img_index);
+            axios.post(api.upload_files,form).then(res => {
+              if(res.data.status == 200){
+                this.form.PRaboimage.push({name:params.file.name,url:res.data.data});
+                this.img_index ++ ;
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: '服务器请求失败，请稍后再试 '
+                });
+              }
+            },error =>{
+              this.$message({
+                type: 'error',
+                message: '服务器请求失败，请稍后再试 '
+              });
             })
           },
           sideClick(v){
@@ -410,7 +570,6 @@
             }else{
               return
             }
-
           },
           //显示更多
           showMore(v){
@@ -420,12 +579,8 @@
           issueClick(){
             this.$router.push('/commodity/commodityManagement')
           },
-          imgUp(response, file, fileList){
-            console.log(response)
-          },
           submitClick(){
             let that = this;
-
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                   that.query(this.form)
@@ -434,7 +589,7 @@
           },
           query(params){
             let _brands = [];
-            let _form = JSON.parse(JSON.stringify(params))
+            let _form = JSON.parse(JSON.stringify(params));
             for(let i=0;i<this.form.PRbrand.length;i++){
               if(_form.PRbrand[i] != undefined){
                 let _value = this.brand_list[i];
@@ -443,6 +598,30 @@
               }
             }
             _form.PRbrand = _brands;
+            let _PRaboimage = [];
+            for(let i=0;i<this.form.PRaboimage.length;i++){
+              if(_form.PRaboimage[i] != undefined){
+                _PRaboimage.push(_form.PRaboimage[i].url);
+              }
+            }
+            _form.PRaboimage = _PRimage;
+            let _PRimage = [];
+            for(let i=0;i<this.form.PRimage.length;i++){
+              if(_form.PRimage[i] != undefined){
+                _PRimage.push(_form.PRimage[i].url);
+              }
+            }
+
+            for(let i=0;i<this.form.brands.length;i++){
+              for(let item in this.form.brands[i]){
+                if(this.form.brands[i][item] == ''){
+                  this.$message.error('请填写完整商品样式和价格');
+                  return false;
+                }
+              }
+            }
+
+            _form.PRimage = _PRimage;
             axios.post(api.release_product+'?token='+localStorage.getItem('token'),_form).then(res => {
               if(res.data.status == 200){
                 this.$message({
@@ -486,7 +665,11 @@
         if(this.$route.query.CTid){
           this.getCategorybrands(this.$route.query.CTid);
           this.form.CTid = this.$route.query.CTid;
+          this.getPrid();
+        }else if(this.$route.query.PRid){
+          this.getAbo(this.$route.query.PRid);
         }
+
       },
     }
 </script>
@@ -699,5 +882,57 @@
         cursor: pointer;
       }
     }
+  }
+  .el-upload-list--picture-card .el-upload-list__item-actions:hover {
+    opacity: 1;
+  }
+  .m-up-img-box{
+    .flex-row(flex-start);
+
+    .el-upload-list__item-actions {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      cursor: default;
+      text-align: center;
+      color: #fff;
+      opacity: 0;
+      font-size: 20px;
+      background-color: rgba(0,0,0,.5);
+      -webkit-transition: opacity .3s;
+      transition: opacity .3s;
+      border-radius: 6px;
+      .flex-row(center);
+      span {
+        cursor: pointer;
+      }
+    }
+  }
+  .inputbg{
+    margin-left: 10px;
+    color: #9fd0bf;
+    border: 1px solid #eeeeee;
+    background-color: #fbfdff;
+    border-radius: 6px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+    width: 1.8rem;
+    height: 1.8rem;
+    line-height: 1.8rem;
+    text-align: center;
+  }
+  .inputbg input{
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity:0;
+    filter:alpha(opacity=0);
+    width: 1.8rem;
+    height: 1.8rem;
+    line-height: 1.8rem;
+    cursor: pointer;
   }
 </style>

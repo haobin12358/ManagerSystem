@@ -1,6 +1,6 @@
 // const title = 'http://10.0.0.197:7443/sharp/manager/';
-// const title = 'http://120.79.182.43:7443/sharp/manager/';
-const title ='http://192.168.0.100/sharp/manager/';
+const title = 'http://120.79.182.43:7443/sharp/manager/';
+// const title ='http://192.168.0.100:7443/sharp/manager/';
 
 const api={
   login: title + 'user/login',//用户登录
@@ -19,6 +19,8 @@ const api={
   release_product: title + 'product/release',//发布商品商品
   update_product : title + 'product/update_product',//上下架商品
   upload_files: title +'other/upload_files',//上传图片
+  get_prid: title + 'product/get_prid',//获取商品id
+  get_abo:title + 'product/get_abo',//获取商品详情
 
   get_first_category: title + 'category/get_first',//获取类目
   get_child_category:title + 'category/get_child',//获取子类目
