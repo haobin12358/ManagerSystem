@@ -4,10 +4,8 @@
     <div class="m-content">
       <div class="m-top">
         <div class="m-top-search">
-          <div class="m-top-text">用户ID：</div>
-          <el-input class="m-top-input" v-model="inputID" size="mini"></el-input>
-          <div class="m-top-text">用户名：</div>
-          <el-input class="m-top-input" v-model="inputName" size="mini"></el-input>
+          <div class="m-top-text">查询条件：</div>
+          <el-input class="m-top-input" v-model="searchText" size="mini" placeholder="请输入用户名或联系方式" style="width: 20%;" clearable></el-input>
           <el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>
         </div>
         <div class="m-top-button">
@@ -16,16 +14,25 @@
       </div>
 
       <div class="m-middle">
-        <el-table :data="user" stripe style="width: 100%">
-          <el-table-column align="center" prop="userId" label="用户ID"></el-table-column>
-          <el-table-column align="center" prop="userName" label="用户名"></el-table-column>
-          <el-table-column align="center" prop="registerTime" label="注册时间" width="180"></el-table-column>
-          <el-table-column align="center" prop="email" label="E-mall" width="180"></el-table-column>
-          <el-table-column align="center" prop="group" label="用户组"></el-table-column>
-          <el-table-column align="center" prop="loginTime" label="最近登录"></el-table-column>
+        <el-table :data="userList" stripe style="width: 100%">
+          <el-table-column align="center" prop="USname" label="用户名"></el-table-column>
+          <el-table-column align="center" prop="UStelphone" label="联系方式"></el-table-column>
+          <el-table-column align="center" prop="USsex" label="性别"></el-table-column>
+          <el-table-column align="center" prop="UScreateTime" label="创建时间"></el-table-column>
+          <el-table-column align="center" prop="USloginTime" label="最近登录"></el-table-column>
+          <el-table-column align="center" prop="USstatus" label="状态"></el-table-column>
           <el-table-column align="center" label="操作">
             <template slot-scope="scope">
-              <el-dropdown size="mini" split-button>查看
+              <div v-if="scope.row.USstatus == '禁用'">
+                <el-button class="lock-user-button" type="text" @click="lockUser(scope.row, '可用')">解封</el-button>
+              </div>
+              <div v-if="scope.row.USstatus == '可用'">
+                <el-button class="lock-user-button" type="text" @click="lockUser(scope.row, '禁用')">封禁</el-button>
+              </div>
+              <div v-if="scope.row.USstatus == '未激活'">
+                <el-button class="lock-user-button" type="text" @click="lockUser(scope.row, '可用')">激活</el-button>
+              </div>
+              <!--<el-dropdown size="mini" split-button>查看
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>
                     <el-button type="text" class="el-crud">编辑用户权限</el-button>
@@ -40,7 +47,7 @@
                     <el-button type="text" class="el-crud">封禁用户</el-button>
                   </el-dropdown-item>
                 </el-dropdown-menu>
-              </el-dropdown>
+              </el-dropdown>-->
             </template>
           </el-table-column>
         </el-table>
@@ -62,28 +69,30 @@
             </el-form>
             <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.2rem">
               <el-button @click="addUserVisible=false" size="mini">取 消</el-button>
-              <el-button type="primary" @click="addUserVisible=false" size="mini">确 定</el-button>
+              <el-button class="add-user-done" @click="addUserVisible=false" size="mini">确 定</el-button>
             </div>
           </div>
         </el-dialog>
       </div>
       <div class="m-bottom">
-        <pagination></pagination>
+        <Pagination :total="total_page" @pageChange="pageChange"></Pagination>
       </div>
     </div>
   </div>
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
-  import user from '../../common/json/userInfo'
-  import Pagination from "../../components/common/pages";
+  import Pagination from "../../components/common/page";
+  import api from '../../api/api';
+  import {Message} from 'element-ui';
+  import axios from 'axios';
     export default {
         data() {
             return {
               name: '用户数据管理',
               inputID: '',
               inputName: '',
-              user: user,
+              userList: [],
               addUserVisible: false,
               addForm: {
                 userName: '',
@@ -91,20 +100,76 @@
                 password: '',
                 againPassword: '',
               },
-              addFormWidth: '1rem'
+              addFormWidth: '1rem',
+              total_page: 0,
+              current_page: 0,
+              total_num: 0,
+              page_size: 10,
+              searchText: ''
             }
         },
         components:{
-          'Pagination': Pagination,
-          'pageTitle': pageTitle
+          Pagination, pageTitle
         },
         methods: {
+          getData(v, searchText){
+            let params = {
+              token: localStorage.getItem('token'),
+              page_num: v || this.current_page,
+              page_size: this.page_size,
+              USfilter: searchText
+            };
+            axios.get(api.get_users, {params: params}).then(res => {
+              if(res.data.status == 200) {
+                this.userList = res.data.data.USers;
+                // console.log(this.userList)
+                this.total_num = res.data.data.count;
+                this.total_page = Math.ceil(this.total_num / this.page_size);
+              }else{
+                this.$message.error(res.data.message);
+              }
+            },error => {
+              this.$message.error(error.data.message);
+            })
+          },
+          pageChange(v){
+            if(v == this.current_page){
+              this.$message({
+                message: '这已经是第' + v + '页数据了',
+                type: 'warning'
+              });
+              return false;
+            }
+            this.current_page = v;
+            this.getData(v, '');
+          },
           freshClick(){
             console.log('fresh');
           },
           topSearch() {
-            console.log('用户ID：', this.inputID);
-            console.log('用户名：', this.inputName);
+            this.getData(1, this.searchText)
+          },
+          lockUser(row, USstatus) {
+            console.log(row)
+            this.userName = row.USname
+            this.$confirm('确认'+USstatus+'用户名为 ' + this.userName + ' 的用户吗？', '提示', {
+              confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning', center: true
+            }).then(() => {
+              let that = this
+              let params = {
+                UStelphone: row.UStelphone,
+                USstatus: USstatus
+              }
+              axios.post(api.update_users+'?token='+localStorage.getItem('token'), params).then(res => {
+                console.log(res)
+                if(res.data.status == 200){
+                  this.$message({ message:res.data.message, type:'success' });
+                  that.getData();
+                }
+              })
+            }).catch(() => {
+              this.$message({ type: 'info', message: '操作取消' });
+            });
           },
           addUser() {
             console.log('添加用户');
@@ -112,6 +177,7 @@
         },
         created() {
           // console.log(user);
+          this.pageChange(1)
         }
     }
 </script>
@@ -150,18 +216,26 @@
       }
     }
     .m-middle {
+      .lock-user-button {
+        color: @sidebarChildColor;
+      }
       .el-crud {
         font-size: 14px;
         color: #000000;
       }
       .add-dialog {
+        margin-right: 0.4rem;
         .el-form-item {
           margin-bottom: 0;
+        }
+        .add-user-done {
+          background-color: @btnActiveColor;
+          color: @bgMainColor;
         }
       }
     }
     .m-bottom {
-      margin: 0.2rem 0.4rem 0.3rem 0;
+      margin: 0.2rem 0.4rem 0 0;
     }
   }
 </style>

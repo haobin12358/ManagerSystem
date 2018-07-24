@@ -45,28 +45,28 @@
               <div class="buyer-info">
                 <div class="buyer-info-title">买家收货信息</div>
                 <div class="info-left-text-div">
-                  <div class="info-text">订单ID：</div>
-                  <div class="info-text">买家昵称：</div>
-                  <div class="info-text">收货人：</div>
+                  <div class="info-text">订单编号：</div>
+                  <div class="info-text">联系对象：</div>
+                  <div class="info-text">联系方式：</div>
                   <div class="info-text">收货地址：</div>
-                  <div class="info-text">联系电话：</div>
+                  <div class="info-text">下单时间：</div>
                   <div class="info-text">备注：</div>
                 </div>
                 <div class="info-right-text-div">
-                  <div class="info-text-value">{{order.orderNo}}</div>
-                  <div class="info-text-value">{{order.buyer}}</div>
-                  <div class="info-text-value">{{order.buyer}}</div>
-                  <div class="info-text-value">{{order.buyerAddress}}</div>
-                  <div class="info-text-value">{{order.payNo}}</div>
-                  <div class="info-text-value">{{order.memo}}</div>
+                  <div class="info-text-value">{{order.OMid}}</div>
+                  <div class="info-text-value">{{order.LOname}}</div>
+                  <div class="info-text-value">{{order.LOtelphone}}</div>
+                  <div class="info-text-value">{{order.LOdetail}}</div>
+                  <div class="info-text-value">{{order.OMtime}}</div>
+                  <div class="info-text-value">{{order.OMabo}}</div>
                 </div>
               </div>
               <div class="send-info">
                 <el-form :model="form" class="send-info-form">
                   <el-form-item label="物流公司:" :label-width="formLabelWidth">
                     <el-select v-model="form.region" placeholder="" style="width: 1.7rem" size="small">
-                      <el-option label="圆通快递" value="圆通快递"></el-option>
-                      <el-option label="中通快递" value="中通快递"></el-option>
+                      <el-option label="顺丰速运" value="顺丰速运"></el-option>
+                      <el-option label="EMS" value="EMS"></el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item label="快递单号:" :label-width="formLabelWidth">
@@ -83,7 +83,7 @@
             <el-dialog title="备 注" :visible.sync="memoForm" width="4rem">
               <el-form :model="memoForms">
                 <el-form-item label="备 注：" :label-width="formLabelWidth">
-                  <el-input v-model="memoForms.name" auto-complete="off" size="small" type="textarea" :autosize="{ minRows: 2, maxRows: 5}"></el-input>
+                  <el-input v-model="memoForms.name" auto-complete="off" size="small" type="textarea" :autosize="{ minRows: 2, maxRows: 5}" style="width: 90%"></el-input>
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
@@ -101,15 +101,33 @@
               </span>
             </el-dialog>
             <!--判断订单状态后显示相应的操作按钮-->
-            <div v-if="order.OMstatus=='已发货'">
-              <el-button class="right-button" @click="searchWhere=true">查看物流进度</el-button>
+            <div v-if="order.OMstatus=='已取消'">
+              <div style="height: 0.3rem">用户已取消订单</div>
             </div>
             <div v-if="order.OMstatus=='未支付'">
               <div style="height: 0.3rem">等待用户支付</div>
             </div>
+            <div v-if="order.OMstatus=='支付中'">
+              <div style="height: 0.3rem">等待支付款项到账</div>
+            </div>
             <div v-if="order.OMstatus=='已支付'">
-               <el-button class="right-button" @click="toSendForm=true">发 货</el-button>
-               <el-button class="right-button" @click="" style="margin-left: 0.2rem;" @click="memoForm=true">备 注</el-button>
+              <el-button class="right-button" @click="toSendForm=true">发 货</el-button>
+              <!--<el-button class="right-button" @click="" style="margin-left: 0.2rem;" @click="memoForm=true">备 注</el-button>-->
+            </div>
+            <div v-if="order.OMstatus=='已发货'">
+              <el-button class="right-button" @click="searchWhere=true">查看物流进度</el-button>
+            </div>
+            <div v-if="order.OMstatus=='已收货'">
+              <div style="height: 0.3rem">用户已收货</div>
+            </div>
+            <div v-if="order.OMstatus=='已完成'">
+              <div style="height: 0.3rem">该订单已完成</div>
+            </div>
+            <div v-if="order.OMstatus=='已评价'">
+              <div style="height: 0.3rem">用户已评价该订单</div>
+            </div>
+            <div v-if="order.OMstatus=='退款中'">
+              <div style="height: 0.3rem">该订单正在退款中</div>
             </div>
           </div>
           <div class="right-bottom-text">
@@ -147,7 +165,7 @@
 </template>
 
 <script>
-  // 订单状态 0 : 已取消, 7 : 未支付, 14 : 已支付, 21 : 已接单, 28 : 配送中, 35 : 已装箱, 42 : 已完成, 49 : 已评价
+  // 0: "已取消", 7: "未支付", 14: "支付中", 21: "已支付",28: "已发货", 35: "已收货", 42: "已完成", 49: "已评价", 56: "退款中"
   import allOrder from "../../common/json/allOrder";
   import pageTitle from '../../components/common/title';
   import step from '../../components/common/step';
@@ -206,21 +224,7 @@
           if(res.data.status == 200) {
             this.order =res.data.data
             // console.log(this.order)
-            if(this.order.OMstatus == '未支付') {
-              this.step = [
-                { name:'买家下单', time: this.order.OMtime, active:true, next:true },
-                { name:'买家支付', time: '待付款', active:false, next:false },
-                { name:'商家发货', time: '待发货', active:false, next:false },
-                { name:'交易完成', time: '未完成', active:false, next:false }]
-              this.orderStatus = this.order.OMstatus
-            }else if(this.order.OMstatus == '已发货') {
-              this.step = [
-                { name:'买家下单', time: this.order.OMtime, active:true, next:true },
-                { name:'买家支付', time: '已支付', active:true, next:true },
-                { name:'商家发货', time: this.order.OMstatus, active:true, next:true },
-                { name:'交易完成', time: '未完成', active:false, next:false }]
-              this.orderStatus = this.order.OMstatus
-            }
+            this.setStep()
           }else{
             this.$message.error(res.data.message);
           }
@@ -230,11 +234,96 @@
       },
       toSend() {
         this.toSendForm = false
+        if(this.order.OMstatus == '已支付') {
+          let token = localStorage.getItem('token')
+          let params = {
+            OMid: this.order.OMid,
+            OMstatus: '已发货'
+          }
+          axios.post(api.update_order_status+'?token='+token,params).then(res=>{
+            if(res.data.status == 200){
+              this.order.OMstatus = '已发货'
+              this.orderStatus = this.order.OMstatus
+              this.setStep()
+              this.$message({ message: res.data.message, type: 'success' });
+            }else{
+              this.$message.error(res.data.message);
+            }
+          }, res=>{
+            this.$message.error(res.data.message);
+          });
+        }
+      },
+      setStep() {
+        if(this.order.OMstatus == '已取消') {
+          this.step = [
+            { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+            { name:'买家支付', time: '订单已取消', active:false, next:false },
+            { name:'商家发货', time: '订单已取消', active:false, next:false },
+            { name:'交易完成', time: '未完成', active:false, next:false }]
+          this.orderStatus = this.order.OMstatus
+        }else if(this.order.OMstatus == '未支付') {
+          this.step = [
+            { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+            { name:'买家支付', time: '待支付', active:false, next:false },
+            { name:'商家发货', time: '待发货', active:false, next:false },
+            { name:'交易完成', time: '未完成', active:false, next:false }]
+          this.orderStatus = this.order.OMstatus
+        }else if(this.order.OMstatus == '支付中') {
+          this.step = [
+            { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+            { name:'买家支付', time: '支付中', active:true, next:true },
+            { name:'商家发货', time: '待发货', active:false, next:false },
+            { name:'交易完成', time: '未完成', active:false, next:false }]
+          this.orderStatus = this.order.OMstatus
+        }else if(this.order.OMstatus == '已支付') {
+          this.step = [
+            { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+            { name:'买家支付', time: '已支付', active:true, next:true },
+            { name:'商家发货', time: '待发货', active:false, next:false },
+            { name:'交易完成', time: '未完成', active:false, next:false }]
+          this.orderStatus = this.order.OMstatus
+        }else if(this.order.OMstatus == '已发货') {
+          this.step = [
+            { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+            { name:'买家支付', time: '已支付', active:true, next:true },
+            { name:'商家发货', time: '已发货', active:true, next:true },
+            { name:'交易完成', time: '未完成', active:false, next:false }]
+          this.orderStatus = this.order.OMstatus
+        }else if(this.order.OMstatus == '已收货') {
+          this.step = [
+            { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+            { name:'买家支付', time: '已支付', active:true, next:true },
+            { name:'买家收货', time: '已收货', active:true, next:true },
+            { name:'交易完成', time: '未完成', active:false, next:false }]
+          this.orderStatus = this.order.OMstatus
+        }else if(this.order.OMstatus == '已完成') {
+          this.step = [
+            { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+            { name:'买家支付', time: '已支付', active:true, next:true },
+            { name:'买家收货', time: '已收货', active:true, next:true },
+            { name:'交易完成', time: '已完成', active:true, next:true }]
+          this.orderStatus = this.order.OMstatus
+        }else if(this.order.OMstatus == '已评价') {
+          this.step = [
+            { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+            { name:'买家支付', time: '已支付', active:true, next:true },
+            { name:'交易完成', time: '已完成', active:true, next:true },
+            { name:'填写评价', time: '已评价', active:true, next:true }]
+          this.orderStatus = this.order.OMstatus
+        }else if(this.order.OMstatus == '退款中') {
+          this.step = [
+            { name:'买家下单', time: this.order.OMtime, active:true, next:true },
+            { name:'买家支付', time: '已支付', active:true, next:true },
+            { name:'买家收货', time: '已收货', active:true, next:true },
+            { name:'退款完成', time: '退款中', active:false, next:true }]
+          this.orderStatus = this.order.OMstatus
+        }
       }
     },
     created() {
       // this.order = this.$route.query.order;
-      this.OMid = this.$route.params.OMid;
+      this.OMid = this.$route.query.OMid;
       this.getData(this.OMid)
       // console.log(this.OMid)
     }
@@ -251,7 +340,7 @@
       }
       /*height: 5rem;*/
       .details-middle-left {
-        width: 40%;
+        width: 45%;
         float: left;
         .order-info-part {
           height: 1.8rem;
@@ -273,7 +362,7 @@
         }
       }
       .details-middle-right {
-        width: 58%;
+        width: 53%;
         float: right;
         .m-step-part {
           .right-top-top {
@@ -308,7 +397,7 @@
             .buyer-info {
               width: 50%;
               float: left;
-              margin: 0 0.2rem 0.2rem 0.2rem;
+              margin: -0.1rem 0.2rem 0.2rem 0.2rem;
               border: 1px solid @borderColor;
               border-radius: 5px;
               .buyer-info-title {

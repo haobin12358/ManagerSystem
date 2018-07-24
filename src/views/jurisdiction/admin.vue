@@ -4,28 +4,28 @@
     <div class="m-content">
       <div class="m-top">
         <div class="m-top-search">
-          <div class="m-top-text">用户ID：</div>
-          <el-input class="m-top-input" v-model="inputID" size="mini"></el-input>
-          <div class="m-top-text">用户名：</div>
-          <el-input class="m-top-input" v-model="inputName" size="mini"></el-input>
+          <div class="m-top-text">查询条件：</div>
+          <el-input class="m-top-input" v-model="searchText" size="mini" placeholder="请输入昵称或邮箱" style="width: 20%;" clearable></el-input>
           <el-button class="m-top-search-button" size="mini" @click="topSearch">查询</el-button>
         </div>
         <div class="m-top-button">
           <el-button class="m-top-button-button" size="mini" @click="addAdminVisible=true">添加管理员</el-button>
         </div>
       </div>
-
       <div class="m-middle">
-        <el-table :data="admin" stripe style="width: 100%">
-          <el-table-column align="center" prop="id" label="编号"></el-table-column>
-          <el-table-column align="center" prop="userName" label="用户名"></el-table-column>
-          <el-table-column align="center" prop="nickName" label="昵称" width="180"></el-table-column>
-          <el-table-column align="center" prop="email" label="E-mall" width="180"></el-table-column>
-          <el-table-column align="center" prop="group" label="用户组"></el-table-column>
-          <el-table-column align="center" prop="status" label="状态"></el-table-column>
+        <el-table :data="adminList" stripe style="width: 100%">
+          <el-table-column align="center" prop="MAid" label="编号" width="300"></el-table-column>
+          <el-table-column align="center" prop="MAnicname" label="昵称" width="70"></el-table-column>
+          <el-table-column align="center" prop="MAemail" label="E-mall" width="230"></el-table-column>
+          <el-table-column align="center" prop="MAtelphone" label="联系方式" width="110"></el-table-column>
+          <el-table-column align="center" prop="MAidentity" label="身份描述" width="120"></el-table-column>
+          <el-table-column align="center" prop="MAcreatTime" label="创建时间" width="160"></el-table-column>
+          <el-table-column align="center" prop="MAloginTime" label="最近登录" width="160"></el-table-column>
+          <el-table-column align="center" prop="MAstatus" label="状态" width="70"></el-table-column>
           <el-table-column align="center" label="操作">
             <template slot-scope="scope">
-              <el-dropdown size="mini" split-button>查看
+              <el-button class="edit-admin-button" type="text" @click="editAdmin(scope.row)">编辑管理员</el-button>
+              <!--<el-dropdown size="mini" split-button @click="lockAdmin(scope.row)">查看
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>
                     <el-button type="text" class="el-crud" @click="editAdmin(scope.row)">编辑管理员信息</el-button>
@@ -34,10 +34,11 @@
                     <el-button type="text" class="el-crud" @click="lockAdmin(scope.row)">封禁管理员</el-button>
                   </el-dropdown-item>
                 </el-dropdown-menu>
-              </el-dropdown>
+              </el-dropdown>-->
             </template>
           </el-table-column>
         </el-table>
+        <!--编辑管理员弹出框-->
         <el-dialog :title="editAdminTitle" :visible.sync="editAdminVisible" width="30%" show-close center>
           <div v-if="dialog=='index'">
             <div class="edit-dialog" style="margin-top: 0.25rem">
@@ -49,20 +50,34 @@
                 <img class="change-pictures" src="../../assets/images/changePw.png"/>
                 <div>修改管理员密码</div>
               </div>
-              <div class="change" @click="dialog='changeGroup'">
-                <img class="change-pictures" src="../../assets/images/changGroup.png"/>
-                <div>设置管理员组</div>
+              <div v-if="row.MAstatus == '可用'">
+                <div class="change" @click="lockAdmin('封禁', '封禁')">
+                  <img class="change-pictures" src="../../assets/images/changGroup.png"/>
+                  <div>封禁管理员</div>
+                </div>
+              </div>
+              <div v-if="row.MAstatus == '禁用'">
+                <div class="change" @click="lockAdmin('可用', '解封')">
+                  <img class="change-pictures" src="../../assets/images/changGroup.png"/>
+                  <div>解封管理员</div>
+                </div>
+              </div>
+              <div v-if="row.MAstatus == '未激活'">
+                <div class="change" @click="lockAdmin('可用', '激活')">
+                  <img class="change-pictures" src="../../assets/images/changGroup.png"/>
+                  <div>激活管理员</div>
+                </div>
               </div>
             </div>
           </div>
           <div v-if="dialog=='changePicture'">
-            <div class="edit-dialog" style="margin-top: 0.25rem">
+            <div class="edit-dialog" style="margin-top: 0.15rem">
               <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
                 :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                 <img v-if="imageUrl" :src="imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
-              <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.3rem">
+              <div slot="footer" class="dialog-footer" align="right" style="margin-top: 0.2rem">
                 <el-button @click="dialog='index'">取 消</el-button>
                 <el-button type="primary" @click="dialog='index'">确 定</el-button>
               </div>
@@ -70,7 +85,7 @@
           </div>
           <div v-if="dialog=='changePw'">
             <div class="edit-dialog">
-              <el-form :model="form">
+              <el-form :model="form" style="margin-right: 0.4rem">
                 <el-form-item label="请输入旧密码：" :label-width="formLabelWidth">
                   <el-input v-model="form.oldPw" auto-complete="off" type="password" size="mini"></el-input>
                 </el-form-item>
@@ -87,7 +102,7 @@
               </div>
             </div>
           </div>
-          <div v-if="dialog=='changeGroup'">
+          <!--<div v-if="dialog=='changeGroup'">
             <div class="edit-dialog" style="margin-top: 0.25rem">
               <el-form :model="groupForm">
                 <el-form-item label="活动区域" :label-width="formLabelWidth">
@@ -104,8 +119,9 @@
                 <el-button type="primary" @click="dialog='index'">确 定</el-button>
               </div>
             </div>
-          </div>
+          </div>-->
         </el-dialog>
+        <!--添加管理员弹出框-->
         <el-dialog title="添加管理员" :visible.sync="addAdminVisible" width="30%" center>
           <div class="add-dialog">
             <el-form :model="addForm">
@@ -137,22 +153,24 @@
         </el-dialog>
       </div>
       <div class="m-bottom">
-        <pagination></pagination>
+        <Pagination :total="total_page" @pageChange="pageChange"></Pagination>
       </div>
     </div>
   </div>
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
-  import admin from '../../common/json/adminInfo'
-  import Pagination from "../../components/common/pages";
+  import Pagination from "../../components/common/page";
+  import api from '../../api/api';
+  import {Message} from 'element-ui';
+  import axios from 'axios';
   export default {
     data() {
       return {
         name: '管理员管理',
         inputID: '',
         inputName: '',
-        admin: admin,
+        adminList: [],
         editAdminVisible: false,
         addAdminVisible: false,
         editAdminTitle: '',
@@ -176,42 +194,82 @@
         },
         formLabelWidth: '1.2rem',
         addFormWidth: '1rem',
+        total_page: 0,
+        current_page: 0,
+        total_num: 0,
+        page_size: 10,
+        searchText: '',
+        row: []
       }
     },
     components:{
-      'Pagination': Pagination,
-      'pageTitle': pageTitle
+      Pagination, pageTitle
     },
     methods: {
+      getData(v, searchText){
+        let params = {
+          token: localStorage.getItem('token'),
+          page_num: v || this.current_page,
+          page_size: this.page_size,
+          MAfilter: searchText
+        };
+        axios.get(api.get_managers, {params: params}).then(res => {
+          if(res.data.status == 200) {
+            this.adminList = res.data.data.Managers;
+            // console.log(this.adminList)
+            this.total_num = res.data.data.count;
+            this.total_page = Math.ceil(this.total_num / this.page_size);
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
+      },
+      pageChange(v){
+        if(v == this.current_page){
+          this.$message({ message: '这已经是第'+v+'页数据了', type: 'warning' });
+          return false;
+        }
+        this.current_page = v;
+        this.getData(v, '');
+      },
       freshClick(){
         console.log('fresh');
       },
       topSearch() {
-        console.log('用户ID：', this.inputID);
-        console.log('用户名：', this.inputName);
+        console.log('searchText', this.searchText);
+        this.getData(1, this.searchText)
       },
       editAdmin(row) {
+        this.row = row
         this.editAdminVisible = true;
         this.dialog = 'index';
-        this.editAdminTitle = row.id + ' 管理员数据管理';
+        this.editAdminTitle = row.MAid+' 管理员数据管理';
       },
-      lockAdmin(row) {
-        this.$confirm('确认封禁编号为 ' + row.id + ' 的管理员吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          // center: true
+      lockAdmin(MAstatus, title) {
+        this.$confirm('确认'+title+'编号为 ' + this.row.MAid + ' 的管理员吗？', '提示', {
+          confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning', center: true
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '操作成功!'
-          });
+          this.changeMAstatus(MAstatus)
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '操作取消'
-          });
+          this.$message({ type: 'info', message: '操作取消' });
         });
+        // console.log(this.row.MAid)
+      },
+      changeMAstatus(MAstatus) {
+        let that = this
+        let params = {
+          MAtelphone: row.MAtelphone,
+          MAstatus: MAstatus
+        }
+        axios.post(api.update_users+'?token='+localStorage.getItem('token'), params).then(res => {
+          console.log(res)
+          if(res.data.status == 200){
+            this.$message({ message:res.data.message, type:'success' });
+            that.getData();
+          }
+        })
       },
       // 更改用户头像
       handleAvatarSuccess(res, file) {
@@ -230,18 +288,16 @@
         return isJPG && isLt2M;
       },
       changePwDone() {
-        console.log('oldPw:', this.form.oldPw);
-        console.log('newPw:', this.form.newPw);
-        console.log('againNewPw:', this.form.againNewPw);
         if(this.form.againNewPw != this.form.newPw) {
           this.$message.error('两次密码输入不一致！');
         }else {
+          this.$message({ type: 'success', message: '操作成功!' });
           this.dialog = 'index';
         }
-      },
-      created() {
-        // console.log(admin);
       }
+    },
+    created() {
+      this.pageChange(1)
     }
   }
 </script>
@@ -280,10 +336,13 @@
       }
     }
     .m-middle {
-      .el-crud {
+      .edit-admin-button {
+        color: @sidebarChildColor;
+      }
+      /*.el-crud {
         font-size: 14px;
         color: #000000;
-      }
+      }*/
       .edit-dialog {
         .el-form-item {
           margin-bottom: 0;
@@ -314,11 +373,10 @@
           height: 0.85rem;
           display: block;
         }
-
-
-        height: 1.6rem;
+        height: 1.3rem;
         .change {
           float: left;
+          width: 27%;
           margin-left: 0.2rem;
           text-align: center;
           .change-pictures {
@@ -334,7 +392,7 @@
       }
     }
     .m-bottom {
-      margin: 0.2rem 0.4rem 0.3rem 0;
+      margin: 0.2rem 0.4rem 0 0;
     }
   }
 </style>
