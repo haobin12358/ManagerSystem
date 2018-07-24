@@ -10,10 +10,10 @@
       <div class="m-one-part">
         <h3 id="basicInfo">基本信息</h3>
         <el-form-item label="商品名称:" prop="PRname">
-          <el-input v-model="form.PRname" class="m-input-l" :disable="disable"></el-input>
+          <el-input v-model="form.PRname" class="m-input-l" :disabled="disable"></el-input>
         </el-form-item>
         <el-form-item label="添加描述:" prop="PRinfo">
-          <el-input v-model="form.PRinfo" class="m-input-l" :disable="disable"></el-input>
+          <el-input v-model="form.PRinfo" class="m-input-l" :disabled="disable"></el-input>
           <p class="m-alert">建议描述文字在36字以内</p>
         </el-form-item>
         <el-form-item label="商品属性:" prop="PRbrand">
@@ -125,17 +125,18 @@
           </div>
         </el-form-item>
         <div v-show="show_basic_info">
-          <el-form-item label="商品卖点:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
+          <el-form-item label="商品卖点:" >
             <el-input v-model="form.name" class="m-input-l" placeholder="输入内容"></el-input>
             <p class="m-alert">在商品详情页下面展示卖点信息，建议36字以内</p><!--，<span class="m-link">查看示例</span>-->
           </el-form-item>
-          <el-form-item label="商品视频:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
+          <el-form-item label="商品视频:" >
             <el-upload
               action="http://120.79.182.43:7443/sharp/manager/other/upload_files"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove"
+              :on-remove="handleRemoveVideo"
               :http-request="imgUploadVideo"
-              class="m-img-l">
+              :limit="1"
+              class="m-img-l"
+              :on-exceed="outImg">
               <span>+添加视频</span>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
@@ -390,12 +391,41 @@
                 token:localStorage.getItem('token')
               }}).then(res => {
               if(res.data.status == 200){
+                //商品属性list
                 that.brand_list = res.data.data.category;
+                //是否禁用
+                that.disable = true;
+                //展开设置更多设置
+                that.show_basic_info =true;
+                that.show_price_info = true;
+                that.show_other_info = true;
+                let _arr = [];
+                for(let i=0;i<res.data.data.product_info.PRimage.length;i++){
+                  _arr[i] = {name:'',url:res.data.data.product_info.PRimage[i]};
+                }
+                that.form.PRimage = [].concat(_arr);//商品图片
+                that.form.PRname = res.data.data.product_info.PRname;//商品名称
+                that.form.PRinfo = res.data.data.product_info.PRinfo;//商品描述
+                let _brand = [];
+                for(let i=0;i<that.brand_list.length;i++){
+                  if(that.brand_list[i].CBid == res.data.data.product_info.PRbrand[i].CBid){
+                    _brand[i] = res.data.data.product_info.PRbrand[i].CBvalue
+                  }
+                }
+                that.form.PRbrand = [].concat(_brand);//商品属性
+                that.form.brands = [].concat(res.data.data.product_info.brands);//商品商品样式
+                that.form.brands_key = [].concat(res.data.data.product_info.brands_key);//商品商品样式
+                that.form.PRvideo = {name:'',url:res.data.data.product_info.PRvideo};//商品视频
+                let _aboArr = [];
+                for(let i=0;i<res.data.data.product_info.PRaboimage.length;i++){
+                  _aboArr[i] = {name:'',url:res.data.data.product_info.PRaboimage[i]};
+                }
+                that.form.PRaboimage = [].concat(_aboArr);//商品详情
               }else{
-                that.$message.error(res.data.message)
+                that.$message.error(res.data.message);
               }
             },error => {
-              that.$message.error(error.data.message)
+              that.$message.error(error.data.message);
             })
           },
           getCategorybrands(id){
@@ -422,6 +452,9 @@
               _arr[i] = {name:fileList[i].name,url:fileList[i].url}
             }
             this.form.PRimage = [].concat(_arr)
+          },
+          handleRemoveVideo(file, fileList) {
+
           },
           handleAboRemove(file, fileList) {
             let _arr = [];
@@ -620,7 +653,15 @@
                 }
               }
             }
-
+            for(let i=0;i<this.form.brands_key.length;i++){
+              if(this.form.brands_key[i] == ''){
+                this.$message.error('请填写完整商品样式和价格');
+                return false;
+              }else if( i == 1 && (this.form.brands_key[i] == this.form.brands_key[i-1])){
+                this.$message.error('商品样式和价格特征值一样');
+                return false;
+              }
+            }
             _form.PRimage = _PRimage;
             axios.post(api.release_product+'?token='+localStorage.getItem('token'),_form).then(res => {
               if(res.data.status == 200){
