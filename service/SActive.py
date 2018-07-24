@@ -6,8 +6,8 @@ sys.path.append(os.path.dirname(os.getcwd()))
 
 from SBase import SBase, close_session
 
-from models.model import Actives
-from models.model import Coupons
+from ManagerSystem.models.model import Actives
+from ManagerSystem.models.model import Coupons
 class SActive(SBase):
     @close_session
     def get_actives_by_maid(self, maid):

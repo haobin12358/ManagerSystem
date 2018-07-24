@@ -75,7 +75,8 @@ class CProducts():
         PRtype = product.PRtype
         product_info["PRbrand"] = json.loads(PRbrand)
         product_info["PRtype"] = conversion_PRtype.get(PRtype)
-        product_info["PBimage"] = list(PRSWINGIMAGE.get(PRid))
+        pblist = tolist(self.sproduct.get_pball_by_prid(PRid))
+        product_info["PB"] = pblist
         product_info["PRquality"] = {}
         BRid = [br.BRid for br in self.sproduct.get_brid_by_prid(PRid)]
         log.info("BRid", BRid)

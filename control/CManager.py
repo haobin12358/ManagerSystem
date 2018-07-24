@@ -179,9 +179,9 @@ class CManager():
         manager = {
             "MAcreatTime": TimeManager.get_db_time_str()
         }
-        if "MAidentity" in data:
+        if data.get("MAidentity"):
             manager["MAidentity"] = conversion_MAidentity_reverse.get(data.get("MAidentity", "卖家"))
-        if "MAstatus" in data:
+        if data.get("MAstatus"):
             manager["MAstatus"] = conversion_MAstatus_resverse.get(data.get("MAstatus"), "可用")
 
         maid = token_to_usid(args.get("token"))
@@ -407,8 +407,9 @@ class CManager():
             users = tolist(self.smanager.get_users(start_num, page_size, or_filter))
             for user in users:
                 user["USsex"] = conversion_USsex.get(user.get("USsex"))
-                user["UScreateTime"]= TimeManager.get_web_time_str(user.get("UScreateTime"))
-                user["USloginTime"]= TimeManager.get_web_time_str(user.get("USloginTime"))
+                user["UScreateTime"] = TimeManager.get_web_time_str(user.get("UScreateTime"))
+                user["USloginTime"] = TimeManager.get_web_time_str(user.get("USloginTime"))
+                user["USstatus"] = conversion_MAstatus.get(user.get("USstatus"))
 
             response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
 
@@ -430,14 +431,50 @@ class CManager():
             return PARAMS_MISS
         data = json.loads(request.data)
         log.info("data", data)
-        if "USid" not in data:
+        if "UStelphone" not in data:
             return PARAMS_MISS
         maid = token_to_usid(args.get("token"))
         manager = self.smanager.get_manager_by_maid(maid)
         if manager.MAidentity > 101:
             return get_response("ERROR_MESSAGE_NO_PERMISSION", "MANAGERSYSTEMERROR", "ERROR_CODE_NO_PERMISSION")
         try:
-            update_result = tolist(self.smanager.update_user_by_filter())
+            from ManagerSystem.models.model import Users
+            and_filter = {
+                Users.UStelphone == data.get("UStelphone")
+            }
+            users = {
+                "USstatus": conversion_MAstatus_resverse.get(get_str(data, "USstatus"))
+            }
+            update_result = self.smanager.update_user_by_filter(and_filter, users)
+            if not update_result:
+                return get_response("ERROR_MESSAGE_DB_ERROR", "MANAGERSYSTEMERROR", "ERROR_CODE_DB_ERROR")
+            return get_response("SUCCESS_MESSAGE_UPDATE_DATA", "OK")
+        except Exception as e:
+            log.error("update users", e.message)
+            return SYSTEM_ERROR
+
+    def update_manager_by_matel(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        if "token" not in args:
+            return PARAMS_MISS
+        data = json.loads(request.data)
+        log.info("data", data)
+        if "MAtelphone" not in data:
+            return PARAMS_MISS
+        maid = token_to_usid(args.get("token"))
+        manager = self.smanager.get_manager_by_maid(maid)
+        if manager.MAidentity > 101:
+            return get_response("ERROR_MESSAGE_NO_PERMISSION", "MANAGERSYSTEMERROR", "ERROR_CODE_NO_PERMISSION")
+        try:
+            from ManagerSystem.models.model import Manager
+            mng = {
+                "MAstatus": conversion_MAstatus_resverse.get(get_str(data, "MAstatus"))
+            }
+            update_result = self.smanager.update_users_by_matel(data.get("MAtelphone"), mng)
+            if not update_result:
+                return get_response("ERROR_MESSAGE_DB_ERROR", "MANAGERSYSTEMERROR", "ERROR_CODE_DB_ERROR")
+            return get_response("SUCCESS_MESSAGE_UPDATE_DATA", "OK")
         except Exception as e:
             log.error("update users", e.message)
             return SYSTEM_ERROR

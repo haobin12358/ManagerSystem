@@ -25,16 +25,17 @@ class AManager(Resource):
 
         return APIS_WRONG
 
-
     def post(self, manager):
         log.info("get api", manager)
         action = {
             "apply": "self.cmanager.apply_manager()",
             "update_manager": "self.cmanager.update_manager()",
+            "update_manager_by_matel": "self.cmanager.update_manager_by_matel()",
             "update_user": "self.cmanager.update_password()",
             "get_inforcode": "self.cmanager.get_inforcode()",
             "login": "self.cmanager.login()",
-            "forget_password": "self.cmanager.forget_password()"
+            "forget_password": "self.cmanager.forget_password()",
+            "update_users": "self.cmanager.update_users()",
         }
         if manager in action:
             return eval(action.get(manager))

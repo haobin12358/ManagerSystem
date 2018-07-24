@@ -50,8 +50,8 @@ class SManager(SBase):
             .order_by(IdentifyingCode.ICtime.desc()).first()
 
     @close_session
-    def update_users_by_matel(self, matel):
-        return self.session.query(Manager).filter(Manager.MAtelphone == matel).update(matel)
+    def update_users_by_matel(self, matel, manager):
+        return self.session.query(Manager).filter(Manager.MAtelphone == matel).update(manager)
 
     @close_session
     def get_manager_by_name(self, name):
@@ -69,9 +69,10 @@ class SManager(SBase):
 
     @close_session
     def get_users(self, start_num, page_size, or_filter):
-        return self.session.query(Users.USname, Users.UStelphone, Users.UScreateTime, Users.USloginTime, Users.USsex)\
+        return self.session.query(Users.USname, Users.UStelphone, Users.UScreateTime,
+                                  Users.USloginTime, Users.USsex, Users.USstatus)\
             .filter(or_(*or_filter)).offset(start_num).limit(page_size).all()
 
     @close_session
     def update_user_by_filter(self, and_filter, user):
-        return self.session.query(Users).filter(and_(and_filter)).update(user)
+        return self.session.query(Users).filter(and_(*and_filter)).update(user)

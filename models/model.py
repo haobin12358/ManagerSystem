@@ -25,6 +25,7 @@ class Users(Base):
     USinvate = Column(String(64))                    # 用户邀请码，算法生成待设计
     UScreateTime = Column(String(14))
     USloginTime = Column(String(14))
+    USstatus = Column(Integer)
 
 
 
