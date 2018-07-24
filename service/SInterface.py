@@ -18,3 +18,7 @@ class SInterface(SBase):
     @close_session
     def get_menu_by_mnid(self, mnid):
         return self.session.query(Menu.MNid, Menu.MNparent, Menu.MNicon, Menu.MNname, Menu.MNurl).filter(Menu.MNid == mnid).first()
+
+    @close_session
+    def get_menu_by_filter(self, and_filter):
+        return self.session.query(Menu.MNid, Menu.MNparent, Menu.MNicon, Menu.MNname, Menu.MNurl).filter(*and_filter).all()

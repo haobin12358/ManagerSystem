@@ -28,7 +28,6 @@ class Users(Base):
     USstatus = Column(Integer)
 
 
-
 class Locations(Base):
     __tablename__ = "Locations"
     LOid = Column(String(64), primary_key=True)
@@ -70,6 +69,7 @@ class Products(Base):
     PRtime = Column(String(14))                  # 创建时间
     CTid = Column(String(64))                    # 类目id
     PRfranking = Column(Float)                   # 邮费
+    PRPoint = Column(Text)
 
 
 class ProductsBrands(Base):
@@ -83,6 +83,7 @@ class ProductsBrands(Base):
     PBsalesvolume = Column(Integer, nullable=False)  # 商品销量
     PBscore = Column(Float, nullable=True)           # 商品评分
     PBimage = Column(Text, nullable=False)           # 商品图片存放地址
+    PBmarkingPrice = Column(Float)                   # 商品划线价格
 
 
 class Brands(Base):
@@ -161,7 +162,8 @@ class Coupons(Base):
     COend = Column(String(14))    # 优惠券的结束时间
     COutype = Column(Integer)     # 优惠券限制的使用人群，用于后期扩展会员
     COtype = Column(Integer)      # 优惠券类型 {801 满减， 802 满折， 803 商品类目限制， 804 无限制， 805 用户类型限制， 806: 店铺折扣}
-    ACid = Column(String(64))
+    MAid = Column(String(64))     # 店家id
+    PRid = Column(Text)           # 商品id
 
 
 # 活动
@@ -173,6 +175,12 @@ class Actives(Base):
     ACimage = Column(Text)        # 活动宣传图画
     ACstart = Column(String(14))  # 活动开始时间
     ACend = Column(String(14))    # 活动结束时间
+    ACfilter = Column(Float)
+    ACdiscount = Column(Float)    # 折扣，值为0-1，其中0为免单
+    ACamount = Column(Float)      # 优惠金额，减免金额，限制最大数目
+    ACbrand = Column(String(64))  # 商品类别，限制部分商品使用
+    ACtype = Column(Integer)      # 优惠券类型 {801 满减， 802 满折， 803 商品类目限制， 804 无限制， 805 用户类型限制， 806: 店铺折扣}
+    PRid = Column(Text)           # 商品id
 
 
 # 用户

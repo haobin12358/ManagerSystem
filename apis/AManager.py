@@ -36,6 +36,7 @@ class AManager(Resource):
             "login": "self.cmanager.login()",
             "forget_password": "self.cmanager.forget_password()",
             "update_users": "self.cmanager.update_users()",
+            "add_manager": "self.cmanager.add_manager()",
         }
         if manager in action:
             return eval(action.get(manager))

@@ -12,10 +12,8 @@ from ManagerSystem.common.Tools import get_str
 from ManagerSystem.common.ResultManager import todict, tolist
 from ManagerSystem.common.TimeManagert import TimeManager
 from ManagerSystem.config.conversion import conversion_PBunit, \
-    conversion_PBunit_reverse, conversion_PRbrand, conversion_PRbrand_reverse, \
-    conversion_PRtype, conversion_PRtype_reverse, conversion_PBstatus_reverse, conversion_PBstatus
-
-from ManagerSystem.config.imageconfig import PRSWINGIMAGE, PRABOIMAGE
+    conversion_PBunit_reverse, conversion_PRtype, conversion_PRtype_reverse, \
+    conversion_PBstatus_reverse, conversion_PBstatus
 from ManagerSystem.globals import log
 
 
@@ -37,8 +35,20 @@ class CProducts():
         maid = args.get("token")
         product = self.sproduct.get_product_by_prid(PRid)
         log.info("product", product)
+
         if not product:
             return SYSTEM_ERROR
+        from ManagerSystem.service.SCategory import SCategory
+        from ManagerSystem.models.model import CategoryBrand
+        category_filter = {
+            CategoryBrand.CTid == product.CTid
+        }
+
+        category = tolist(SCategory().get_categorybrands_by_filter(category_filter))
+        log.info("cb list", category)
+        for cb in category:
+            if cb.get("CBvalue"):
+                cb["CBvalue"] = str.split(get_str(cb, "CBvalue"), ",")
         product_price = [9999999, -1]
         product_volue = 0
         product_price_list =[
@@ -51,6 +61,7 @@ class CProducts():
                 product_price[0] = row
             if row > product_price[1]:
                 product_price[1] = row
+        product_price = [str(i) for i in product_price]
         prprice = "-".join(product_price) \
             if product_price[0] != product_price[1] \
             else product_price[0]
@@ -75,27 +86,34 @@ class CProducts():
         PRtype = product.PRtype
         product_info["PRbrand"] = json.loads(PRbrand)
         product_info["PRtype"] = conversion_PRtype.get(PRtype)
-        pblist = tolist(self.sproduct.get_pball_by_prid(PRid))
-        product_info["PB"] = pblist
-        product_info["PRquality"] = {}
-        BRid = [br.BRid for br in self.sproduct.get_brid_by_prid(PRid)]
-        log.info("BRid", BRid)
-        for brid in BRid:
-            while brid != "0":
-                brand = self.sproduct.get_brand_by_brid(brid)
-                log.info("brand", brand)
-                brid, BRkey, BRvalue = brand.BRfromid, brand.BRkey, brand.BRvalue
-                if BRkey in product_info["PRquality"].keys():
-                    if BRvalue not in product_info["PRquality"][BRkey]["choice"]:
-                        product_info["PRquality"][BRkey]["choice"].append(BRvalue)
-                else:
-                    product_info["PRquality"].keys().append(BRkey)
-                    product_info["PRquality"][BRkey] = {}
-                    product_info["PRquality"][BRkey]["name"] = BRkey
-                    product_info["PRquality"][BRkey]["choice"] = [BRvalue]
+        brands, brands_key = self.get_brands(PRid)
+        product_info["brands"] = brands
+        product_info["brands_key"] = brands_key
         response_of_product = get_response("SUCCESS_MESSAGE_GET_PRODUCT", "OK")
-        response_of_product["data"] = product_info
+        response_of_product["data"] = {
+            "category": category,
+            "product_info": product_info
+        }
         return response_of_product
+
+    def get_brands(self, prid):
+        pblist = tolist(self.sproduct.get_pball_by_prid(prid))
+        brandskey = []
+
+        for pb in pblist:
+            brid = pb.get("BRid")
+            brand = self.sproduct.get_brand_by_brid(brid)
+            brands = []
+            while brid != "0":
+                if brand.BRkey not in brandskey:
+                    brandskey.append(brand.BRkey)
+                brands.append(brand.BRvalue)
+                brid = brand.BRfromid
+                brand = self.sproduct.get_brand_by_brid(brid)
+            pb["BRands"] = brands
+            pb['PBstatus'] = conversion_PBstatus.get(pb.get("PBstatus"))
+            pb["PBunit"] = conversion_PBunit.get(pb.get("PBunit"))
+        return pblist, brandskey
 
     def get_all(self):
         args = request.args.to_dict()
@@ -121,9 +139,9 @@ class CProducts():
         log.info("PRid list", PRid_list)
         pbstatus = get_str(args, "PBstatus")
         # todo 增加遍历输出所有图片
-        htv = float(args.get("htv", 0.48))
-        from ManagerSystem.common.Gethdp import get_hdp
-        hdp = get_hdp(htv)
+        # htv = float(args.get("htv", 0.48))
+        # from ManagerSystem.common.Gethdp import get_hdp
+        # hdp = get_hdp(htv)
         product_infos = []
         for PRid in PRid_list:
             product = todict(self.sproduct.get_product_by_prid(PRid))
@@ -327,7 +345,6 @@ class CProducts():
         response["data"] = data
         return response
 
-
     def get_m_by_n(self, key, key_list, brands, brid_list, index):
         # 首先移除需要判断的key
         #key_list.remove(key)
@@ -378,7 +395,6 @@ class CProducts():
 
         return control_key
 
-
     def add_product(self):
         args = request.args.to_dict()
         log.info("args", args)
@@ -393,7 +409,6 @@ class CProducts():
         except Exception as e:
             return TOKEN_ERROR
         # 库存
-
 
         prid = data.get("PRid")
         # todo 拆分更新

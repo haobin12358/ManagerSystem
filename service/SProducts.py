@@ -14,7 +14,7 @@ class SProducts(SBase):
     @close_session
     def get_product_by_maid(self, maid):
         return self.session.query(
-            Products.PRid, Products.PRname, Products.PRvideo, Products.PRimage, Products.PRtype,
+            Products.PRid, Products.PRname, Products.PRvideo, Products.PRimage, Products.PRtype, Products.PRPoint,
             Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart, Products.PRfranking
         ).filter(Products.MAid == maid).all()
 
@@ -24,13 +24,13 @@ class SProducts(SBase):
             print(type(i), i)
         return self.session.query(
             PB.PBid, PB.PRid, PB.BRid, PB.PBprice, PB.PBunit, PB.PBstatus,
-            PB.PBsalesvolume, PB.PBscore, PB.PBimage
+            PB.PBsalesvolume, PB.PBscore, PB.PBimage, PB.PBmarkingPrice,
         ).filter(PB.PRid == prid).all()
 
     @close_session
     def get_product_by_pbid_filters(self, pbid):
         return self.session.query(
-            PB.PRid, PB.BRid, PB.PBunit, PB.PBprice,
+            PB.PRid, PB.BRid, PB.PBunit, PB.PBprice, PB.PBmarkingPrice,
             PB.PBsalesvolume, PB.PBscore, PB.PBimage) \
             .filter_by(PBstatus=201).filter_by(PBid=pbid).first()
 
@@ -53,8 +53,8 @@ class SProducts(SBase):
     @close_session
     def get_product_by_prid(self, prid):
         return self.session.query(Products.PRname, Products.PRbrand, Products.PRinfo,
-                                  Products.PRvideo, Products.PRtype, Products.PRimage,
-                                  Products.PRaboimage, Products.PRvideostart,
+                                  Products.PRvideo, Products.PRtype, Products.PRimage, Products.PRPoint,
+                                  Products.PRaboimage, Products.PRvideostart, Products.CTid,
                                   Products.PRtime, Products.PRfranking).filter_by(
             PRid=prid).first()
 
@@ -89,19 +89,19 @@ class SProducts(SBase):
 
     @close_session
     def get_pball_by_brid(self, brid):
-        return self.session.query(PB.PBimage, PB.PBunit, PB.PBprice, PB.PBscore,
+        return self.session.query(PB.PBimage, PB.PBunit, PB.PBprice, PB.PBscore, PB.PBmarkingPrice,
                                   PB.PBsalesvolume, PB.PBid).filter_by(BRid=brid).first()
 
     @close_session
     def get_pball_by_prid(self, prid):
         return self.session.query(
-            PB.PBimage, PB.PBunit, PB.PBprice, PB.PBscore, PB.PBstatus,
+            PB.PBimage, PB.PBunit, PB.PBprice, PB.PBscore, PB.PBstatus, PB.PBmarkingPrice, PB.BRid,
             PB.PBsalesvolume, PB.PBid).filter(PB.PRid == prid, PB.PBstatus != 207).all()
 
     @close_session
     def get_pball_by_prid_pbstatus(self, prid, pbstatus):
         return self.session.query(
-            PB.PBimage, PB.PBunit, PB.PBprice, PB.PBscore,
+            PB.PBimage, PB.PBunit, PB.PBprice, PB.PBscore, PB.PBmarkingPrice,
             PB.PBsalesvolume, PB.PBid, PB.PBstatus).filter(PB.PRid == prid, PB.PBstatus == pbstatus).all()
 
     def get_volue_score_by_pbid(self, pbid):
@@ -174,7 +174,7 @@ class SProducts(SBase):
     @close_session
     def get_product_by_pbid(self, pbid):
         return self.session.query(
-            PB.PRid, PB.BRid, PB.PBunit, PB.PBprice,
+            PB.PRid, PB.BRid, PB.PBunit, PB.PBprice, PB.PBmarkingPrice,
             PB.PBsalesvolume, PB.PBscore, PB.PBimage).filter_by(PBid=pbid).first()
 
     @close_session
@@ -189,5 +189,5 @@ class SProducts(SBase):
     def get_product_by_filter(self, pr_filter):
         return self.session.query(
             Products.PRid, Products.PRname, Products.PRvideo, Products.PRimage, Products.PRtype, Products.CTid,
-            Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart, Products.PRfranking
+            Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart, Products.PRfranking, Products.PRPoint
         ).filter(*pr_filter).all()

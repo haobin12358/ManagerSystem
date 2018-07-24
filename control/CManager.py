@@ -27,6 +27,15 @@ class CManager():
         self.sinterface = SInterface()
 
     def add_manager(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        if "token" not in args:
+            return PARAMS_MISS
+        smid = token_to_usid(args.get("token"))
+        smanager = self.smanager.get_manager_by_maid(smid)
+        if smanager.MAidentity != 100:
+            return get_response("ERROR_MESSAGE_NO_PERMISSION", "MANAGERSYSTEMERROR", "ERROR_CODE_NO_PERMISSION")
+
         data = json.loads(request.data)
         log.info("data", data)
         manager_key = [
@@ -40,18 +49,25 @@ class CManager():
         manager["MAid"] = maid
         manager["MAname"] = get_str(data, "MAname")
         manager["MAtelphone"] = get_str(data, "MAtelphone")
-        # todo 创建管理员
-
-    def update_manager(self):
-        args = request.args.to_dict()
-        if "token" not in args:
-            return PARAMS_MISS
-        log.info("args", args)
-        maid = token_to_usid(args.get("token"))
-        data = json.loads(request.data)
-        log.info("data", data)
-
-
+        manager["MApassword"] = self.create_password()
+        manager["MAemail"] = get_str(data, "MAemail")
+        manager["MAidentity"] = 101
+        manager["MAstatus"] = 153
+        manager["MAstatus"] = 153
+        manager["MAcreatTime"] = TimeManager.get_db_time_str()
+        manager["MAendTime"] = TimeManager.get_forward_time(days=365)
+        manager["MAloginTime"] = TimeManager.get_db_time_str()
+        self.smanager.add_model("Manager", **manager)
+        from ManagerSystem.service.SInterface import SInterface
+        from ManagerSystem.models.model import Menu
+        sinterface = SInterface()
+        mmlist = sinterface.get_menu_by_filter({Menu.MNparent != "0"})
+        for mm in mmlist:
+            self.smanager.add_model(
+                "ManagerMenu", MMid=str(uuid.uuid1()), MAid=maid, MNid=mm.MNid)
+        response = get_response("SUCCESS_MESSAGE_REGISTER", "OK")
+        response["data"] = manager
+        return response
 
     def apply_manager(self):
         data = json.loads(request.data)

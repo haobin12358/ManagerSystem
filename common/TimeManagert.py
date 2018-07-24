@@ -33,3 +33,7 @@ class TimeManager(object):
     @staticmethod
     def get_web_time_str(time_str, formattype=fomat_for_web_second):
         return datetime.datetime.strptime(time_str, format_for_db).strftime(formattype)
+
+    @staticmethod
+    def get_forward_time(**kwargs):
+        return (datetime.datetime.now() + datetime.timedelta(**kwargs)).strftime(format_for_db)
