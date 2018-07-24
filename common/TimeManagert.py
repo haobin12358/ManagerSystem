@@ -37,3 +37,7 @@ class TimeManager(object):
     @staticmethod
     def get_forward_time(**kwargs):
         return (datetime.datetime.now() + datetime.timedelta(**kwargs)).strftime(format_for_db)
+
+
+if __name__ == "__main__":
+    print(TimeManager.get_forward_time(days=-1))

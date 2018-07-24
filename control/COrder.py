@@ -247,6 +247,133 @@ class COrder():
         ]
         return response
 
+    def get_order_situation(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        if "token" not in args:
+            return PARAMS_MISS
+        from ManagerSystem.models.model import OrderMain
+        days = int(args.get("days", 1))
+        maid = token_to_usid(args.get("token"))
+        prid_list = self.sproduct.get_product_by_maid(maid)
+        pbid_list = []
+        for pr in prid_list:
+            pbid_list.extend([pb.PBid for pb in self.sproduct.get_pbid_by_prid(pr.PRid)])
+        OMid_list = []
+        for pbid in pbid_list:
+            OMid_list.extend([op.OMid for op in self.sorder.get_order_part_list_by_pbid(pbid)])
+
+        OMid_list = {}.fromkeys(OMid_list).keys()
+        payed_count = 0
+        paying_count = 0
+        deliver_count = 0
+        week_payed_count = 0
+        week_paying_count = 0
+        omprice = 0
+        week_payed_list = []
+        week_paying_list = []
+
+        for omid in OMid_list:
+
+            om = self.sorder.get_om_by_filter({OrderMain.OMid == omid})[0]
+            if om.OMtime > TimeManager.get_forward_time(days=-days):
+                if om.OMstatus >= 21:
+                    payed_count += 1
+                    omprice += om.OMprice
+                elif om.OMstatus != 0:
+                    paying_count += 1
+                if om.OMstatus == 21:
+                    deliver_count += 1
+            if om.OMtime > TimeManager.get_forward_time(days=-7):
+                if om.OMstatus >= 21:
+                    week_payed_count += 1
+                elif om.OMstatus != 0:
+                    week_paying_count += 1
+
+            for i in range(1, 8):
+                if om.OMtime == TimeManager.get_forward_time(days=-i):
+                    if om.OMstatus >= 21:
+                        if len(week_payed_list) < i:
+                            week_payed_list.append(1)
+                        else:
+                            week_payed_list[i - 1] += 1
+                    elif om.OMstatus != 0:
+                        if len(week_paying_list) < i:
+                            week_paying_list.append(1)
+                        else:
+                            week_paying_list[i - 1] += 1
+                else:
+                    if len(week_payed_list) < i:
+                        week_payed_list.append(0)
+                    else:
+                        week_payed_list[i - 1] += 0
+
+                    if len(week_paying_list) < i:
+                        week_paying_list.append(0)
+                    else:
+                        week_paying_list[i - 1] += 0
+
+        # payed_filter = {
+        #     OrderMain.OMtime< TimeManager.get_forward_time(days=-days),
+        #     OrderMain.OMstatus >= 21,
+        # }
+        # payed_count = self.sorder.get_count_by_or_filter("model.OrderMain.OMid", payed_filter, set())
+        # omlist = self.sorder.get_om_by_filter(payed_filter)
+        # omprice = 0
+        # for om in omlist:
+        #     omprice += om.OMprice
+        # paying_filter = {
+        #     OrderMain.OMtime < TimeManager.get_forward_time(days=-days),
+        #     OrderMain.OMstatus < 21,
+        #     OrderMain.OMstatus != 0,
+        # }
+        # paying_count = self.sorder.get_count_by_or_filter("model.OrderMain.OMid", paying_filter, set())
+        # deliver_filter = {
+        #     OrderMain.OMstatus == 21,
+        # }
+        # deliver_count = self.sorder.get_count_by_or_filter("model.OrderMain.OMid", deliver_filter, set())
+        # week_payed_filter = {
+        #     OrderMain.OMtime < TimeManager.get_forward_time(days=-7),
+        #     OrderMain.OMstatus >= 21
+        #
+        # }
+        # week_payed_count = self.sorder.get_count_by_or_filter("model.OrderMain.OMid", week_payed_filter, set())
+        # week_paying_filter = {
+        #     OrderMain.OMtime < TimeManager.get_forward_time(days=-days),
+        #     OrderMain.OMstatus < 21,
+        #     OrderMain.OMstatus != 0,
+        # }
+        # week_paying_count = self.sorder.get_count_by_or_filter("model.OrderMain.OMid", week_paying_filter, set())
+        # week_payed_list = []
+        # week_paying_list = []
+        # for i in range(1, 8):
+        #     day_payed_filter = {
+        #         OrderMain.OMtime < TimeManager.get_forward_time(days=-i),
+        #         OrderMain.OMstatus >= 21
+        #     }
+        #     count = self.sorder.get_count_by_or_filter(day_payed_filter)
+        #     week_payed_list.append(count)
+        #     day_paying_filter = {
+        #         OrderMain.OMtime < TimeManager.get_forward_time(days=-i),
+        #         OrderMain.OMstatus < 21,
+        #         OrderMain.OMstatus != 0,
+        #     }
+        #     count = self.sorder.get_count_by_or_filter(day_paying_filter)
+        #     week_paying_list.append(count)
+        response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
+        response["data"] = {
+            "payed_count": payed_count,
+            "paying_count": paying_count,
+            "deliver_count": deliver_count,
+            "week_payed_count": week_payed_count,
+            "week_paying_count": week_paying_count,
+            "week_payed_list": week_payed_list,
+            "week_paying_list": week_paying_list,
+            "omprice": omprice,
+
+        }
+        return response
+
 
 if __name__ == "__main__":
     co = COrder()
