@@ -17,6 +17,8 @@ class AManager(Resource):
         log.info("get api", manager)
         action = {
             "get_manager": "self.cmanager.get_manager()",
+            "get_managers": "self.cmanager.get_managers()",
+            "get_users": "self.cmanager.get_users()",
         }
         if manager in action:
             return eval(action.get(manager))

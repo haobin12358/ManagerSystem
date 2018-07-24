@@ -17,7 +17,7 @@ from ManagerSystem.common.ImportManager import get_response
 from ManagerSystem.config.response import SYSTEM_ERROR, PARAMS_MISS
 from ManagerSystem.config.conversion import conversion_MAidentity_reverse, conversion_MAidentity,\
     conversion_MAstatus, conversion_MAstatus_resverse
-from ManagerSystem.common.ResultManager import todict
+from ManagerSystem.common.ResultManager import todict, tolist
 
 
 
@@ -153,11 +153,10 @@ class CManager():
 
             if not manager:
                 return get_response("ERROR_MESSAGE_WRONG_PASSWORD", "MANAGERSYSTEMERROR", "ERROR_WRONG_PASSWORD")
+
             maid = manager.MAid
+            self.smanager.update_manager(maid, {"MAloginTime": TimeManager.get_db_time_str()})
             response = get_response("SUCCESS_MESSAGE_LOGIN", "OK")
-
-            from ManagerSystem.config.conversion import conversion_MAidentity
-
             response["data"] = {
                 "side": self.get_interface(maid),
                 "token": usid_to_token(maid),
@@ -336,3 +335,90 @@ class CManager():
             menu_list.append(menu)
         log.info("menu list", menu_list)
         return menu_list
+
+    def get_managers(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        if "token" not in args:
+            return PARAMS_MISS
+        page_size = int(args.get("page_size"))
+        page_num = int(args.get("page_num"))
+        or_filter = set()
+        if "MAfilter" in args:
+            from ManagerSystem.models.model import Manager
+            or_filter.add(Manager.MAnicname.like("%{0}%".format(get_str(args, "MAfilter"))))
+            or_filter.add(Manager.MAemail.like("%{0}%".format(get_str(args, "MAfilter"))))
+
+        maid = token_to_usid(args.get("token"))
+        try:
+            pn, count = self.check_page_value(page_num, page_size, "model.Manager.MAid", set(), or_filter)
+            start_num = (pn - 1) * page_size
+            manager = self.smanager.get_manager_by_maid(maid)
+            if not manager:
+                return SYSTEM_ERROR
+            manager_list = tolist(self.smanager.get_managers(start_num, page_size, or_filter))
+            for manager in manager_list:
+                manager["MAidentity"] = conversion_MAidentity.get(manager.get("MAidentity"))
+                manager["MAstatus"] = conversion_MAstatus.get(manager.get("MAstatus"))
+                manager["MAloginTime"] = TimeManager.get_web_time_str(manager.get("MAloginTime"))
+                manager["MAcreatTime"] = TimeManager.get_web_time_str(manager.get("MAcreatTime"))
+            response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
+            response["data"] = {
+                "count": count,
+                "page_num": pn,
+                "page_size": page_size,
+                "Managers": manager_list
+            }
+            return response
+        except Exception as e:
+            log.error("get managers", e.message)
+            return SYSTEM_ERROR
+
+    def check_page_value(self, page_num, page_size, model_name, and_params, or_params):
+        count = self.smanager.get_count_by_or_filter(model_name, and_params, or_params)
+        if page_size * page_num > count:
+            page_num = count / page_size
+        page_num = page_num if page_num > 0 else 1
+        return page_num, count
+
+    def get_users(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        if "token" not in args:
+            return PARAMS_MISS
+        maid = token_to_usid(args.get("token"))
+        try:
+            manager = self.smanager.get_manager_by_maid(maid)
+            if not manager:
+                return SYSTEM_ERROR
+            if manager.MAidentity > 101 :
+                return get_response("ERROR_MESSAGE_NO_PERMISSION","MANAGERSYSTEMERROR", "ERROR_CODE_NO_PERMISSION")
+            page_size = int(args.get("page_size"))
+            page_num = int(args.get("page_num"))
+            or_filter = set()
+            if args.get("USfilter"):
+                from ManagerSystem.models.model import Users
+                or_filter.add(Users.USname.like("%{0}%".format(get_str(args, "USfilter"))))
+                or_filter.add(Users.UStelphone.like("%{0}%".format(get_str(args, "USfilter"))))
+
+            from ManagerSystem.config.conversion import conversion_USsex
+            pn, count = self.check_page_value(page_num, page_size, "model.Users.USid", set(), or_filter)
+            start_num = (pn - 1) * page_size
+            users = tolist(self.smanager.get_users(start_num, page_size, or_filter))
+            for user in users:
+                user["USsex"] = conversion_USsex.get(user.get("USsex"))
+                user["UScreateTime"]= TimeManager.get_web_time_str(user.get("UScreateTime"))
+                user["USloginTime"]= TimeManager.get_web_time_str(user.get("USloginTime"))
+
+            response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
+
+            response["data"] = {
+                "count": count,
+                "page_num": pn,
+                "page_size": page_size,
+                "USers": users
+            }
+            return response
+        except Exception as e:
+            log.error("get users", e.message)
+            return SYSTEM_ERROR

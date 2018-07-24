@@ -10,7 +10,7 @@ from ManagerSystem.config import dbconfig as cfg
 
 DB_PARAMS = "{0}://{1}:{2}@{3}/{4}?charset={5}".format(
     cfg.sqlenginename, cfg.username, cfg.password, cfg.host, cfg.database, cfg.charset)
-mysql_engine = create_engine(DB_PARAMS, echo=True)
+mysql_engine = create_engine(DB_PARAMS, echo=False)
 Base = declarative_base()
 
 
@@ -23,6 +23,9 @@ class Users(Base):
     USsex = Column(Integer)                          # 用户性别 {101男， 102女}
     UScoin = Column(Float)                           # 用户积分，根据用户购买商品生成
     USinvate = Column(String(64))                    # 用户邀请码，算法生成待设计
+    UScreateTime = Column(String(14))
+    USloginTime = Column(String(14))
+
 
 
 class Locations(Base):
@@ -190,6 +193,7 @@ class Manager(Base):
     MAidImageReverse = Column(Text)                   # 法人身份证B面
     MAbusinessLicense = Column(Text)                  # 店家营业执照
     MAcredit = Column(String(18))                     # 统一社会信用代码
+    MAloginTime = Column(String(14))                  # 最后一次登录时间
 
 
 # 权限

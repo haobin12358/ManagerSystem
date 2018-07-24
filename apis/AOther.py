@@ -405,7 +405,9 @@ class AOther(Resource):
             }
         elif other == "upload_files":
             formdata = request.form
+            log.info("formdata", formdata)
             files = request.files.get("files")
+
             import platform
             from ManagerSystem.config import Inforcode
             if platform.system() == "Windows":

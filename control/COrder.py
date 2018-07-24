@@ -86,13 +86,17 @@ class COrder():
                 if not om_dict:
                     continue
                 om_dict = om_dict[0]
+                om_count = {k: 0 for k in cvs.conversion_OMstatus}
+
                 om_dict.update({"order_item": om_id_dict.get(om_id)})
                 location = todict(self.sorder.get_location_by_usid(om_dict.pop("USid")))
                 log.info("location", location)
+                om_count[om_dict.get("OMstatus")] = om_count.get(om_dict.get("OMstatus")) + 1
                 om_dict.update(location)
                 om_dict["OMcointype"] = cvs.conversion_PBunit.get(om_dict.get("OMcointype"), "其他币种")
                 om_dict["OMstatus"] = cvs.conversion_OMstatus.get(om_dict.get("OMstatus"), 0)
                 om_dict["OMtime"] = TimeManager.get_web_time_str(om_dict.get("OMtime"))
+
                 om_list.append(om_dict)
             log.info("omlist", om_list)
             count = len(om_list)
@@ -105,7 +109,8 @@ class COrder():
                 "count": count,
                 "page_num": page_num,
                 "page_size": page_size,
-                "OrderMains": om_list
+                "OrderMains": om_list,
+                "OMcount": om_count
             }
             return data
         except Exception as e:
