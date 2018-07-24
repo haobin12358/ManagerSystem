@@ -64,7 +64,7 @@
       return {
         expandAll: false,
         orderList: [],
-        total_page: 1,
+        total_page: 0,
         current_page: 0,
         total_num: 0,
         page_size: 10,
@@ -76,9 +76,8 @@
     },
     methods: {
       orderDetails(order) {
-        // console.log(order.LOid)
-        // this.$router.push({path: '/order/orderDetails', query: {order}});
-        this.$router.push({name: 'orderDetails', params: {OMid: order.OMid}});
+        let OMid = order.OMid
+        this.$router.push({path: '/order/orderDetails', query: {OMid}});
       },
       changeOMstatus(OMstatus) {
         if(OMstatus == '全部') {
@@ -106,8 +105,6 @@
           }else{
             this.$message.error(res.data.message);
           }
-        },error => {
-          this.$message.error(error.data.message);
         })
       },
       pageChange(v){

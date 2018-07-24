@@ -13,7 +13,9 @@ const api={
   update_order_status: title + 'order/update_order_status',//更新订单状态
 
   get_managers: title + 'user/get_managers',//获取管理员列表
+  update_manager_by_matel: title + 'user/update_manager_by_matel',//封禁/取消封禁管理员
   get_users: title + 'user/get_users',//获取用户信息列表
+  update_users: title + 'user/update_users',//封禁/取消封禁用户
 
   get_all_product: title + 'product/get_all',//获取所有商品
   release_product: title + 'product/release',//发布商品商品
