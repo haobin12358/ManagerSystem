@@ -12,6 +12,8 @@ const api={
   get_order_by_LOid: title + 'order/order_abo',//获取订单详情
   update_order_status: title + 'order/update_order_status',//更新订单状态
 
+  get_managers: title + 'user/get_managers',//获取管理员列表
+  get_users: title + 'user/get_users',//获取用户信息列表
 
   get_all_product: title + 'product/get_all',//获取所有商品
   release_product: title + 'product/release',//发布商品商品
