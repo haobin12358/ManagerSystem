@@ -1,12 +1,12 @@
 <template>
   <div class="order-index-left">
     <div class="order-box">
-      <div class="order-text">付款笔数</div>
-      <div class="order-number">{{orderSituation.week_paying_count}}</div>
+      <div class="order-text">下单笔数</div>
+      <div class="order-number">{{orderSituation.ordered_count}}</div>
     </div>
     <div class="order-box">
-      <div class="order-text">退款笔数</div>
-      <div class="order-number">{{orderSituation.week_payed_count}}</div>
+      <div class="order-text">收入总额</div>
+      <div class="order-number number-red">￥{{orderSituation.omprice}}</div>
     </div>
   </div>
 </template>
@@ -48,6 +48,9 @@
         text-align: center;
         margin: 0.2rem 0 0.2rem 0;
         font-size: 40px;
+      }
+      .number-red {
+        color: @red;
       }
     }
   }
