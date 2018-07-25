@@ -47,34 +47,34 @@
       <div class="all-order-tabs">
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="全部" name="全部" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已取消" name="已取消" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="未支付" name="未支付" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="支付中" name="支付中" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已支付" name="已支付" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已发货" name="已发货" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已收货" name="已收货" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已完成" name="已完成" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已评价" name="已评价" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="退款中" name="退款中" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -84,6 +84,9 @@
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
   import allOrderTable from '../../components/common/all-order-table';
+  import api from '../../api/api';
+  import {Message} from 'element-ui';
+  import axios from 'axios';
   export default {
       data() {
           return {
@@ -125,6 +128,12 @@
             lazyStatus: true,
             PRnameSearch: '',
             OMidSearch: '',
+            orderList: [],
+            /*total_page: 0,
+            current_page: 0,
+            total_num: 0,*/
+            page_size: 10,
+            OMstatus: ''
           }
       },
       components: {
@@ -136,11 +145,35 @@
           console.log('fresh');
         },
         handleClick(tab) {
-          this.$refs.child.changeOMstatus(tab.label)
+          this.changeOMstatus(tab.label)
+        },
+        changeOMstatus(OMstatus) {
+          if(OMstatus == '全部') {
+            this.OMstatus = ''
+          }else {
+            this.OMstatus = OMstatus
+          }
+          this.getData(1)
+        },
+        getData(v){
+          let params = {
+            token: localStorage.getItem('token'),
+            OMstatus: this.OMstatus,
+            page_num: v,
+            page_size: this.page_size
+          };
+          axios.get(api.get_all_order,{params:params}).then(res => {
+            if(res.data.status == 200) {
+              this.orderList = res.data.data.OrderMains;
+              this.$refs.child.getOrderList(res.data.data, this.page_size)
+            }else{
+              this.$message.error(res.data.message);
+            }
+          })
         }
       },
       created() {
-
+        this.getData(1)
       }
   }
 </script>
