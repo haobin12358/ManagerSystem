@@ -76,22 +76,20 @@ class COrder():
                     else:
                         om_id_dict[op_pb.get("OMid")] = [op_pb]
             log.info("om_id_dict", om_id_dict)
+            om_count = {k: 0 for k in cvs.conversion_OMstatus}
             for om_id in om_id_dict:
                 if args.get("OMid") and args.get("OMid") not in om_id:
                     continue
                 omfilter_tmp  = omfilter.copy()
                 omfilter_tmp.add(OrderMain.OMid == om_id)
                 om_dict = tolist(self.sorder.get_om_by_filter(omfilter_tmp))
-
                 if not om_dict:
                     continue
                 om_dict = om_dict[0]
-                om_count = {k: 0 for k in cvs.conversion_OMstatus}
-
                 om_dict.update({"order_item": om_id_dict.get(om_id)})
                 location = todict(self.sorder.get_location_by_usid(om_dict.pop("USid")))
                 log.info("location", location)
-                om_count[om_dict.get("OMstatus")] = om_count.get(om_dict.get("OMstatus")) + 1
+                om_count[om_dict.get("OMstatus")] += 1
                 om_dict.update(location)
                 om_dict["OMcointype"] = cvs.conversion_PBunit.get(om_dict.get("OMcointype"), "其他币种")
                 om_dict["OMstatus"] = cvs.conversion_OMstatus.get(om_dict.get("OMstatus"), 0)
@@ -264,12 +262,12 @@ class COrder():
             OMid_list.extend([op.OMid for op in self.sorder.get_order_part_list_by_pbid(pbid)])
 
         OMid_list = {}.fromkeys(OMid_list).keys()
-        payed_count = 0
-        paying_count = 0
-        deliver_count = 0
-        week_payed_count = 0
-        week_paying_count = 0
-        omprice = 0
+        ordered_count = 0  # 下单总数
+        paying_count = 0   # 待付款
+        deliver_count = 0  # 待发货
+        received_count = 0  # 已收货
+        omprice = 0         # 订单总收入
+        refund_count = 0    # 退款中
         week_payed_list = []
         week_paying_list = []
 
@@ -277,27 +275,29 @@ class COrder():
 
             om = self.sorder.get_om_by_filter({OrderMain.OMid == omid})[0]
             if om.OMtime > TimeManager.get_forward_time(days=-days):
-                if om.OMstatus >= 21:
-                    payed_count += 1
+                if om.OMstatus >= 56:
+                    refund_count += 1
+
+                if om.OMstatus >= 14:
+                    ordered_count += 1
                     omprice += om.OMprice
                 elif om.OMstatus != 0:
                     paying_count += 1
+
                 if om.OMstatus == 21:
                     deliver_count += 1
-            if om.OMtime > TimeManager.get_forward_time(days=-7):
-                if om.OMstatus >= 21:
-                    week_payed_count += 1
-                elif om.OMstatus != 0:
-                    week_paying_count += 1
 
-            for i in range(1, 8):
+                if om.OMstatus >= 28:
+                    received_count += 1
+
+            for i in range(1, days + 1):
                 if om.OMtime == TimeManager.get_forward_time(days=-i):
-                    if om.OMstatus >= 21:
+                    if om.OMstatus >= 14:
                         if len(week_payed_list) < i:
                             week_payed_list.append(1)
                         else:
                             week_payed_list[i - 1] += 1
-                    elif om.OMstatus != 0:
+                    if om.OMstatus >= 21:
                         if len(week_paying_list) < i:
                             week_paying_list.append(1)
                         else:
@@ -362,11 +362,11 @@ class COrder():
         #     week_paying_list.append(count)
         response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
         response["data"] = {
-            "payed_count": payed_count,
+            "ordered_count": ordered_count,
             "paying_count": paying_count,
             "deliver_count": deliver_count,
-            "week_payed_count": week_payed_count,
-            "week_paying_count": week_paying_count,
+            "received_count": received_count,
+            "refund_count": refund_count,
             "week_payed_list": week_payed_list,
             "week_paying_list": week_paying_list,
             "omprice": omprice,

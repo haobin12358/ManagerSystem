@@ -78,6 +78,7 @@ class CProducts():
         product_info["PRsalevolume"] = product_volue
         product_info["PRname"] = product.PRname
         product_info["PRvideo"] = product.PRvideo
+        product_info["PRfranking"] = product.PRfranking
         product_info["PRinfo"] = product.PRinfo
         product_info["PRvideostart"] = product.PRvideostart
         product_info["PRimage"] = json.loads(product.PRimage)
@@ -103,6 +104,8 @@ class CProducts():
         for pb in pblist:
             brid = pb.get("BRid")
             brand = self.sproduct.get_brand_by_brid(brid)
+            pbnumber_list = [st.PBnumber for st in self.stock.get_stocks_by_PBid(pb.get("PBid"))]
+            log.info("pbnumber_list", pbnumber_list)
             brands = []
             while brid != "0":
                 if brand.BRkey not in brandskey:
@@ -113,6 +116,8 @@ class CProducts():
             pb["BRands"] = brands
             pb['PBstatus'] = conversion_PBstatus.get(pb.get("PBstatus"))
             pb["PBunit"] = conversion_PBunit.get(pb.get("PBunit"))
+            pb["PBnumber"] = sum(pbnumber_list)
+
         return pblist, brandskey
 
     def get_all(self):
