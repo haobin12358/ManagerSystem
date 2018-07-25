@@ -57,51 +57,134 @@
         let params = {
           token: localStorage.getItem('token'),
           days: days
-        };
+        }
+        let daysList = []
+        for(let i=1;i<31;i++) {
+          let day = '第'+i+'天'
+          daysList.push(day)
+        }
         axios.get(api.get_order_situation, {params: params}).then(res => {
           if(res.data.status == 200) {
             this.orderSituation =res.data.data
-            this.option7 = {
-              title: {
-                text: '近七日数据',
-                subtext: '注：下单笔数不包括退单数据'
-              },
-              tooltip: {
-                trigger: 'axis'
-              },
-              legend: {
-                data:['下单笔数', '付款笔数']
-              },
-              grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-              },
-              xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: ['周一','周二','周三','周四','周五','周六','周日']
-              },
-              yAxis: {
-                type: 'value'
-              },
-              series: [
-                {
-                  name:'下单笔数',
-                  type:'line',
-                  smooth: true,
-                  data: this.orderSituation.week_paying_list
+            if(days == 1) {
+              this.option1 = {
+                title : {
+                  text: '昨日数据',
+                  subtext: '纯属虚构',
+                  x:'center'
                 },
-                {
-                  name:'付款笔数',
-                  type:'line',
-                  smooth: true,
-                  data: this.orderSituation.week_payed_list
-                }
-              ]
+                tooltip : {
+                  trigger: 'item',
+                  formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                  orient: 'vertical',
+                  left: 'left',
+                  data: ['未支付','已支付']
+                },
+                series : [
+                  {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[
+                      {value:this.orderSituation.paying_count, name:'未支付'},
+                      {value:this.orderSituation.week_paying_list[0], name:'已支付'}
+                    ],
+                    itemStyle: {
+                      emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                      }
+                    }
+                  }
+                ]
+              }
+            }else if(days == 7) {
+              this.option7 = {
+                title: {
+                  text: '近七日数据',
+                  subtext: '注：下单笔数不包括退单数据'
+                },
+                tooltip: {
+                  trigger: 'axis'
+                },
+                legend: {
+                  data:['下单笔数', '付款笔数']
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true
+                },
+                xAxis: {
+                  type: 'category',
+                  boundaryGap: false,
+                  data: ['周一','周二','周三','周四','周五','周六','周日']
+                },
+                yAxis: {
+                  type: 'value'
+                },
+                series: [
+                  {
+                    name:'下单笔数',
+                    type:'line',
+                    smooth: true,
+                    data: this.orderSituation.week_paying_list
+                  },
+                  {
+                    name:'付款笔数',
+                    type:'line',
+                    smooth: true,
+                    data: this.orderSituation.week_payed_list
+                  }
+                ]
+              }
+            }else if(days == 30) {
+              this.option30 = {
+                title: {
+                  text: '近三十日数据',
+                  subtext: '注：下单笔数不包括退单数据'
+                },
+                tooltip: {
+                  trigger: 'axis'
+                },
+                legend: {
+                  data:['下单笔数', '付款笔数']
+                },
+                grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true
+                },
+                xAxis: {
+                  type: 'category',
+                  boundaryGap: false,
+                  data: daysList
+                },
+                yAxis: {
+                  type: 'value'
+                },
+                series: [
+                  {
+                    name:'下单笔数',
+                    type:'line',
+                    smooth: true,
+                    data: this.orderSituation.week_paying_list
+                  },
+                  {
+                    name:'付款笔数',
+                    type:'line',
+                    smooth: true,
+                    data: this.orderSituation.week_payed_list
+                  }
+                ]
+              }
             }
-            console.log(this.orderSituation)
           }else{
             this.$message.error(res.data.message);
           }
@@ -109,107 +192,25 @@
           this.$message.error(error.data.message);
         })
       },
+      // 判断点击的tab
       handleClick(tab, event) {
         if(tab.name == 'one') {
           this.days = '昨日'
           this.leftDays = '昨日'
-          this.option1 = {
-            title : {
-              text: '昨日数据',
-              subtext: '纯属虚构',
-              x:'center'
-            },
-            tooltip : {
-              trigger: 'item',
-              formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            legend: {
-              orient: 'vertical',
-              left: 'left',
-              data: ['未支付','已支付']
-            },
-            series : [
-              {
-                name: '访问来源',
-                type: 'pie',
-                radius : '55%',
-                center: ['50%', '60%'],
-                data:[
-                  {value:2, name:'未支付'},
-                  {value:3, name:'已支付'}
-                ],
-                itemStyle: {
-                  emphasis: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                  }
-                }
-              }
-            ]
-          }
           this.getData(1)
-          // this.$refs.one.changeTopData(0);
-          // this.$refs.leftOne.changeLeftData(0);
         }else if(tab.name == 'seven') {
           this.days = '七日'
           this.leftDays = '近七日'
           this.getData(7)
-          // this.$refs.seven.changeTopData(1);
-          // this.$refs.leftSeven.changeLeftData(1);
         }else if(tab.name == 'thirty') {
           this.days = '近三十日'
           this.leftDays = '近三十日'
-          this.option30 = {
-            title: {
-              text: '近三十日数据',
-              subtext: '注：下单笔数不包括退单数据'
-            },
-            tooltip: {
-              trigger: 'axis'
-            },
-            legend: {
-              data:['下单笔数', '付款笔数']
-            },
-            grid: {
-              left: '3%',
-              right: '4%',
-              bottom: '3%',
-              containLabel: true
-            },
-            xAxis: {
-              type: 'category',
-              boundaryGap: false,
-              data: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30']
-            },
-            yAxis: {
-              type: 'value'
-            },
-            series: [
-              {
-                name:'下单笔数',
-                type:'line',
-                smooth: true,
-                data: [5,2,1,4,3,6,4,4,5,4,5,2,1,4,3,6,4,4,5,4,5,2,1,4,3,6,4,4,5,4]
-              },
-              {
-                name:'付款笔数',
-                type:'line',
-                smooth: true,
-                data: [3,5,2,6,9,6,6,4,8,5,3,5,2,6,9,6,6,4,8,5,3,5,2,6,9,6,6,4,8,5]
-              }
-            ]
-          }
           this.getData(30)
-          // this.$refs.thirty.changeTopData(2);
-          // this.$refs.leftThirty.changeLeftData(2);
         }
       }
     },
     mounted() {
       this.getData(7)
-      // this.$refs.seven.changeTopData(1);
-      // this.$refs.leftSeven.changeLeftData(1);
     }
   }
 </script>

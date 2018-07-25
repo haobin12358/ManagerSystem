@@ -15,14 +15,6 @@
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
             </el-select>
-          </div>
-          <div class="search-text-input">
-            <div class="search-text">快递方式：</div>
-            <el-select v-model="value" placeholder="请选择" size="mini">
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-            </el-select>
           </div>-->
         </div>
         <div class="order-search-two">
@@ -31,50 +23,50 @@
             <el-input v-model="OMidSearch" size="mini" placeholder="请输入订单号" clearable></el-input>
           </div>
           <div class="search-text-input" style="width: 5rem">
-            <div class="search-text">退款时间：</div>
+            <div class="search-text">下单时间：</div>
             <div class="block">
-              <el-date-picker v-model="value7" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                              :picker-options="pickerOptions2" size="mini">
+              <el-date-picker v-model="OMtime" type="daterange" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
+                              :picker-options="pickerOptions2" size="mini" value-format="yyyy-MM-dd">
               </el-date-picker>
             </div>
           </div>
         </div>
         <div class="search-buttons">
-          <el-button class="search-button" size="mini">查询</el-button>
+          <el-button class="search-button" size="mini" @click="topSearch">查询</el-button>
           <el-button class="search-button" size="mini">批量导出</el-button>
         </div>
       </div>
       <div class="all-order-tabs">
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="全部" name="全部" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已取消" name="已取消" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="未支付" name="未支付" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="支付中" name="支付中" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已支付" name="已支付" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已发货" name="已发货" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已收货" name="已收货" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已完成" name="已完成" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="已评价" name="已评价" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
           <el-tab-pane label="退款中" name="退款中" :lazy="lazyStatus">
-            <all-order-table ref="child"></all-order-table>
+            <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -84,6 +76,9 @@
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
   import allOrderTable from '../../components/common/all-order-table';
+  import api from '../../api/api';
+  import {Message} from 'element-ui';
+  import axios from 'axios';
   export default {
       data() {
           return {
@@ -120,11 +115,16 @@
                 }
               ]
             },
-            value7: '',
-            value: '',
+            OMtime: '',
+            // value: '',
             lazyStatus: true,
             PRnameSearch: '',
             OMidSearch: '',
+            orderList: [],
+            page_size: 10,
+            OMstatus: '',
+            OMstartTime: '',
+            OMendTime: ''
           }
       },
       components: {
@@ -132,15 +132,52 @@
         'allOrderTable': allOrderTable
       },
       methods: {
+        // 页面刷新
         freshClick(){
           console.log('fresh');
         },
+        // 获取点击tab的label
         handleClick(tab) {
-          this.$refs.child.changeOMstatus(tab.label)
+          this.changeOMstatus(tab.label)
+        },
+        // 判断需要的订单状态
+        changeOMstatus(OMstatus) {
+          if(OMstatus == '全部') {
+            this.OMstatus = ''
+          }else {
+            this.OMstatus = OMstatus
+          }
+          this.getData(1)
+        },
+        // 获取订单数据
+        getData(v){
+          let params = {
+            token: localStorage.getItem('token'),
+            OMstatus: this.OMstatus,
+            page_num: v,
+            page_size: this.page_size,
+            PRname: this.PRnameSearch,
+            OMstartTime: this.OMstartTime,
+            OMendTime: this.OMendTime,
+            OMid: this.OMidSearch,
+          };
+          axios.get(api.get_all_order,{params:params}).then(res => {
+            if(res.data.status == 200) {
+              this.orderList = res.data.data.OrderMains;
+              this.$refs.child.getOrderList(res.data.data, this.page_size)
+            }else{
+              this.$message.error(res.data.message);
+            }
+          })
+        },
+        topSearch() {
+          this.OMstartTime = this.OMtime[0]
+          this.OMendTime = this.OMtime[1]
+          this.getData(1)
         }
       },
       created() {
-
+        this.getData(1)
       }
   }
 </script>

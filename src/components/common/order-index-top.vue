@@ -2,10 +2,6 @@
   <div>
     <div class="order-index-top">
       <div class="order-box">
-        <div class="order-text">下单笔数</div>
-        <div class="order-number">{{orderSituation.payed_count}}</div>
-      </div>
-      <div class="order-box">
         <div class="order-text">待付款</div>
         <div class="order-number">{{orderSituation.paying_count}}</div>
       </div>
@@ -14,8 +10,12 @@
         <div class="order-number">{{orderSituation.deliver_count}}</div>
       </div>
       <div class="order-box">
-        <div class="order-text">收入总额</div>
-        <div class="order-number number-red">￥{{orderSituation.omprice}}</div>
+        <div class="order-text">已发货</div>
+        <div class="order-number">{{orderSituation.received_count}}</div>
+      </div>
+      <div class="order-box">
+        <div class="order-text">退款中</div>
+        <div class="order-number">{{orderSituation.refund_count}}</div>
       </div>
     </div>
     <div class="order-subTitle">
@@ -26,7 +26,6 @@
 </template>
 
 <script>
-  import orderIndex from '../../common/json/orderIndex'
     export default {
       props: ["orderSituation"],
       name: "order-index-top",
@@ -39,12 +38,7 @@
         }
       },
       methods: {
-        /*changeTopData(i) {
-          this.orderNumber = orderIndex[i].orderNumber;
-          this.toPay = orderIndex[i].toPay;
-          this.toSend = orderIndex[i].toSend;
-          this.income = orderIndex[i].income;
-        }*/
+
       }
     }
 
@@ -69,9 +63,6 @@
         text-align: center;
         margin-top: 0.2rem;
         font-size: 40px;
-      }
-      .number-red {
-        color: @red;
       }
     }
   }

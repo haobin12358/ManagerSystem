@@ -54,9 +54,7 @@
 <script>
   // 0: "已取消", 7: "未支付", 14: "支付中", 21: "已支付",28: "已发货", 35: "已收货", 42: "已完成", 49: "已评价", 56: "退款中"
   import Pagination from "../../components/common/page";
-  import api from '../../api/api';
   import {Message} from 'element-ui';
-  import axios from 'axios';
   export default {
     props: [],
     name: "all-order-table",
@@ -65,9 +63,7 @@
         expandAll: false,
         orderList: [],
         total_page: 0,
-        current_page: 0,
-        total_num: 0,
-        page_size: 10,
+        current_page: 1,
         OMstatus: ''
       }
     },
@@ -79,34 +75,10 @@
         let OMid = order.OMid
         this.$router.push({path: '/order/orderDetails', query: {OMid}});
       },
-      changeOMstatus(OMstatus) {
-        if(OMstatus == '全部') {
-          this.OMstatus = ''
-        }else {
-          this.OMstatus = OMstatus
-        }
-        this.getData(1)
-        console.log('this.OMstatus', this.OMstatus)
-      },
-      getData(v){
-        let params = {
-          token: localStorage.getItem('token'),
-          OMstatus: this.OMstatus,
-          page_num: v,
-          page_size: this.page_size
-        };
-        axios.get(api.get_all_order,{params:params}).then(res => {
-          console.log('params.OMstatus', params.OMstatus)
-          if(res.data.status == 200) {
-            this.orderList = res.data.data.OrderMains;
-            console.log(res.data.data)
-            // console.log(this.orderList)
-            this.total_num = res.data.data.count;
-            this.total_page = Math.ceil(this.total_num / this.page_size);
-          }else{
-            this.$message.error(res.data.message);
-          }
-        })
+      getOrderList(data, page_size) {
+        this.orderList = data.OrderMains
+        // console.log(this.orderList)
+        this.total_page = Math.ceil(data.count / page_size);
       },
       pageChange(v){
         if(v == this.current_page){
@@ -117,14 +89,8 @@
           return false;
         }
         this.current_page = v;
-        this.getData(v);
-        console.log('page')
-      },
-    },
-    created() {
-      console.log('created')
-      // this.orderList = allOrder;
-      this.getData(1)
+        this.$emit('toPage', v)
+      }
     }
   }
 </script>
