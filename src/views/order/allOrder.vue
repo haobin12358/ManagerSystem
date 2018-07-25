@@ -38,34 +38,34 @@
       </div>
       <div class="all-order-tabs">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="全部（7）" name="全部" :lazy="lazyStatus">
+          <el-tab-pane label="全部(7)" name="全部" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已取消（7）" name="已取消" :lazy="lazyStatus">
+          <el-tab-pane label="已取消(7)" name="已取消" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="未支付（7）" name="未支付" :lazy="lazyStatus">
+          <el-tab-pane label="未支付(7)" name="未支付" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="支付中（7）" name="支付中" :lazy="lazyStatus">
+          <el-tab-pane label="支付中(7)" name="支付中" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已支付（7）" name="已支付" :lazy="lazyStatus">
+          <el-tab-pane label="已支付(7)" name="已支付" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已发货（7）" name="已发货" :lazy="lazyStatus">
+          <el-tab-pane label="已发货(7)" name="已发货" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已收货（7）" name="已收货" :lazy="lazyStatus">
+          <el-tab-pane label="已收货(7)" name="已收货" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已完成（7）" name="已完成" :lazy="lazyStatus">
+          <el-tab-pane label="已完成(7)" name="已完成" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已评价（7）" name="已评价" :lazy="lazyStatus">
+          <el-tab-pane label="已评价(7)" name="已评价" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="退款中（7）" name="退款中" :lazy="lazyStatus">
+          <el-tab-pane label="退款中(7)" name="退款中" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
         </el-tabs>
@@ -175,17 +175,24 @@
         // 获取订单的各个状态及对应的数量
         getTabs(OMcount) {
           let i = 0
-          this.tabList[0] = this.tabList[0]+'( '+this.orderList.length+' )'
+          this.tabList[0] = this.tabList[0]+'('+this.orderList.length+')'
           for(let j=1;j<this.tabList.length;j++) {
             i = (j-1)*7
-            this.tabList[j] = this.tabList[j]+'( '+OMcount[i]+' )'
+            this.tabList[j] = this.tabList[j]+'('+OMcount[i]+')'
           }
         },
         // 头部查询条件
         topSearch() {
-          this.OMstartTime = this.OMtime[0]+' 00:00:00'
-          this.OMendTime = this.OMtime[1]+' 23:59:59'
-          this.getData(1)
+          if(this.OMtime != '' || this.PRnameSearch != '' || this.OMidSearch != '') {
+            if(this.OMtime != null) {
+              this.OMstartTime = this.OMtime[0]+' 00:00:00'
+              this.OMendTime = this.OMtime[1]+' 23:59:59'
+            }else if (this.OMtime == null) {
+              this.OMstartTime = ''
+              this.OMendTime = ''
+            }
+            this.getData(1)
+          }
         }
       },
       created() {
