@@ -308,12 +308,15 @@
       Pagination
     },
     methods: {
+      /*刷新*/
       freshClick(){
         console.log('fresh');
       },
+      /*搜索*/
       storeSubmit(){
 
       },
+      /*数据概况/店铺优惠券的切换*/
       tabChange(v){
         this.tab_data[v].show = true;
        for(let item in this.tab_data){
@@ -322,9 +325,11 @@
          }
        }
       },
+      /*+店铺优惠券*/
       storeEdit(){
         this.$router.push('/activity/discountStoreStepOne');
       },
+      /*张数点击，数据切换*/
       numListClick(v){
         for(let i = 0;i<this.data_detail.length;i++){
           this.data_detail[i].click = false;

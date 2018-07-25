@@ -134,6 +134,7 @@
       freshClick(){
         console.log('fresh');
       },
+      /*搜索*/
       search(){
         let that = this;
         if(!that.form.CTid){
@@ -142,8 +143,18 @@
           that.getProductSelect(that.form.CTid)
         }
       },
+      /*下拉框模糊搜索*/
       productBlur(e){
         this.getProductList(e)
+      },
+      /*文本框模糊搜索*/
+      changeInput(i){
+        console.log(i)
+        if(i == 0){
+          this.getChildCategory('',0,this.category_input[i]);
+        }else{
+          this.getChildCategory(this.select_category[i-1].CTid,i,this.category_input[i]);
+        }
       },
       /*获取商品*/
       getProductList(name){
@@ -241,6 +252,7 @@
       sideClick(v){
         this.linkTo = v;
       },
+      /*类目左右滚动*/
       scroll(v){
         let _scroll = document.getElementById('m-scroll');
         if(v == -1 && this.scroll_index == 0){
@@ -264,15 +276,6 @@
           return false;
         }
         this.$router.push({path:'/commodity/goodsImported',query:{CTid:this.select_category[this.select_category.length -1].CTid}});
-      },
-      changeInput(i){
-        console.log(i)
-        if(i == 0){
-          this.getChildCategory('',0,this.category_input[i]);
-        }else{
-          this.getChildCategory(this.select_category[i-1].CTid,i,this.category_input[i]);
-        }
-
       }
     },
     created() {

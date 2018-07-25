@@ -1,7 +1,7 @@
 <template>
 <div class="m-goodsImported">
   <el-form ref="form" :model="form" :rules="rules" label-width="1.2rem" class="demo-ruleForm">
-    <page-title :title="name" @freshClick="freshClick"></page-title>
+    <page-title :title="name"></page-title>
     <div class="m-goodsImported-content">
       <div class="m-edit-btn">
         <span>-编辑-</span>
@@ -450,10 +450,7 @@
               that.$message.error(error.data.message)
             })
           },
-          /*页面刷新*/
-          freshClick(){
-            console.log('fresh');
-          },
+          /*商品图片删除*/
           handleRemove(file, fileList) {
             let _arr = [];
             for(let i=0;i<fileList.length;i++){
@@ -461,9 +458,11 @@
             }
             this.form.PRimage = [].concat(_arr)
           },
+          /*视频删除*/
           handleRemoveVideo(file, fileList) {
 
           },
+          /*商品详情图片删除*/
           handleAboRemove(file, fileList) {
             let _arr = [];
             for(let i=0;i<fileList.length;i++){
@@ -471,23 +470,28 @@
             }
             this.form.PRaboimage = [].concat(_arr)
           },
+          /*商品样式图片删除*/
           imgRemove(index){
             this.form.brands[index].PBimage = '';
             var file = document.getElementById(index);
             file.value ='';
           },
+          /*商品样式图片大图显示*/
           CardPreview(index){
             this.image = this.form.brands[index].PBimage;
             this.dialogVisible = true;
           },
+          /*商品图片大图显示*/
           handlePictureCardPreview(file) {
             this.image = file.url;
             this.dialogVisible = true;
           },
+          /*商品详情图片大图显示*/
           handleAboPictureCardPreview(file) {
             this.image = file.url;
             this.dialogVisible = true;
           },
+          /*商品图片上传重定向*/
           imgUploadTop(params){
             let form = new FormData();
             form.append("file", params.file);
@@ -511,6 +515,7 @@
               });
             })
           },
+          /*商品样式图片上传重定向*/
           imgUploadDetail(event,index){
             if(this.form.brands[index].PBimage.length > 0){
               this.$message({
@@ -543,6 +548,7 @@
               });
             })
           },
+          /*商品视频大图上传重定向*/
           imgUploadVideo(params){
             let form = new FormData();
             form.append("file", params.file);
@@ -566,6 +572,7 @@
               });
             })
           },
+          /*商品详情大图上传重定向*/
           imgUploadAbo(params){
             let form = new FormData();
             form.append("file", params.file);
@@ -589,6 +596,15 @@
               });
             })
           },
+          /* 超过上传限制*/
+          outImg(){
+            this.$message({
+              message: '上传图片超出数量限制',
+              type: 'warning',
+              duration:1000
+            });
+          },
+          /*右边定位点击*/
           sideClick(v){
             this.linkTo = v;
             if(v == 'basicInfo'){
@@ -599,6 +615,7 @@
               document.documentElement.scrollTop = document.getElementById('otherInfo').offsetTop - 229;
             }
           },
+          /*页面滚动*/
           handleScroll(){
             if(document.getElementById('otherInfo') && document.getElementById('priceInfo') ){
               if((document.getElementById('otherInfo').offsetTop <= document.documentElement.scrollTop + 230 ) ){
@@ -620,6 +637,7 @@
           issueClick(){
             this.$router.push('/commodity/commodityManagement')
           },
+          /*发布*/
           submitClick(){
             let that = this;
             this.$refs['form'].validate((valid) => {
@@ -628,6 +646,7 @@
                 }
             })
           },
+          /*发布方法*/
           query(params){
             let _brands = [];
             let _form = JSON.parse(JSON.stringify(params));
@@ -690,13 +709,7 @@
               });
             })
           },
-          outImg(){
-            this.$message({
-              message: '上传图片超出数量限制',
-              type: 'warning',
-              duration:1000
-            });
-          },
+          /*删除一个子类*/
           deleteOne(v){
             this.brands.splice(v,1);
           },

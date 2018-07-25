@@ -1,6 +1,6 @@
 <template>
   <div class="m-user">
-    <page-title :title="name" @freshClick="freshClick"></page-title>
+    <page-title :title="name" :fresh="true" @freshClick="freshClick"></page-title>
     <div class="m-content">
       <div class="m-top">
         <div class="m-top-search">
@@ -120,22 +120,22 @@
       }
     },
     methods: {
+      /*页面刷新*/
       freshClick(){
         this.queryData(1);
       },
+      /*搜索条件搜索*/
       topSearch() {
         this.queryData(1);
       },
-      addUser() {
-        console.log('添加用户')
-      },
+      /*显示详情*/
       showModal(v,row){
         this.show_modal = v;
         if(row){
           this.row_data = row;
         }
-
       },
+      /*查询页面数据*/
       queryData(v,name,start){
         let that = this;
         axios.get(api.get_approval,{params:{
@@ -156,6 +156,7 @@
           this.$message.error(error.data.message);
         })
       },
+      /*审批按钮*/
       updateApproval(v){
         let that = this;
           this.$prompt('请输入'+ v +'同意理由', '提示', {
@@ -183,6 +184,7 @@
           }).catch(() => {
           });
       },
+      /*分页点击*/
       pageChange(v){
         this.queryData(v);
       }
