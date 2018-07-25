@@ -192,6 +192,7 @@
           this.$message.error(error.data.message);
         })
       },
+      // 判断点击的tab
       handleClick(tab, event) {
         if(tab.name == 'one') {
           this.days = '昨日'
