@@ -6,17 +6,17 @@
         <el-tab-pane label="昨日" name="one" :lazy="lazyStatus">
           <order-index-top ref="one" :orderSituation="orderSituation"></order-index-top>
           <order-index-left ref="leftOne" :orderSituation="orderSituation"></order-index-left>
-          <my-echarts class="my-echarts" id="echartsId1" :option="option1" :width="650" :height="330"></my-echarts>
+          <my-echarts class="my-echarts" id="echartsId1" :option="option1" :width="650" :height="250"></my-echarts>
         </el-tab-pane>
         <el-tab-pane label="近七日" name="seven" :lazy="lazyStatus">
           <order-index-top ref="seven" :orderSituation="orderSituation"></order-index-top>
           <order-index-left ref="leftSeven" :orderSituation="orderSituation"></order-index-left>
-          <my-echarts class="my-echarts" id="echartsId7" :option="option7" :width="650" :height="330"></my-echarts>
+          <my-echarts class="my-echarts" id="echartsId7" :option="option7" :width="650" :height="250"></my-echarts>
         </el-tab-pane>
         <el-tab-pane label="近三十日" name="thirty" :lazy="lazyStatus">
           <order-index-top ref="thirty" :orderSituation="orderSituation"></order-index-top>
           <order-index-left ref="leftThirty" :orderSituation="orderSituation"></order-index-left>
-          <my-echarts class="my-echarts" id="echartsId30" :option="option30" :width="800" :height="330"></my-echarts>
+          <my-echarts class="my-echarts" id="echartsId30" :option="option30" :width="750" :height="250"></my-echarts>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -70,7 +70,6 @@
               this.option1 = {
                 title : {
                   text: '昨日数据',
-                  subtext: '纯属虚构',
                   x:'center'
                 },
                 tooltip : {
@@ -222,7 +221,7 @@
     .my-echarts {
       width: 70%;
       float: left;
-      margin-left: 10%;
+      margin-left: 5%;
     }
   }
 </style>
