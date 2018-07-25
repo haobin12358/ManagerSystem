@@ -5,10 +5,10 @@
       <div class="all-order-search">
         <div class="order-search-one">
           <div class="search-text-input">
-            <div class="search-text" style="margin-left: 0.51rem">订单号：</div>
-            <el-input size="mini"></el-input>
+            <div class="search-text">商品名称：</div>
+            <el-input v-model="PRnameSearch" size="mini" placeholder="请输入商品名称" clearable></el-input>
           </div>
-          <div class="search-text-input">
+          <!--<div class="search-text-input">
             <div class="search-text">订单状态：</div>
             <el-select v-model="value" placeholder="请选择" size="mini">
               <el-option label="中通快递" value="中通快递"></el-option>
@@ -23,12 +23,12 @@
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
             </el-select>
-          </div>
+          </div>-->
         </div>
         <div class="order-search-two">
           <div class="search-text-input">
-            <div class="search-text">商品名称：</div>
-            <el-input size="mini"></el-input>
+            <div class="search-text" style="margin-left: 0.51rem">订单号：</div>
+            <el-input v-model="OMidSearch" size="mini" placeholder="请输入订单号" clearable></el-input>
           </div>
           <div class="search-text-input" style="width: 5rem">
             <div class="search-text">退款时间：</div>
@@ -122,7 +122,9 @@
             },
             value7: '',
             value: '',
-            lazyStatus: true
+            lazyStatus: true,
+            PRnameSearch: '',
+            OMidSearch: '',
           }
       },
       components: {
@@ -156,7 +158,7 @@
         background-color: @borderColor;
         .search-buttons {
           float: right;
-          margin-top: -0.3rem;
+          /*margin-top: -0.3rem;*/
           margin-right: 1.15rem;
           .search-button {
             background-color: @btnActiveColor;
