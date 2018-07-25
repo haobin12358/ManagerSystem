@@ -43,13 +43,13 @@
             </div>
             <div class="m-right">
               <el-form-item>
-                <el-button type="primary" class="m-select-btn" @click="storeSubmit">搜索</el-button>
+                <el-button type="primary" class="m-select-btn" @click="onSubmit">搜索</el-button>
               </el-form-item>
             </div>
           </div>
         </el-form>
         <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
-          <el-table :data="user" stripe style="width: 100%">
+          <el-table :data="product_data" stripe style="width: 100%">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column align="center" prop="userId" width="400" label="宝贝描述">
               <template slot-scope="scope">
@@ -73,15 +73,11 @@
           </el-table>
         </div>
         <div class="m-page-box">
-          <pagination></pagination>
+          <pagination :total="page_data.total_page" @pageChange="pageChange"></pagination>
         </div>
         <div class="m-bottom-btn m-flex-center">
-          <router-link to="/activity/activityStoreStepOne" >
-            <span class="m-btn">上一步</span>
-          </router-link>
-          <router-link to="/activity/activityStoreStepThree" >
-            <span class="m-btn  active">完成</span>
-          </router-link>
+            <span class="m-btn" @click="lastStep">上一步</span>
+            <span class="m-btn  active" @click="storeSubmit">完成</span>
         </div>
       </div>
     </el-form>
@@ -91,8 +87,7 @@
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
   import step from '../../components/common/step';
-  import user from '../../common/json/userInfo';
-  import Pagination from "../../components/common/pages";
+  import Pagination from "../../components/common/page";
   export default {
     data() {
       return {
@@ -128,7 +123,13 @@
           date1:''
         },
         radio:'1',
-        user:user
+        product_data:[],
+        page_data:{
+          total_page:0,
+          current_page:1,
+          total_num:0,
+          page_size:10,
+        }
       }
     },
     components:{
@@ -145,6 +146,20 @@
       },
       storeSubmit(){
 
+      },
+      lastStep(){
+        this.$router.push('/activity/activityStoreStepTwo')
+      },
+      pageChange(v){
+        if(v == this.current_page){
+          this.$message({
+            message: '这已经是第' + v + '页数据了',
+            type: 'warning'
+          });
+          return false;
+        }
+        this.current_page = v;
+        // this.getData(v);
       }
     },
     created() {

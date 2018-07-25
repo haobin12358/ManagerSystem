@@ -104,12 +104,8 @@
 
         </div>
         <div class="m-bottom-btn m-flex-center">
-          <router-link to="/activity/activityStoreStepOne" >
-            <span class="m-btn">上一步</span>
-          </router-link>
-          <router-link to="/activity/activityStoreStepThree" >
-            <span class="m-btn  active">下一步</span>
-          </router-link>
+            <span class="m-btn" @click="lastStep">上一步</span>
+            <span class="m-btn  active" @click="onSubmit">下一步</span>
         </div>
       </div>
     </el-form>
@@ -214,8 +210,11 @@
         });
       },
       onSubmit(){
-
-      }
+        this.$router.push('/activity/activityStoreStepThree');
+      },
+      lastStep(){
+        this.$router.push('/activity/activityStoreStepOne');
+      },
     },
     created() {
 
