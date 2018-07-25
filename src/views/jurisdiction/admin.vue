@@ -17,12 +17,12 @@
           <el-table-column align="center" prop="MAid" label="编号" width="300"></el-table-column>
           <el-table-column align="center" prop="MAnicname" label="昵称" width="70"></el-table-column>
           <el-table-column align="center" prop="MAemail" label="E-mall" width="230"></el-table-column>
-          <el-table-column align="center" prop="MAtelphone" label="联系方式" width="110"></el-table-column>
+          <el-table-column align="center" prop="MAtelphone" label="联系方式" width="120"></el-table-column>
           <el-table-column align="center" prop="MAidentity" label="身份描述" width="120"></el-table-column>
           <el-table-column align="center" prop="MAcreatTime" label="创建时间" width="160"></el-table-column>
           <el-table-column align="center" prop="MAloginTime" label="最近登录" width="160"></el-table-column>
           <el-table-column align="center" prop="MAstatus" label="状态" width="70"></el-table-column>
-          <el-table-column align="center" label="操作" fixed="right" width="90">
+          <el-table-column align="center" label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button class="edit-admin-button" type="text" @click="editAdmin(scope.row)">编辑管理员</el-button>
             </template>

@@ -21,7 +21,7 @@
           <el-table-column align="center" prop="UScreateTime" label="创建时间"></el-table-column>
           <el-table-column align="center" prop="USloginTime" label="最近登录"></el-table-column>
           <el-table-column align="center" prop="USstatus" label="状态" width="70"></el-table-column>
-          <el-table-column align="center" label="操作" width="80" fixed="right">
+          <el-table-column align="center" label="操作" fixed="right">
             <template slot-scope="scope">
               <div v-if="scope.row.USstatus == '禁用'">
                 <el-button class="lock-user-button" type="text" @click="lockUser(scope.row, '可用')">解封</el-button>
