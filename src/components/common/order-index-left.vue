@@ -1,12 +1,12 @@
 <template>
   <div class="order-index-left">
     <div class="order-box">
-      <div class="order-text">{{leftDays}}下单笔数</div>
-      <div class="order-number">{{oldOrderNumber}}</div>
+      <div class="order-text">{{leftDays}}下单笔数（不含退单）</div>
+      <div class="order-number">{{orderSituation.week_paying_count}}</div>
     </div>
     <div class="order-box">
       <div class="order-text">{{leftDays}}付款笔数</div>
-      <div class="order-number">{{oldPay}}</div>
+      <div class="order-number">{{orderSituation.week_payed_count}}</div>
     </div>
   </div>
 </template>
@@ -14,7 +14,7 @@
 <script>
   import orderIndex from '../../common/json/orderIndex'
   export default {
-    props: ["leftDays"],
+    props: ["leftDays", "orderSituation"],
     name: "order-index-left",
     data() {
       return {

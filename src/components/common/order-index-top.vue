@@ -2,20 +2,20 @@
   <div>
     <div class="order-index-top">
       <div class="order-box">
-        <div class="order-text">{{days}}下单笔数</div>
+        <div class="order-text">下单笔数</div>
         <div class="order-number">{{orderSituation.payed_count}}</div>
       </div>
       <div class="order-box">
         <div class="order-text">待付款</div>
-        <div class="order-number">{{toPay}}</div>
+        <div class="order-number">{{orderSituation.paying_count}}</div>
       </div>
       <div class="order-box">
         <div class="order-text">待发货</div>
-        <div class="order-number">{{toSend}}</div>
+        <div class="order-number">{{orderSituation.deliver_count}}</div>
       </div>
       <div class="order-box">
-        <div class="order-text">{{days}}收入</div>
-        <div class="order-number number-red">￥{{income}}</div>
+        <div class="order-text">收入总额</div>
+        <div class="order-number number-red">￥{{orderSituation.paying_count}}</div>
       </div>
     </div>
     <div class="order-subTitle">
@@ -28,7 +28,7 @@
 <script>
   import orderIndex from '../../common/json/orderIndex'
     export default {
-      props: ["days", "orderSituation"],
+      props: ["orderSituation"],
       name: "order-index-top",
       data() {
         return {
@@ -59,8 +59,8 @@
     border-bottom-left-radius: 0.1rem;
     border-bottom-right-radius: 0.1rem;
     .order-box {
+      width: 25%;
       float: left;
-      margin-left: 1.5rem;
       .order-text {
         text-align: center;
       }
