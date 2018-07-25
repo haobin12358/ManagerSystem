@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  // 1、待付款，2、待发货，3、已发货，4、已完成，5、已关闭，6、退款中
+  // 0: "已取消", 7: "未支付", 14: "支付中", 21: "已支付",28: "已发货", 35: "已收货", 42: "已完成", 49: "已评价", 56: "退款中"
   import Pagination from "../../components/common/page";
   import api from '../../api/api';
   import {Message} from 'element-ui';
@@ -99,7 +99,8 @@
           console.log('params.OMstatus', params.OMstatus)
           if(res.data.status == 200) {
             this.orderList = res.data.data.OrderMains;
-            console.log(this.orderList)
+            console.log(res.data.data)
+            // console.log(this.orderList)
             this.total_num = res.data.data.count;
             this.total_page = Math.ceil(this.total_num / this.page_size);
           }else{

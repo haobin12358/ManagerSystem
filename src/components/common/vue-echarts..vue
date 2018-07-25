@@ -31,8 +31,8 @@
 
     },
     mounted(){
-      // let myEcharts = this.echarts.init(document.getElementById(`${this.id}`))
-      // myEcharts.setOption(this.option)
+      let myEcharts = this.echarts.init(document.getElementById(`${this.id}`))
+      myEcharts.setOption(this.option)
     },
     watch:{
       'option':function (val, oldVal) {

@@ -15,7 +15,7 @@
       </div>
       <div class="order-box">
         <div class="order-text">收入总额</div>
-        <div class="order-number number-red">￥{{orderSituation.paying_count}}</div>
+        <div class="order-number number-red">￥{{orderSituation.omprice}}</div>
       </div>
     </div>
     <div class="order-subTitle">
@@ -39,12 +39,12 @@
         }
       },
       methods: {
-        changeTopData(i) {
+        /*changeTopData(i) {
           this.orderNumber = orderIndex[i].orderNumber;
           this.toPay = orderIndex[i].toPay;
           this.toSend = orderIndex[i].toSend;
           this.income = orderIndex[i].income;
-        }
+        }*/
       }
     }
 

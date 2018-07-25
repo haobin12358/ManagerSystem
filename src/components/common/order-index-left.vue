@@ -1,20 +1,19 @@
 <template>
   <div class="order-index-left">
     <div class="order-box">
-      <div class="order-text">{{leftDays}}下单笔数（不含退单）</div>
+      <div class="order-text">付款笔数</div>
       <div class="order-number">{{orderSituation.week_paying_count}}</div>
     </div>
     <div class="order-box">
-      <div class="order-text">{{leftDays}}付款笔数</div>
+      <div class="order-text">退款笔数</div>
       <div class="order-number">{{orderSituation.week_payed_count}}</div>
     </div>
   </div>
 </template>
 
 <script>
-  import orderIndex from '../../common/json/orderIndex'
   export default {
-    props: ["leftDays", "orderSituation"],
+    props: ["orderSituation"],
     name: "order-index-left",
     data() {
       return {
@@ -23,10 +22,10 @@
       }
     },
     methods: {
-      changeLeftData(i) {
-        this.oldOrderNumber = orderIndex[i].oldOrderNumber;
-        this.oldPay = orderIndex[i].oldPay
-      }
+      // changeLeftData(i) {
+      //   this.oldOrderNumber = orderIndex[i].oldOrderNumber;
+      //   this.oldPay = orderIndex[i].oldPay
+      // }
     }
   }
 </script>
