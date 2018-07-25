@@ -1,20 +1,20 @@
 <template>
     <div class="m-step">
       <page-title :list="title_list" @freshClick="freshClick"></page-title>
-      <el-form  :model="storeForm" label-width="1.2rem" >
+      <el-form  :model="storeForm" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" >
       <div class="m-step-content">
         <div class="m-step-part">
           <step :list="step"></step>
         </div>
         <div class="m-step-part">
           <h3 class="m-step-h3">基本信息</h3>
-          <el-form-item label="活动名称：">
-            <el-input v-model="storeForm.name" class="m-input-l" maxlength="10" placeholder="最多10个字"></el-input>
+          <el-form-item label="活动名称：" >
+            <el-input v-model="storeForm.COname" class="m-input-l" maxlength="10" placeholder="最多10个字"></el-input>
           </el-form-item>
-          <el-form-item label="使用时间：">
-            <el-date-picker type="date"  placeholder="起始时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>
+          <el-form-item label="使用时间：" >
+            <el-date-picker type="date"  placeholder="起始时间" v-model="storeForm.COstart" style="width: 2rem;"></el-date-picker>
             <span class="m-date-line">-</span>
-            <el-date-picker type="date"  placeholder="结束时间" v-model="storeForm.date2" style="width: 2rem;"></el-date-picker>
+            <el-date-picker type="date"  placeholder="结束时间" v-model="storeForm.COend" style="width: 2rem;"></el-date-picker>
           </el-form-item>
         </div>
         <template v-for="(item,index) in denomination_data">
@@ -27,7 +27,7 @@
               </div>
             </h3>
             <el-form-item label="优惠金额：">
-              <el-input v-model="storeForm.name" class="m-input-l" placeholder="审批人"></el-input>
+              <el-input v-model="storeForm.COamount" class="m-input-l" placeholder="审批人"></el-input>
               <span>&nbsp; 元</span>
             </el-form-item>
             <el-form-item label="使用门槛：">
@@ -87,8 +87,26 @@
         ],
         denomination_data:[1],
         storeForm:{
+          COname:'',
+          COstart:'',
+          COend:'',
+          COamount:'',
           name:''
-        }
+        },
+        rules:{
+          COname:[
+            { required: true, message: '请输入活动名称', trigger: 'blur' }
+          ],
+          COstart:[
+            { required: true, message: '请选择开始时间', trigger: 'blur' }
+          ],
+          COend:[
+            { required: true, message: '请选择结束时间', trigger: 'blur' }
+          ],
+          COamount:[
+            { required: true, message: '请选择优惠金额', trigger: 'blur' }
+          ],
+        },
       }
     },
     components:{

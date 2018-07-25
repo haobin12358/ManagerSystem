@@ -76,12 +76,8 @@
           <pagination :total="page_data.total_page" @pageChange="pageChange"></pagination>
         </div>
         <div class="m-bottom-btn m-flex-center">
-          <router-link to="/activity/activityStoreStepOne" >
-            <span class="m-btn">上一步</span>
-          </router-link>
-          <router-link to="/activity/activityStoreStepThree" >
+            <span class="m-btn" @click="lastStep">上一步</span>
             <span class="m-btn  active" @click="storeSubmit">完成</span>
-          </router-link>
         </div>
       </div>
     </el-form>
@@ -150,6 +146,9 @@
       },
       storeSubmit(){
 
+      },
+      lastStep(){
+        this.$router.push('/activity/activityStoreStepTwo')
       },
       pageChange(v){
         if(v == this.current_page){
