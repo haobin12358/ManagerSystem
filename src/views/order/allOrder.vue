@@ -38,34 +38,34 @@
       </div>
       <div class="all-order-tabs">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="全部" name="全部" :lazy="lazyStatus">
+          <el-tab-pane label="全部（7）" name="全部" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已取消" name="已取消" :lazy="lazyStatus">
+          <el-tab-pane label="已取消（7）" name="已取消" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="未支付" name="未支付" :lazy="lazyStatus">
+          <el-tab-pane label="未支付（7）" name="未支付" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="支付中" name="支付中" :lazy="lazyStatus">
+          <el-tab-pane label="支付中（7）" name="支付中" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已支付" name="已支付" :lazy="lazyStatus">
+          <el-tab-pane label="已支付（7）" name="已支付" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已发货" name="已发货" :lazy="lazyStatus">
+          <el-tab-pane label="已发货（7）" name="已发货" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已收货" name="已收货" :lazy="lazyStatus">
+          <el-tab-pane label="已收货（7）" name="已收货" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已完成" name="已完成" :lazy="lazyStatus">
+          <el-tab-pane label="已完成（7）" name="已完成" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="已评价" name="已评价" :lazy="lazyStatus">
+          <el-tab-pane label="已评价（7）" name="已评价" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
-          <el-tab-pane label="退款中" name="退款中" :lazy="lazyStatus">
+          <el-tab-pane label="退款中（7）" name="退款中" :lazy="lazyStatus">
             <all-order-table ref="child" @toPage="getData"></all-order-table>
           </el-tab-pane>
         </el-tabs>
@@ -124,7 +124,8 @@
             page_size: 10,
             OMstatus: '',
             OMstartTime: '',
-            OMendTime: ''
+            OMendTime: '',
+            tabList: ['全部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中']
           }
       },
       components: {
@@ -138,7 +139,7 @@
         },
         // 获取点击tab的label
         handleClick(tab) {
-          this.changeOMstatus(tab.label)
+          this.changeOMstatus(tab.name)
         },
         // 判断需要的订单状态
         changeOMstatus(OMstatus) {
@@ -159,20 +160,31 @@
             PRname: this.PRnameSearch,
             OMstartTime: this.OMstartTime,
             OMendTime: this.OMendTime,
-            OMid: this.OMidSearch,
-          };
+            OMid: this.OMidSearch
+          }
           axios.get(api.get_all_order,{params:params}).then(res => {
             if(res.data.status == 200) {
               this.orderList = res.data.data.OrderMains;
+              this.getTabs(res.data.data.OMcount);
               this.$refs.child.getOrderList(res.data.data, this.page_size)
             }else{
               this.$message.error(res.data.message);
             }
           })
         },
+        // 获取订单的各个状态及对应的数量
+        getTabs(OMcount) {
+          let i = 0
+          this.tabList[0] = this.tabList[0]+'( '+this.orderList.length+' )'
+          for(let j=1;j<this.tabList.length;j++) {
+            i = (j-1)*7
+            this.tabList[j] = this.tabList[j]+'( '+OMcount[i]+' )'
+          }
+        },
+        // 头部查询条件
         topSearch() {
-          this.OMstartTime = this.OMtime[0]
-          this.OMendTime = this.OMtime[1]
+          this.OMstartTime = this.OMtime[0]+' 00:00:00'
+          this.OMendTime = this.OMtime[1]+' 23:59:59'
           this.getData(1)
         }
       },

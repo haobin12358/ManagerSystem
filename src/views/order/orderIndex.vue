@@ -133,13 +133,13 @@
                     name:'下单笔数',
                     type:'line',
                     smooth: true,
-                    data: this.orderSituation.week_paying_list
+                    data: this.orderSituation.week_payed_list
                   },
                   {
                     name:'付款笔数',
                     type:'line',
                     smooth: true,
-                    data: this.orderSituation.week_payed_list
+                    data: this.orderSituation.week_paying_list
                   }
                 ]
               }
@@ -174,13 +174,13 @@
                     name:'下单笔数',
                     type:'line',
                     smooth: true,
-                    data: this.orderSituation.week_paying_list
+                    data: this.orderSituation.week_payed_list
                   },
                   {
                     name:'付款笔数',
                     type:'line',
                     smooth: true,
-                    data: this.orderSituation.week_payed_list
+                    data: this.orderSituation.week_paying_list
                   }
                 ]
               }
