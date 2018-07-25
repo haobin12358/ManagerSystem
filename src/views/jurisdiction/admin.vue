@@ -187,12 +187,12 @@
     },
     methods: {
       // 获取管理员数据的方法
-      getData(v, searchText){
+      getData(v){
         let params = {
           token: localStorage.getItem('token'),
           page_num: v || this.current_page,
           page_size: this.page_size,
-          MAfilter: searchText
+          MAfilter: this.searchText
         };
         axios.get(api.get_managers, {params: params}).then(res => {
           if(res.data.status == 200) {
@@ -214,7 +214,7 @@
           return false;
         }
         this.current_page = v;
-        this.getData(v, '');
+        this.getData(v);
       },
       // 页面刷新的方法
       freshClick(){
@@ -223,7 +223,7 @@
       // 头部的模糊查询
       topSearch() {
         // console.log('searchText', this.searchText);
-        this.getData(1, this.searchText)
+        this.getData(1)
       },
       // 点击编辑管理员数据按钮所对应的方法
       editAdmin(row) {
