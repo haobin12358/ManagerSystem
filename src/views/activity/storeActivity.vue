@@ -255,9 +255,11 @@
       freshClick(){
         console.log('fresh');
       },
+      /*搜索*/
       storeSubmit(){
 
       },
+      /*数据和店铺活动数tab切换*/
       tabChange(v){
         this.tab_data[v].show = true;
         for(let item in this.tab_data){
@@ -266,9 +268,11 @@
           }
         }
       },
+      /*添加新店铺活动*/
       storeCardClick(){
         this.$router.push('/activity/activityStoreStepOne');
       },
+      /*张数点击切换*/
       numListClick(v){
         for(let i = 0;i<this.data_detail.length;i++){
           this.data_detail[i].click = false;

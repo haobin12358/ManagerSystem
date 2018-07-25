@@ -137,9 +137,11 @@
       // }
     },
     methods: {
+      /*刷新*/
       freshClick(){
         console.log('fresh');
       },
+      /*商品名称查询*/
       topSearch() {
         this.getData(1,this.productName);
       },
@@ -152,30 +154,34 @@
         }
 
       },
+      /*多选按钮点击*/
       changeFun(v){
         this.checkRow = v;
       },
+      /*编辑*/
       editClick(row){
         this.$router.push('/commodity/goodsImported?PRid=' + row.PRid);
       },
       checkClick(){
 
       },
+      /*显示和隐藏模态框*/
       showModal(v){
         this.show_modal = v;
       },
-      //发布商品
+      /*发布商品*/
       importProduct(){
         this.updateProduct('在售状态');
       },
-      //下架商品
+      /*下架商品*/
       soldOut(){
         this.updateProduct('下架状态');
       },
-      //删除商品
+      /*删除商品*/
       deleteProduct(){
         this.updateProduct('删除状态');
       },
+      /*更新商品方法*/
       updateProduct(status){
         let PRid = [];
         let that = this;
@@ -203,6 +209,7 @@
           }
         })
       },
+      /*获取表格数据*/
       getData(v,code){
         let params = {
           token:localStorage.getItem('token'),
@@ -223,6 +230,7 @@
           this.$message.error(error.data.message);
         })
       },
+      /*分页点击*/
       pageChange(v){
         if(v == this.current_page){
           this.$message({
