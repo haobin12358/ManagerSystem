@@ -22,10 +22,7 @@
       }
     },
     methods: {
-      // changeLeftData(i) {
-      //   this.oldOrderNumber = orderIndex[i].oldOrderNumber;
-      //   this.oldPay = orderIndex[i].oldPay
-      // }
+
     }
   }
 </script>

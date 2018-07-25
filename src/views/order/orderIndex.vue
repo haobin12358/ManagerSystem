@@ -197,27 +197,19 @@
           this.days = '昨日'
           this.leftDays = '昨日'
           this.getData(1)
-          // this.$refs.one.changeTopData(0);
-          // this.$refs.leftOne.changeLeftData(0);
         }else if(tab.name == 'seven') {
           this.days = '七日'
           this.leftDays = '近七日'
           this.getData(7)
-          // this.$refs.seven.changeTopData(1);
-          // this.$refs.leftSeven.changeLeftData(1);
         }else if(tab.name == 'thirty') {
           this.days = '近三十日'
           this.leftDays = '近三十日'
           this.getData(30)
-          // this.$refs.thirty.changeTopData(2);
-          // this.$refs.leftThirty.changeLeftData(2);
         }
       }
     },
     mounted() {
       this.getData(7)
-      // this.$refs.seven.changeTopData(1);
-      // this.$refs.leftSeven.changeLeftData(1);
     }
   }
 </script>

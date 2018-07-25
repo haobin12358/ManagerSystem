@@ -26,7 +26,6 @@
 </template>
 
 <script>
-  import orderIndex from '../../common/json/orderIndex'
     export default {
       props: ["orderSituation"],
       name: "order-index-top",
@@ -39,12 +38,7 @@
         }
       },
       methods: {
-        /*changeTopData(i) {
-          this.orderNumber = orderIndex[i].orderNumber;
-          this.toPay = orderIndex[i].toPay;
-          this.toSend = orderIndex[i].toSend;
-          this.income = orderIndex[i].income;
-        }*/
+
       }
     }
 
