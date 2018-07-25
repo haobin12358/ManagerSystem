@@ -3,7 +3,7 @@
     <div class="order-index-top">
       <div class="order-box">
         <div class="order-text">{{days}}下单笔数</div>
-        <div class="order-number">{{orderNumber}}</div>
+        <div class="order-number">{{orderSituation.payed_count}}</div>
       </div>
       <div class="order-box">
         <div class="order-text">待付款</div>
@@ -27,9 +27,8 @@
 
 <script>
   import orderIndex from '../../common/json/orderIndex'
-  // import orderIndexTop from "../../components/common/order-index-top";
     export default {
-      props: ["days"],
+      props: ["days", "orderSituation"],
       name: "order-index-top",
       data() {
         return {
@@ -38,9 +37,6 @@
           toSend: '',
           income: ''
         }
-      },
-      components: {
-        // 'orderIndexTop': orderIndexTop
       },
       methods: {
         changeTopData(i) {

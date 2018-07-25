@@ -4,16 +4,16 @@
     <div class="m-content">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="昨日" name="one">
-          <order-index-top ref="one" :days="days"></order-index-top>
+          <order-index-top ref="one" :days="days" :orderSituation="orderSituation"></order-index-top>
           <order-index-left ref="leftOne" :leftDays="leftDays"></order-index-left>
         </el-tab-pane>
-        <el-tab-pane label="七日" name="seven">
-          <order-index-top ref="seven" :days="days"></order-index-top>
+        <el-tab-pane label="近七日" name="seven">
+          <order-index-top ref="seven" :days="days" :orderSituation="orderSituation"></order-index-top>
           <order-index-left ref="leftSeven" :leftDays="leftDays"></order-index-left>
           <my-echarts class="seven-echarts" :id="echartsId" :option="option" :width="650" :height="330"></my-echarts>
         </el-tab-pane>
         <el-tab-pane label="月度" name="thirty">
-          <order-index-top ref="thirty" :days="days"></order-index-top>
+          <order-index-top ref="thirty" :days="days" :orderSituation="orderSituation"></order-index-top>
           <order-index-left ref="leftThirty" :leftDays="leftDays"></order-index-left>
         </el-tab-pane>
       </el-tabs>
@@ -25,14 +25,18 @@
   import orderIndexTop from "../../components/common/order-index-top";
   import orderIndexLeft from "../../components/common/order-index-left";
   import myEcharts from "../../components/common/vue-echarts."
+  import api from '../../api/api';
+  import {Message} from 'element-ui';
+  import axios from 'axios';
   export default {
     data() {
       return {
         name: '订单概况',
         activeName: 'seven',
-        days: '本周',
+        days: '近七日',
         leftDays: '上周',
         echartsId: 'myEcharts',
+        orderSituation: [],
         option: {
           title: {
             text: '上周数据'
@@ -75,10 +79,7 @@
       }
     },
     components:{
-      'orderIndexTop': orderIndexTop,
-      'orderIndexLeft': orderIndexLeft,
-      'pageTitle': pageTitle,
-      'myEcharts': myEcharts
+      orderIndexTop, orderIndexLeft, pageTitle, myEcharts
     },
     methods: {
       freshClick(){
@@ -92,7 +93,7 @@
           this.$refs.one.changeTopData(0);
           this.$refs.leftOne.changeLeftData(0);
         }else if(tab.name == 'seven') {
-          this.days = '本周';
+          this.days = '近七日';
           this.leftDays = '上周';
           this.$refs.seven.changeTopData(1);
           this.$refs.leftSeven.changeLeftData(1);
@@ -102,9 +103,27 @@
           this.$refs.thirty.changeTopData(2);
           this.$refs.leftThirty.changeLeftData(2);
         }
-      }
+      },
+      // 获取订单概况数据
+      getData(days){
+        let params = {
+          token: localStorage.getItem('token'),
+          days: days
+        };
+        axios.get(api.get_order_situation, {params: params}).then(res => {
+          if(res.data.status == 200) {
+            this.orderSituation =res.data.data
+            console.log(this.orderSituation)
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
+      },
     },
     mounted() {
+      this.getData(7)
       this.$refs.seven.changeTopData(1);
       this.$refs.leftSeven.changeLeftData(1);
     }

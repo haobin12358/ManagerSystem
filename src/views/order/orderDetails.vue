@@ -215,6 +215,7 @@
       freshClick(){
         console.log('fresh');
       },
+      // 获取订单详情
       getData(OMid){
         let params = {
           token: localStorage.getItem('token'),
@@ -232,6 +233,7 @@
           this.$message.error(error.data.message);
         })
       },
+      // 将已支付的订单发货，使之变成已发货
       toSend() {
         this.toSendForm = false
         if(this.order.OMstatus == '已支付') {
@@ -254,6 +256,7 @@
           });
         }
       },
+      // 依据订单状态设置页面上部的step步骤条
       setStep() {
         if(this.order.OMstatus == '已取消') {
           this.step = [

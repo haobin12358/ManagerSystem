@@ -13,7 +13,6 @@
 
 <script>
   import orderIndex from '../../common/json/orderIndex'
-  // import orderIndexLeft from "../../components/common/order-index-left";
   export default {
     props: ["leftDays"],
     name: "order-index-left",
@@ -22,9 +21,6 @@
         oldOrderNumber: '',
         oldPay: ''
       }
-    },
-    components: {
-      // 'orderIndexLeft': orderIndexLeft
     },
     methods: {
       changeLeftData(i) {
