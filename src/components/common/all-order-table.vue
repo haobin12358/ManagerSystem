@@ -28,17 +28,17 @@
           </el-table>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="订单号" prop="OMid" width="350">
+      <el-table-column align="center" label="订单号" prop="OMid" width="320">
       </el-table-column>
       <el-table-column align="center" label="订单状态" prop="OMstatus" width="100">
       </el-table-column>
-      <el-table-column align="center" label="订单价格" prop="OMprice" width="100">
+      <el-table-column align="center" label="订单价格" prop="OMprice" width="90">
       </el-table-column>
       <el-table-column align="center" label="下单时间" prop="OMtime" width="200">
       </el-table-column>
       <el-table-column align="center" label="订单备注" prop="OMabo">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="150">
+      <el-table-column align="center" label="操作" width="150" fixed="right">
         <template slot-scope="scope">
           <el-button size="mini" class="order-details" @click="orderDetails(scope.row)">订单详情
           </el-button>
