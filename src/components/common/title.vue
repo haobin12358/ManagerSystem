@@ -7,12 +7,12 @@
           <span v-text="item.name" class="m-router-link" @click="routerClick(item.url)">工作模块管理</span>
         </template>
       </div>
-      <span class="m-page-fresh" @click="freshClick"></span>
+      <span class="m-page-fresh" @click="freshClick" v-if="fresh"></span>
     </div>
 
     <div class="m-page-title" v-else>
       <span v-text="title">工作模块管理</span>
-      <span class="m-page-fresh" @click="freshClick"></span>
+      <span class="m-page-fresh" @click="freshClick" v-if="fresh"></span>
     </div>
   </div>
 
@@ -30,6 +30,10 @@
             list:{
               type:Array,
               default:null
+            },
+            fresh:{
+              type:Boolean,
+              default:false
             }
         },
         methods: {

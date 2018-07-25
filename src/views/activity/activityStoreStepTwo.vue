@@ -28,20 +28,23 @@
           <h4>基本信息</h4>
           <el-form-item label="优惠类型：">
             <p class="m-alert-box">
-              <el-radio v-model="radio" label="1">满减（打折）</el-radio>
+              <el-radio v-model="storeForm.ACtype" label="1">满减（打折）</el-radio>
               <span class="m-alert-icon"></span>
               <span class="m-alert-info">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
             </p>
+            <p>
+              <el-radio v-model="storeForm.ACtype" label="2">满元（减钱）</el-radio>
+            </p>
             <p class="m-margin-bottom">
-              <el-radio v-model="radio" label="2">满元（减钱）</el-radio>
+              <el-radio v-model="storeForm.ACtype" label="3">其它</el-radio>
             </p>
           </el-form-item>
-          <el-form-item label="开始时间：">
-            <el-date-picker type="date"  placeholder="起始时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="结束时间：">
-            <el-date-picker type="date"  placeholder="结束时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>
-          </el-form-item>
+          <!--<el-form-item label="开始时间：">-->
+            <!--<el-date-picker type="date"  placeholder="起始时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="结束时间：">-->
+            <!--<el-date-picker type="date"  placeholder="结束时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>-->
+          <!--</el-form-item>-->
 
           <template v-for="(item,index) in layer_data">
             <div>
@@ -49,28 +52,47 @@
               <el-form-item label="优惠门槛：">
                 <span>满&nbsp;</span>
                 <el-input v-model="storeForm.name" class="m-input-s" placeholder="审批人"></el-input>
-                <span>&nbsp;件</span>
+                <el-radio v-model="radio" label="3">件</el-radio>
+                <el-radio v-model="radio" label="1">元</el-radio>
               </el-form-item>
               <el-form-item label="优惠内容：">
-                <p class="m-alert-box">
-                  <el-radio v-model="radio" label="1">打</el-radio>
-                  <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
-                  <span>&nbsp;折</span>
-                  <span class="m-alert-icon"></span>
-                  <span class="m-alert-info m-alert-info-a">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
-                </p>
-                <p>
-                  <el-radio v-model="radio" label="2">包邮</el-radio>
-                </p>
-                <p>
-                  <el-radio v-model="radio" label="2">送赠品</el-radio>
-                </p>
-                <p>
-                  <el-radio v-model="radio" label="2">送权益</el-radio>
-                </p>
-                <p>
-                  <el-radio v-model="radio" label="2">送优惠券</el-radio>
-                </p>
+                <div v-if="storeForm.ACtype == 1">
+                  <p class="m-alert-box">
+                    <el-radio v-model="radio" label="1">打</el-radio>
+                    <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
+                    <span>&nbsp;折</span>
+                    <span class="m-alert-icon"></span>
+                    <span class="m-alert-info m-alert-info-a">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
+                  </p>
+                </div>
+                <div v-if="storeForm.ACtype == 2">
+                  <p class="m-alert-box">
+                    <el-radio v-model="radio" label="3">减</el-radio>
+                    <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
+                    <span>&nbsp;元</span>
+                    <span class="m-alert-icon"></span>
+                    <span class="m-alert-info m-alert-info-a">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
+                  </p>
+                </div>
+               <div v-if="storeForm.ACtype == 3">
+                 <p>
+                   <el-radio v-model="radio" label="2">包邮</el-radio>
+                   <el-input v-model="storeForm.name" class="m-input-m" placeholder="备注"></el-input>
+                 </p>
+                 <p>
+                   <el-radio v-model="radio" label="2">送赠品</el-radio>
+                   <el-input v-model="storeForm.name" class="m-input-m" placeholder="赠品内容"></el-input>
+                 </p>
+                 <p>
+                   <el-radio v-model="radio" label="2">送权益</el-radio>
+                   <el-input v-model="storeForm.name" class="m-input-m" placeholder="权益内容"></el-input>
+                 </p>
+                 <p>
+                   <el-radio v-model="radio" label="2">送优惠券</el-radio>
+                   <el-input v-model="storeForm.name" class="m-input-m" placeholder="优惠券内容"></el-input>
+                 </p>
+               </div>
+
                 <p class="m-alert-btn-box">
                   <span class="m-alert-btn active" @click="addLayer">+增加一级优惠</span>
                   <span class="m-alert-btn" @click="cutLayer(index)">删除一级优惠</span>
@@ -130,7 +152,8 @@
         layer_data:[1],
         storeForm:{
           name:'',
-          date1:''
+          date1:'',
+          ACtype:'1'
         },
         radio:'1'
       }

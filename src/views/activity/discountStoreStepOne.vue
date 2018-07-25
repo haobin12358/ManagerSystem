@@ -9,7 +9,7 @@
         <div class="m-step-part">
           <h3 class="m-step-h3">基本信息</h3>
           <el-form-item label="活动名称：">
-            <el-input v-model="storeForm.name" class="m-input-l" placeholder="审批人"></el-input>
+            <el-input v-model="storeForm.name" class="m-input-l" maxlength="10" placeholder="最多10个字"></el-input>
           </el-form-item>
           <el-form-item label="使用时间：">
             <el-date-picker type="date"  placeholder="起始时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>

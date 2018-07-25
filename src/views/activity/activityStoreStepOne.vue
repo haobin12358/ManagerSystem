@@ -10,7 +10,7 @@
         <div class="m-step-part">
           <h4>基本信息</h4>
           <el-form-item label="活动名称：">
-            <el-input v-model="storeForm.name" class="m-input-l" placeholder="审批人"></el-input>
+            <el-input v-model="storeForm.name" class="m-input-l" placeholder="最多10个字" maxlength="10"></el-input>
           </el-form-item>
           <el-form-item label="优惠类型：">
             <p>
@@ -21,10 +21,10 @@
             </p>
           </el-form-item>
           <el-form-item label="开始时间：">
-            <el-date-picker type="date"  placeholder="起始时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>
+            <el-date-picker type="date"  placeholder="请选择时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>
           </el-form-item>
           <el-form-item label="结束时间：">
-            <el-date-picker type="date"  placeholder="结束时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>
+            <el-date-picker type="date"  placeholder="请选择时间" v-model="storeForm.date1" style="width: 2rem;"></el-date-picker>
           </el-form-item>
 
           <div class="m-bottom-btn m-flex-center">
