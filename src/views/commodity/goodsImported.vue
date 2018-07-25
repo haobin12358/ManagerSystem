@@ -126,7 +126,7 @@
         </el-form-item>
         <div v-show="show_basic_info">
           <el-form-item label="商品卖点:" >
-            <el-input v-model="form.name" class="m-input-l" placeholder="输入内容"></el-input>
+            <el-input v-model="form.PRPoint" class="m-input-l" placeholder="输入内容"></el-input>
             <p class="m-alert">在商品详情页下面展示卖点信息，建议36字以内</p><!--，<span class="m-link">查看示例</span>-->
           </el-form-item>
           <el-form-item label="商品视频:" >
@@ -166,26 +166,26 @@
       </div>
       <a name="priceInfo"></a>
       <div class="m-one-part">
-        <h3 id="priceInfo">商品库存</h3>
-        <el-form-item label="划线价格:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
-          <el-input v-model="form.name" class="m-input-m" ></el-input>
+        <h3 id="priceInfo">商品价格</h3>
+        <el-form-item label="划线价格:">
+          <el-input v-model="form.PBmarkingPrice" class="m-input-m" ></el-input>
           <p class="m-alert">建议描述文字在36字以内</p>
         </el-form-item>
-        <el-form-item label="库存:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
-          <el-input v-model="form.name" class="m-input-m" ></el-input>
-          <div class="m-check-content">
-            <el-checkbox v-model="checked"></el-checkbox>
-            <span>商品详情不显示剩余件数</span>
-          </div>
-          <p class="m-alert">库存为0时，会放入已售罄列表中</p>
-          <p class="m-look-more" @click="showMore('show_price_info')">更多价格库存设置</p>
-        </el-form-item>
-        <div v-show="show_price_info">
-          <el-form-item label="成本价格:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">
-            <el-input v-model="form.name" class="m-input-m" ></el-input>
-            <p class="m-alert">建议描述文字在36字以内</p>
-          </el-form-item>
-        </div>
+        <!--<el-form-item label="库存:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">-->
+          <!--<el-input v-model="form.name" class="m-input-m" ></el-input>-->
+          <!--<div class="m-check-content">-->
+            <!--<el-checkbox v-model="checked"></el-checkbox>-->
+            <!--<span>商品详情不显示剩余件数</span>-->
+          <!--</div>-->
+          <!--<p class="m-alert">库存为0时，会放入已售罄列表中</p>-->
+          <!--<p class="m-look-more" @click="showMore('show_price_info')">更多价格库存设置</p>-->
+        <!--</el-form-item>-->
+        <!--<div v-show="show_price_info">-->
+          <!--<el-form-item label="成本价格:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">-->
+            <!--<el-input v-model="form.name" class="m-input-m" ></el-input>-->
+            <!--<p class="m-alert">建议描述文字在36字以内</p>-->
+          <!--</el-form-item>-->
+        <!--</div>-->
 
 
       </div>
@@ -203,31 +203,31 @@
           <!--<el-radio v-model="form.PRfrankingR" label="">统一邮费  </el-radio>-->
           <el-input v-model="form.PRfranking" class="m-input-s" ></el-input>
         </el-form-item>
-        <el-form-item label="上架时间:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
-          <div>
-            <el-radio v-model="radio" label="1">立即上架售卖  </el-radio>
-          </div>
-          <div>
-            <el-radio v-model="radio" label="0">自定义上架时间  </el-radio>
-            <el-input v-model="form.name" class="m-input-s" ></el-input>
-            <p class="m-alert">需等待管理员审批完成，上架时间请选择24小时以后</p>
-          </div>
-          <p class="m-look-more" @click="showMore('show_other_info')">更多其他信息设置</p>
-        </el-form-item>
-        <div v-show="show_other_info">
-          <el-form-item label="限购:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
-            <div>
-              <el-radio v-model="radio" label="1">无现货，下单后需过段时间才能发货  </el-radio>
-            </div>
-            <div>
-              <el-radio v-model="radio" label="0">只允许特定用户购买  </el-radio>
-            </div>
-            <div>
-              <el-radio v-model="radio" label="0">允许用户购买数量  </el-radio>
-              <el-input v-model="form.name" class="m-input-s" placeholder="每个ID限购5个"></el-input>
-            </div>
-          </el-form-item>
-        </div>
+        <!--<el-form-item label="上架时间:" :rules="[{ required: true, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">-->
+          <!--<div>-->
+            <!--<el-radio v-model="radio" label="1">立即上架售卖  </el-radio>-->
+          <!--</div>-->
+          <!--<div>-->
+            <!--<el-radio v-model="radio" label="0">自定义上架时间  </el-radio>-->
+            <!--<el-input v-model="form.name" class="m-input-s" ></el-input>-->
+            <!--<p class="m-alert">需等待管理员审批完成，上架时间请选择24小时以后</p>-->
+          <!--</div>-->
+          <!--<p class="m-look-more" @click="showMore('show_other_info')">更多其他信息设置</p>-->
+        <!--</el-form-item>-->
+        <!--<div v-show="show_other_info">-->
+          <!--<el-form-item label="限购:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">-->
+            <!--<div>-->
+              <!--<el-radio v-model="radio" label="1">无现货，下单后需过段时间才能发货  </el-radio>-->
+            <!--</div>-->
+            <!--<div>-->
+              <!--<el-radio v-model="radio" label="0">只允许特定用户购买  </el-radio>-->
+            <!--</div>-->
+            <!--<div>-->
+              <!--<el-radio v-model="radio" label="0">允许用户购买数量  </el-radio>-->
+              <!--<el-input v-model="form.name" class="m-input-s" placeholder="每个ID限购5个"></el-input>-->
+            <!--</div>-->
+          <!--</el-form-item>-->
+        <!--</div>-->
 
       </div>
 
@@ -318,10 +318,12 @@
                   BRands:['',''],
                   PBnumber:''
                 }],
+                PRPoint:'',
                 PRvideo:'',
                 PRaboimage:[],
                 PRfrankingR:true,
-                PRfranking:''
+                PRfranking:'',
+                PBmarkingPrice:''
               },
               rules:{
                 PRname:[
@@ -342,7 +344,7 @@
                 ],
                 PRfrankingR:[
                   { required: true, message: '请设置邮费', trigger: 'blur' }
-                ],
+                ]
               },
               brand_one:{
                 PBprice:'',
@@ -373,6 +375,7 @@
         pageTitle
       },
         methods: {
+          /*获取商品的id*/
           getPrid(){
             axios.get(api.get_prid).then(res => {
               if(res.data.status == 200) {
@@ -384,6 +387,7 @@
               this.$message.error(error.data.message)
             })
           },
+          /*编辑已保存商品*/
           getAbo(id){
             let that = this;
             axios.get(api.get_abo,{params:{
@@ -408,7 +412,7 @@
                 that.form.PRinfo = res.data.data.product_info.PRinfo;//商品描述
                 let _brand = [];
                 for(let i=0;i<that.brand_list.length;i++){
-                  if(that.brand_list[i].CBid == res.data.data.product_info.PRbrand[i].CBid){
+                  if(res.data.data.product_info.PRbrand[i] && (that.brand_list[i].CBid == res.data.data.product_info.PRbrand[i].CBid)){
                     _brand[i] = res.data.data.product_info.PRbrand[i].CBvalue
                   }
                 }
@@ -421,6 +425,8 @@
                   _aboArr[i] = {name:'',url:res.data.data.product_info.PRaboimage[i]};
                 }
                 that.form.PRaboimage = [].concat(_aboArr);//商品详情
+                that.form.PBmarkingPrice = res.data.data.product_info.PBmarkingPrice;//商品划线价格
+                that.form.PRfranking = res.data.data.product_info.PRfranking;//商品邮费
               }else{
                 that.$message.error(res.data.message);
               }
@@ -428,6 +434,7 @@
               that.$message.error(error.data.message);
             })
           },
+          /*获取商品属性*/
           getCategorybrands(id){
             let that = this;
             axios.get(api.get_categorybrands,{params:{
@@ -443,6 +450,7 @@
               that.$message.error(error.data.message)
             })
           },
+          /*页面刷新*/
           freshClick(){
             console.log('fresh');
           },
@@ -655,7 +663,7 @@
             }
             for(let i=0;i<this.form.brands_key.length;i++){
               if(this.form.brands_key[i] == ''){
-                this.$message.error('请填写完整商品样式和价格');
+                this.$message.error('请填写完整商品样式和价格特征值');
                 return false;
               }else if( i == 1 && (this.form.brands_key[i] == this.form.brands_key[i-1])){
                 this.$message.error('商品样式和价格特征值一样');
