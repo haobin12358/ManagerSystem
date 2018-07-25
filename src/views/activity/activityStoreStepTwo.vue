@@ -51,7 +51,7 @@
               <h4>优惠门槛及内容——层级{{index+1}}</h4>
               <el-form-item label="优惠门槛：">
                 <span>满&nbsp;</span>
-                <el-input v-model="storeForm.name" class="m-input-s" placeholder="审批人"></el-input>
+                <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
                 <el-radio v-model="radio" label="3">件</el-radio>
                 <el-radio v-model="radio" label="1">元</el-radio>
               </el-form-item>
@@ -59,7 +59,7 @@
                 <div v-if="storeForm.ACtype == 1">
                   <p class="m-alert-box">
                     <el-radio v-model="radio" label="1">打</el-radio>
-                    <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
+                    <el-input v-model="storeForm.ACdiscount" class="m-input-s" placeholder="值为0-1之间"></el-input>
                     <span>&nbsp;折</span>
                     <span class="m-alert-icon"></span>
                     <span class="m-alert-info m-alert-info-a">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
@@ -68,7 +68,7 @@
                 <div v-if="storeForm.ACtype == 2">
                   <p class="m-alert-box">
                     <el-radio v-model="radio" label="3">减</el-radio>
-                    <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
+                    <el-input v-model="storeForm.ACamount" class="m-input-s" placeholder=""></el-input>
                     <span>&nbsp;元</span>
                     <span class="m-alert-icon"></span>
                     <span class="m-alert-info m-alert-info-a">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
@@ -153,7 +153,26 @@
         storeForm:{
           name:'',
           date1:'',
-          ACtype:'1'
+          ACtype:'1',
+          ACdiscount:0.8,
+          ACamount:''
+        },
+        rules:{
+          ACtype:[
+            { required: true, message: '请输入活动优惠类型', trigger: 'blur' }
+          ],
+          ACabo:[
+            { required: true, message: '请输入活动描述', trigger: 'blur' }
+          ],
+          ACstart:[
+            { required: true, message: '请选择开始时间', trigger: 'blur' }
+          ],
+          ACend:[
+            { required: true, message: '请选择结束时间', trigger: 'blur' }
+          ],
+          ACbrand:[
+            { required: true, message: '请选择优惠类型', trigger: 'blur' }
+          ],
         },
         radio:'1'
       }
