@@ -8,6 +8,7 @@ const api={
   get_approval: title + 'approval/get_approval',//获取审批信息
   update_approval:title + 'approval/update_approval',//同意/拒绝
 
+  get_order_situation: title + 'order/get_order_situation',//获取订单概况
   get_all_order: title + 'order/order_list',//获取所有订单
   get_order_by_LOid: title + 'order/order_abo',//获取订单详情
   update_order_status: title + 'order/update_order_status',//更新订单状态
