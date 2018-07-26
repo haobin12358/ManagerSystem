@@ -87,9 +87,10 @@
                     type: 'pie',
                     radius : '55%',
                     center: ['50%', '60%'],
+                    color: ['#EEB5B3', '#A0D1C1'],
                     data:[
-                      {value:this.orderSituation.paying_count, name:'未支付'},
-                      {value:this.orderSituation.week_paying_list[0], name:'已支付'}
+                      { value:this.orderSituation.paying_count, name:'未支付' },
+                      { value:this.orderSituation.week_paying_list[0], name:'已支付' }
                     ],
                     itemStyle: {
                       emphasis: {
@@ -132,12 +133,14 @@
                     name:'下单笔数',
                     type:'line',
                     smooth: true,
+                    color: '#EEB5B3',
                     data: this.orderSituation.week_payed_list
                   },
                   {
                     name:'付款笔数',
                     type:'line',
                     smooth: true,
+                    color: '#A0D1C1',
                     data: this.orderSituation.week_paying_list
                   }
                 ]
@@ -173,12 +176,14 @@
                     name:'下单笔数',
                     type:'line',
                     smooth: true,
+                    color: '#EEB5B3',
                     data: this.orderSituation.week_payed_list
                   },
                   {
                     name:'付款笔数',
                     type:'line',
                     smooth: true,
+                    color: '#A0D1C1',
                     data: this.orderSituation.week_paying_list
                   }
                 ]
