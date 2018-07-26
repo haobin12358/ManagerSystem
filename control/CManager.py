@@ -253,7 +253,7 @@ class CManager():
             """
         # 根据电话号码获取时间
         time_up = self.smanager.get_uptime_by_utel(Utel)
-        log.info(time_up)
+        log.info("time_up", time_up)
         if time_up:
             time_up_time = datetime.datetime.strptime(time_up.ICtime, format_for_db)
             delta = time_time - time_up_time
