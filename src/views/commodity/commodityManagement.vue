@@ -175,11 +175,29 @@
       },
       /*下架商品*/
       soldOut(){
-        this.updateProduct('下架状态');
+        this.$confirm('确认将选中商品下架?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.updateProduct('下架状态');
+        }).catch(() => {
+
+        });
+
       },
       /*删除商品*/
       deleteProduct(){
-        this.updateProduct('删除状态');
+        this.$confirm('确认将选中商品删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.updateProduct('删除状态');
+        }).catch(() => {
+
+        });
+
       },
       /*更新商品方法*/
       updateProduct(status){

@@ -64,7 +64,7 @@
               <span class="m-img-label">A:</span> <el-input v-model="form.brands_key[0]" placeholder="输入商品属性" class="m-input-s" ></el-input>
               <span class="m-img-label">B:</span> <el-input v-model="form.brands_key[1]" placeholder="输入商品属性" class="m-input-s" ></el-input>
             </div>
-            <div class="m-product" v-for="(item,index) in brands">
+            <div class="m-product" v-for="(item,index) in form.brands">
               <div class="m-product-input">
                 <div>
                   <span class="m-img-label">A:</span>
@@ -77,6 +77,10 @@
                 <div>
                   <span class="m-img-label">价格:</span>
                   <el-input v-model="form.brands[index].PBprice" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
+                </div>
+                <div>
+                  <span class="m-img-label">划线价格:</span>
+                  <el-input v-model="form.brands[index].PBmarkingPrice" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
                 </div>
                 <div>
                   <span class="m-img-label">库存:</span>
@@ -180,31 +184,31 @@
         </div>
 
       </div>
-      <a name="priceInfo"></a>
-      <div class="m-one-part">
-        <h3 id="priceInfo">商品价格</h3>
-        <el-form-item label="划线价格:">
-          <el-input v-model="form.PBmarkingPrice" class="m-input-m" ></el-input>
-          <p class="m-alert">建议描述文字在36字以内</p>
-        </el-form-item>
-        <!--<el-form-item label="库存:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">-->
-          <!--<el-input v-model="form.name" class="m-input-m" ></el-input>-->
-          <!--<div class="m-check-content">-->
-            <!--<el-checkbox v-model="checked"></el-checkbox>-->
-            <!--<span>商品详情不显示剩余件数</span>-->
-          <!--</div>-->
-          <!--<p class="m-alert">库存为0时，会放入已售罄列表中</p>-->
-          <!--<p class="m-look-more" @click="showMore('show_price_info')">更多价格库存设置</p>-->
+      <!--<a name="priceInfo"></a>-->
+      <!--<div class="m-one-part">-->
+        <!--<h3 id="priceInfo">商品价格</h3>-->
+        <!--<el-form-item label="划线价格:">-->
+          <!--<el-input v-model="form.PBmarkingPrice" class="m-input-m" ></el-input>-->
+          <!--<p class="m-alert">建议描述文字在36字以内</p>-->
         <!--</el-form-item>-->
-        <!--<div v-show="show_price_info">-->
-          <!--<el-form-item label="成本价格:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">-->
-            <!--<el-input v-model="form.name" class="m-input-m" ></el-input>-->
-            <!--<p class="m-alert">建议描述文字在36字以内</p>-->
-          <!--</el-form-item>-->
-        <!--</div>-->
+        <!--&lt;!&ndash;<el-form-item label="库存:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">&ndash;&gt;-->
+          <!--&lt;!&ndash;<el-input v-model="form.name" class="m-input-m" ></el-input>&ndash;&gt;-->
+          <!--&lt;!&ndash;<div class="m-check-content">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-checkbox v-model="checked"></el-checkbox>&ndash;&gt;-->
+            <!--&lt;!&ndash;<span>商品详情不显示剩余件数</span>&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--&lt;!&ndash;<p class="m-alert">库存为0时，会放入已售罄列表中</p>&ndash;&gt;-->
+          <!--&lt;!&ndash;<p class="m-look-more" @click="showMore('show_price_info')">更多价格库存设置</p>&ndash;&gt;-->
+        <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div v-show="show_price_info">&ndash;&gt;-->
+          <!--&lt;!&ndash;<el-form-item label="成本价格:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-input v-model="form.name" class="m-input-m" ></el-input>&ndash;&gt;-->
+            <!--&lt;!&ndash;<p class="m-alert">建议描述文字在36字以内</p>&ndash;&gt;-->
+          <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
 
-      </div>
+      <!--</div>-->
 
       <a name="otherInfo"></a>
       <div class="m-one-part m-other">
@@ -269,16 +273,16 @@
               <span class="m-step-content">1、基本信息</span>
             <!--</a>-->
           </li>
-          <li>
-            <span class="line">|</span>
-            <span class="m-step-content"></span>
-          </li>
-          <li @click="sideClick('priceInfo')">
-            <!--<a href="#priceInfo">-->
-              <span class="circle" :class="linkTo == 'priceInfo'?'active':''"></span>
-              <span class="m-step-content">2、商品库存</span>
-            <!--</a>-->
-          </li>
+          <!--<li>-->
+            <!--<span class="line">|</span>-->
+            <!--<span class="m-step-content"></span>-->
+          <!--</li>-->
+          <!--<li @click="sideClick('priceInfo')">-->
+            <!--&lt;!&ndash;<a href="#priceInfo">&ndash;&gt;-->
+              <!--<span class="circle" :class="linkTo == 'priceInfo'?'active':''"></span>-->
+              <!--<span class="m-step-content">2、商品库存</span>-->
+            <!--&lt;!&ndash;</a>&ndash;&gt;-->
+          <!--</li>-->
           <li>
             <span class="line">|</span>
             <span class="m-step-content"></span>
@@ -286,7 +290,7 @@
           <li @click="sideClick('otherInfo')">
             <!--<a href="#otherInfo">-->
               <span class="circle " :class="linkTo == 'otherInfo'?'active':''"></span>
-              <span class="m-step-content">3、其他信息</span>
+              <span class="m-step-content">2、其他信息</span>
             <!--</a>-->
           </li>
           <li>
@@ -344,14 +348,14 @@
                   PBunit:'$',
                   PBimage:'',
                   BRands:['',''],
-                  PBnumber:''
+                  PBnumber:'',
+                  PBmarkingPrice:''
                 }],
                 PRPoint:'',
                 PRvideo:'',
                 PRaboimage:[],
                 PRfrankingR:true,
-                PRfranking:'',
-                PBmarkingPrice:''
+                PRfranking:''
               },
               rules:{
                 PRname:[
@@ -379,7 +383,8 @@
                 PBunit:'$',
                 PBimage:'',
                 BRands:['',''],
-                PBnumber:''
+                PBnumber:'',
+                PBmarkingPrice:''
               },
               brand_list:[],
               brands:[{
@@ -446,15 +451,32 @@
                   }
                 }
                 that.form.PRbrand = [].concat(_brand);//商品属性
-                that.form.brands = [].concat(res.data.data.product_info.brands);//商品商品样式
+                let _brands = [];
+                for(let i=0;i<res.data.data.product_info.brands.length;i++){
+                  _brands[i] = {
+                    PBprice:'',
+                    PBunit:'$',
+                    PBimage:'',
+                    BRands:['',''],
+                    PBnumber:'',
+                    PBmarkingPrice:''
+                  };
+                  _brands[i].PBprice = res.data.data.product_info.brands[i].PBprice;
+                  _brands[i].PBunit = res.data.data.product_info.brands[i].PBunit;
+                  _brands[i].PBimage = res.data.data.product_info.brands[i].PBimage;
+                  _brands[i].BRands = res.data.data.product_info.brands[i].BRands;
+                  _brands[i].PBnumber = res.data.data.product_info.brands[i].PBnumber;
+                  _brands[i].PBmarkingPrice = res.data.data.product_info.brands[i].PBmarkingPrice;
+                }
+                that.form.brands = [].concat(_brands);//商品商品样式
                 that.form.brands_key = [].concat(res.data.data.product_info.brands_key);//商品商品样式
-                that.form.PRvideo = {name:'',url:res.data.data.product_info.PRvideo};//商品视频
+                that.form.PRvideo = res.data.data.product_info.PRvideo;//商品视频
                 let _aboArr = [];
                 for(let i=0;i<res.data.data.product_info.PRaboimage.length;i++){
                   _aboArr[i] = {name:'',url:res.data.data.product_info.PRaboimage[i]};
                 }
                 that.form.PRaboimage = [].concat(_aboArr);//商品详情
-                that.form.PBmarkingPrice = res.data.data.product_info.PBmarkingPrice;//商品划线价格
+                // that.form.PRaboimage = [].concat(res.data.data.product_info.PRaboimage);//商品详情
                 that.form.PRfranking = res.data.data.product_info.PRfranking;//商品邮费
               }else{
                 that.$message.error(res.data.message);
@@ -655,20 +677,27 @@
             this.linkTo = v;
             if(v == 'basicInfo'){
               document.documentElement.scrollTop = 96;
-            }else if(v == 'priceInfo'){
-              document.documentElement.scrollTop = document.getElementById('priceInfo').offsetTop - 89;
-            }else if(v == 'otherInfo'){
-              document.documentElement.scrollTop = document.getElementById('otherInfo').offsetTop - 229;
+            }
+            // else if(v == 'priceInfo'){
+            //   document.documentElement.scrollTop = document.getElementById('priceInfo').offsetTop - 89;
+            // }
+            else if(v == 'otherInfo'){
+              document.documentElement.scrollTop = document.body.scrollHeight -30;
             }
           },
           /*页面滚动*/
           handleScroll(){
-            if(document.getElementById('otherInfo') && document.getElementById('priceInfo') ){
-              if((document.getElementById('otherInfo').offsetTop <= document.documentElement.scrollTop + 230 ) ){
+            console.log(document.body.clientHeight, document.documentElement.scrollTop ,document.body.scrollHeight)
+            if(document.getElementById('otherInfo')  ){ //&& document.getElementById('priceInfo')
+              //(document.getElementById('otherInfo').offsetTop <= document.documentElement.scrollTop + 230 )
+              //(document.body.clientHeight + document.documentElement.scrollTop) == document.body.scrollHeight //页面滚动到最底部
+              if((document.body.clientHeight + document.documentElement.scrollTop) >= (document.body.scrollHeight -30) ){
                 this.linkTo = 'otherInfo';
-              }else if((document.getElementById('priceInfo').offsetTop < document.documentElement.scrollTop +90  ) &&  (document.getElementById('otherInfo').offsetTop > document.documentElement.scrollTop +230)){
-                this.linkTo = 'priceInfo'
-              }else{
+              }
+              // else if((document.getElementById('priceInfo').offsetTop < document.documentElement.scrollTop +90  ) &&  (document.getElementById('otherInfo').offsetTop > document.documentElement.scrollTop +230)){
+              //   this.linkTo = 'priceInfo'
+              // }
+              else{
                 this.linkTo = 'basicInfo'
               }
             }else{
@@ -710,17 +739,17 @@
                 _PRaboimage.push(_form.PRaboimage[i].url);
               }
             }
-            _form.PRaboimage = _PRimage;
+            _form.PRaboimage = _PRaboimage;
             let _PRimage = [];
             for(let i=0;i<this.form.PRimage.length;i++){
               if(_form.PRimage[i] != undefined){
                 _PRimage.push(_form.PRimage[i].url);
               }
             }
-
+            _form.PRimage = _PRimage;
             for(let i=0;i<this.form.brands.length;i++){
               for(let item in this.form.brands[i]){
-                if(this.form.brands[i][item] == ''){
+                if(this.form.brands[i][item] == '' || this.form.brands[i][item] == null ){
                   this.$message.error('请填写完整商品样式和价格');
                   return false;
                 }
@@ -757,12 +786,12 @@
           },
           /*删除一个子类*/
           deleteOne(v){
-            this.brands.splice(v,1);
+            console.log(v)
+            this.form.brands.splice(v,1);
           },
           /*添加更多*/
           addMore(){
-            this.brands.push(this.brand_one);
-            this.form.brands.push(this.brand_one)
+            this.form.brands.push(this.brand_one);
           }
         },
         created() {
@@ -775,6 +804,7 @@
           this.form.CTid = this.$route.query.CTid;
           this.getPrid();
         }else if(this.$route.query.PRid){
+          this.form.PRid = this.$route.query.PRid;
           this.getAbo(this.$route.query.PRid);
         }
 
