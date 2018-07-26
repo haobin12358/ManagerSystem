@@ -56,7 +56,7 @@
   import Pagination from "../../components/common/page";
   import {Message} from 'element-ui';
   export default {
-    props: [],
+    props: ["order"],
     name: "all-order-table",
     data() {
       return {
@@ -67,18 +67,16 @@
         OMstatus: ''
       }
     },
-    components: {
-      Pagination
-    },
+    components: { Pagination },
     methods: {
       orderDetails(order) {
         let OMid = order.OMid
         this.$router.push({path: '/order/orderDetails', query: {OMid}});
       },
-      getOrderList(data, page_size) {
+      getOrderList(data) {
         this.orderList = data.OrderMains
         // console.log(this.orderList)
-        this.total_page = Math.ceil(data.count / page_size);
+        this.total_page = Math.ceil(data.count / data.page_size);
       },
       pageChange(v){
         if(v == this.current_page){

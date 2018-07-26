@@ -38,36 +38,11 @@
       </div>
       <div class="all-order-tabs">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="全部(7)" name="全部" :lazy="lazyStatus">
-            <all-order-table ref="child" @toPage="getData"></all-order-table>
-          </el-tab-pane>
-          <el-tab-pane label="已取消(7)" name="已取消" :lazy="lazyStatus">
-            <all-order-table ref="child" @toPage="getData"></all-order-table>
-          </el-tab-pane>
-          <el-tab-pane label="未支付(7)" name="未支付" :lazy="lazyStatus">
-            <all-order-table ref="child" @toPage="getData"></all-order-table>
-          </el-tab-pane>
-          <el-tab-pane label="支付中(7)" name="支付中" :lazy="lazyStatus">
-            <all-order-table ref="child" @toPage="getData"></all-order-table>
-          </el-tab-pane>
-          <el-tab-pane label="已支付(7)" name="已支付" :lazy="lazyStatus">
-            <all-order-table ref="child" @toPage="getData"></all-order-table>
-          </el-tab-pane>
-          <el-tab-pane label="已发货(7)" name="已发货" :lazy="lazyStatus">
-            <all-order-table ref="child" @toPage="getData"></all-order-table>
-          </el-tab-pane>
-          <el-tab-pane label="已收货(7)" name="已收货" :lazy="lazyStatus">
-            <all-order-table ref="child" @toPage="getData"></all-order-table>
-          </el-tab-pane>
-          <el-tab-pane label="已完成(7)" name="已完成" :lazy="lazyStatus">
-            <all-order-table ref="child" @toPage="getData"></all-order-table>
-          </el-tab-pane>
-          <el-tab-pane label="已评价(7)" name="已评价" :lazy="lazyStatus">
-            <all-order-table ref="child" @toPage="getData"></all-order-table>
-          </el-tab-pane>
-          <el-tab-pane label="退款中(7)" name="退款中" :lazy="lazyStatus">
-            <all-order-table ref="child" @toPage="getData"></all-order-table>
-          </el-tab-pane>
+          <div v-for="item in tabList">
+            <el-tab-pane :label="item" :name="item.slice(0, 3)" :lazy="lazyStatus">
+              <all-order-table ref="child" :order="order" @toPage="getData"></all-order-table>
+            </el-tab-pane>
+          </div>
         </el-tabs>
       </div>
     </div>
@@ -79,125 +54,138 @@
   import api from '../../api/api';
   import {Message} from 'element-ui';
   import axios from 'axios';
+  import index from "../../router";
   export default {
-      data() {
-          return {
-            name: '所有订单',
-            activeName: '全部',
-            pickerOptions2: {
-              shortcuts: [
-                {
-                  text: '最近一周',
-                  onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                    picker.$emit('pick', [start, end]);
-                  }
-                },
-                {
-                  text: '最近一个月',
-                  onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                    picker.$emit('pick', [start, end]);
-                  }
-                },
-                {
-                  text: '最近三个月',
-                  onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                    picker.$emit('pick', [start, end]);
-                  }
+    data() {
+        return {
+          name: '所有订单',
+          activeName: '全 部',
+          pickerOptions2: {
+            shortcuts: [
+              {
+                text: '最近一周',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                  picker.$emit('pick', [start, end]);
                 }
-              ]
-            },
-            OMtime: '',
-            // value: '',
-            lazyStatus: true,
-            PRnameSearch: '',
-            OMidSearch: '',
-            orderList: [],
-            page_size: 10,
-            OMstatus: '',
-            OMstartTime: '',
-            OMendTime: '',
-            tabList: ['全部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中']
-          }
+              },
+              {
+                text: '最近一个月',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                  picker.$emit('pick', [start, end]);
+                }
+              },
+              {
+                text: '最近三个月',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                  picker.$emit('pick', [start, end]);
+                }
+              }
+            ]
+          },
+          OMtime: '',
+          // value: '',
+          lazyStatus: false,
+          PRnameSearch: '',
+          OMidSearch: '',
+          orderList: [],
+          order: {},
+          page_size: 10,
+          OMstatus: '',
+          OMstartTime: '',
+          OMendTime: '',
+          tabList: ['全 部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中'],
+          index: 0
+        }
+    },
+    components: { pageTitle, allOrderTable },
+    methods: {
+      // 页面刷新
+      freshClick(){
+        console.log('fresh');
       },
-      components: {
-        'pageTitle': pageTitle,
-        'allOrderTable': allOrderTable
-      },
-      methods: {
-        // 页面刷新
-        freshClick(){
-          console.log('fresh');
-        },
-        // 获取点击tab的label
-        handleClick(tab) {
-          this.changeOMstatus(tab.name)
-        },
+      // 获取点击tab的label
+      handleClick(tab) {
+        // 判断要调用哪个子组件的方法
+        if(tab.index == 9) {
+          this.index = 0
+        }else {
+          this.index = parseInt(tab.index) + 1
+        }
         // 判断需要的订单状态
-        changeOMstatus(OMstatus) {
-          if(OMstatus == '全部') {
-            this.OMstatus = ''
-          }else {
-            this.OMstatus = OMstatus
+        if(tab.name == '全 部') {
+          this.OMstatus = ''
+        }else {
+          this.OMstatus = tab.name
+        }
+        this.getData(1)
+      },
+      // 获取订单数据
+      getData(v){
+        let params = {
+          token: localStorage.getItem('token'),
+          OMstatus: this.OMstatus,
+          page_num: v,
+          page_size: this.page_size,
+          PRname: this.PRnameSearch,
+          OMstartTime: this.OMstartTime,
+          OMendTime: this.OMendTime,
+          OMid: this.OMidSearch
+        }
+        axios.get(api.get_all_order,{params:params}).then(res => {
+          if(res.data.status == 200) {
+            this.orderList = res.data.data.OrderMains;
+            this.order = res.data.data
+          }else{
+            this.$message.error(res.data.message);
           }
-          this.getData(1)
-        },
-        // 获取订单数据
-        getData(v){
-          let params = {
-            token: localStorage.getItem('token'),
-            OMstatus: this.OMstatus,
-            page_num: v,
-            page_size: this.page_size,
-            PRname: this.PRnameSearch,
-            OMstartTime: this.OMstartTime,
-            OMendTime: this.OMendTime,
-            OMid: this.OMidSearch
-          }
-          axios.get(api.get_all_order,{params:params}).then(res => {
-            if(res.data.status == 200) {
-              this.orderList = res.data.data.OrderMains;
-              this.getTabs(res.data.data.OMcount);
-              this.$refs.child.getOrderList(res.data.data, this.page_size)
-            }else{
-              this.$message.error(res.data.message);
-            }
-          })
-        },
-        // 获取订单的各个状态及对应的数量
-        getTabs(OMcount) {
-          let i = 0
-          this.tabList[0] = this.tabList[0]+'('+this.orderList.length+')'
-          for(let j=1;j<this.tabList.length;j++) {
-            i = (j-1)*7
-            this.tabList[j] = this.tabList[j]+'('+OMcount[i]+')'
-          }
-        },
-        // 头部查询条件
-        topSearch() {
-          if(this.OMtime != '' || this.PRnameSearch != '' || this.OMidSearch != '') {
-            if(this.OMtime != null) {
-              this.OMstartTime = this.OMtime[0]+' 00:00:00'
-              this.OMendTime = this.OMtime[1]+' 23:59:59'
-            }else if (this.OMtime == null) {
-              this.OMstartTime = ''
-              this.OMendTime = ''
-            }
-            this.getData(1)
-          }
+        })
+      },
+      // 获取订单的各个状态及对应的数量，并添加到tabList中
+      getTabs(OMcount) {
+        let i = 0
+        this.tabList[0] = this.tabList[0]+'('+this.orderList.length+')'
+        for(let j=1;j<this.tabList.length;j++) {
+          i = (j-1)*7
+          this.tabList[j] = this.tabList[j]+'('+OMcount[i]+')'
         }
       },
-      created() {
-        this.getData(1)
+      // 头部查询条件
+      topSearch() {
+        // 完善头部查询条件去除后的获取数据
+        if(this.OMtime != '' || this.PRnameSearch != '' || this.OMidSearch != '') {
+          if(this.OMtime != null) {
+            this.OMstartTime = this.OMtime[0]+' 00:00:00'
+            this.OMendTime = this.OMtime[1]+' 23:59:59'
+          }else if (this.OMtime == null) {
+            this.OMstartTime = ''
+            this.OMendTime = ''
+          }
+          this.getData(1)
+        }
       }
+    },
+    created() {
+      this.getData(1)
+    },
+    watch: {
+      // 依据order变化来传递对应的新的order给对应的this.index的子组件，并调用该子组件的getOrderList方法
+      order(newValue, oldValue) {
+        this.$refs.child[this.index].getOrderList(newValue)
+        // 仅对tabList进行一次添加数量操作
+        if(this.tabList[0].length == 3) {
+          this.getTabs(newValue.OMcount)
+        }
+      }
+    }
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
