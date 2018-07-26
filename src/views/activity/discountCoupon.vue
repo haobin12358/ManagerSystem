@@ -40,7 +40,7 @@
           <!--<span class="m-date-icon"></span>-->
         </p>
         <num-list :num_data="data_detail" @numListClick="numListClick"></num-list>
-        <m-echarts width="10" height="3" :option="option" id="discountCoupon"></m-echarts>
+        <m-echarts :width="1000" :height="300" :option="option" :id="id"></m-echarts>
       </div>
 
       <!--店铺优惠券-->
@@ -172,6 +172,7 @@
   export default {
     data() {
       return {
+        id:'discountCoupon',
         name:'优惠券',
         storeForm:{
           name:'',
@@ -330,8 +331,8 @@
       }
     },
     mounted(){
-      let myChart = echarts.init(document.getElementById('echarts'));
-      myChart.setOption(this.option);
+      // let myChart = echarts.init(document.getElementById('echarts'));
+      // myChart.setOption(this.option);
     },
     created() {
 
