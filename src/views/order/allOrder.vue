@@ -5,22 +5,22 @@
       <div class="all-order-search">
         <div class="order-search-one">
           <div class="search-text-input">
-            <div class="search-text">商品名称：</div>
-            <el-input v-model="PRnameSearch" size="mini" placeholder="请输入商品名称" clearable></el-input>
+            <div class="search-text" style="margin-left: 0.51rem">订单号：</div>
+            <el-input v-model="OMidSearch" size="mini" placeholder="请输入订单号" clearable></el-input>
           </div>
-          <!--<div class="search-text-input">
-            <div class="search-text">订单状态：</div>
-            <el-select v-model="value" placeholder="请选择" size="mini">
+          <div class="search-text-input">
+            <div class="search-text">物流方式：</div>
+            <el-select v-model="OMlogisticsNameSearch" placeholder="请选择" size="mini" clearable>
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
               <el-option label="中通快递" value="中通快递"></el-option>
             </el-select>
-          </div>-->
+          </div>
         </div>
         <div class="order-search-two">
           <div class="search-text-input">
-            <div class="search-text" style="margin-left: 0.51rem">订单号：</div>
-            <el-input v-model="OMidSearch" size="mini" placeholder="请输入订单号" clearable></el-input>
+            <div class="search-text">商品名称：</div>
+            <el-input v-model="PRnameSearch" size="mini" placeholder="请输入商品名称" clearable></el-input>
           </div>
           <div class="search-text-input" style="width: 5rem">
             <div class="search-text">下单时间：</div>
@@ -91,8 +91,8 @@
               }
             ]
           },
-          OMtime: '',
-          // value: '',
+          OMtime: null,
+          OMlogisticsNameSearch: '',
           lazyStatus: false,
           PRnameSearch: '',
           OMidSearch: '',
@@ -135,10 +135,11 @@
           OMstatus: this.OMstatus,
           page_num: v,
           page_size: this.page_size,
+          OMid: this.OMidSearch,
+          OMlogisticsName: this.OMlogisticsNameSearch,
           PRname: this.PRnameSearch,
           OMstartTime: this.OMstartTime,
-          OMendTime: this.OMendTime,
-          OMid: this.OMidSearch
+          OMendTime: this.OMendTime
         }
         axios.get(api.get_all_order,{params:params}).then(res => {
           if(res.data.status == 200) {
@@ -160,8 +161,9 @@
       },
       // 头部查询条件
       topSearch() {
-        // 完善头部查询条件去除后的获取数据
-        if(this.OMtime != '' || this.PRnameSearch != '' || this.OMidSearch != '') {
+        // 完善头部查询条件去除后获取数据的逻辑
+        if(this.OMtime != null || this.PRnameSearch != '' || this.OMidSearch != '' || this.OMlogisticsNameSearch != '') {
+          console.log(this.OMtime)
           if(this.OMtime != null) {
             this.OMstartTime = this.OMtime[0]+' 00:00:00'
             this.OMendTime = this.OMtime[1]+' 23:59:59'
@@ -169,8 +171,9 @@
             this.OMstartTime = ''
             this.OMendTime = ''
           }
-          this.getData(1)
         }
+        this.tabList = ['全 部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中']
+        this.getData(1)
       }
     },
     created() {
