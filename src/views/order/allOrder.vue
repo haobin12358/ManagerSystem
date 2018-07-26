@@ -11,9 +11,9 @@
           <div class="search-text-input">
             <div class="search-text">物流方式：</div>
             <el-select v-model="OMlogisticsNameSearch" placeholder="请选择" size="mini" clearable>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
-              <el-option label="中通快递" value="中通快递"></el-option>
+              <div v-for="item in OMlogisticsNameList">
+                <el-option :label="item" :value="item"></el-option>
+              </div>
             </el-select>
           </div>
         </div>
@@ -93,6 +93,7 @@
           },
           OMtime: null,
           OMlogisticsNameSearch: '',
+          OMlogisticsNameList: ['顺丰快递', '中通快递'],
           lazyStatus: false,
           PRnameSearch: '',
           OMidSearch: '',
@@ -149,6 +150,17 @@
             this.$message.error(res.data.message);
           }
         })
+        axios.get(api.get_omfilter).then(res => {
+          if(res.data.status == 200) {
+            for(let i=0;i<res.data.data.length;i++) {
+              if(res.data.data[i].key == "OMlogisticsName") {
+                this.OMlogisticsNameList = res.data.data[i].value
+              }
+            }
+          }else{
+            this.$message.error(res.data.message);
+          }
+        })
       },
       // 获取订单的各个状态及对应的数量，并添加到tabList中
       getTabs(OMcount) {
@@ -163,7 +175,7 @@
       topSearch() {
         // 完善头部查询条件去除后获取数据的逻辑
         if(this.OMtime != null || this.PRnameSearch != '' || this.OMidSearch != '' || this.OMlogisticsNameSearch != '') {
-          console.log(this.OMtime)
+          // console.log(this.OMtime)
           if(this.OMtime != null) {
             this.OMstartTime = this.OMtime[0]+' 00:00:00'
             this.OMendTime = this.OMtime[1]+' 23:59:59'

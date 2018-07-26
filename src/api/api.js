@@ -11,6 +11,7 @@ const api={
   get_order_situation: title + 'order/get_order_situation',//获取订单概况
   get_all_order: title + 'order/order_list',//获取所有订单
   get_order_by_LOid: title + 'order/order_abo',//获取订单详情
+  get_omfilter: title + 'order/get_omfilter',//获取订单filter
   update_order_status: title + 'order/update_order_status',//更新订单状态
 
   get_managers: title + 'user/get_managers',//获取管理员列表
