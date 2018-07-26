@@ -331,8 +331,6 @@
       }
     },
     mounted(){
-      // let myChart = echarts.init(document.getElementById('echarts'));
-      // myChart.setOption(this.option);
     },
     created() {
 

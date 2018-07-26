@@ -103,9 +103,7 @@
           <!--<span class="m-date-icon"></span>-->
         </p>
         <num-list :num_data="data_detail" @numListClick="numListClick"></num-list>
-        <div class="m-discount-echart">
-          <div id="echarts"></div>
-        </div>
+        <m-echarts :width="1000" :height="300" :option="option" id="storeActivity"></m-echarts>
       </div>
     </div>
   </div>
@@ -118,6 +116,7 @@
   import echarts from 'echarts';
   import tabs from '../../components/common/tabs';
   import numList from '../../components/activity/numList';
+  import mEcharts from '../../components/common/vue-echarts';
   export default {
     data() {
       return {
@@ -240,7 +239,8 @@
       pageTitle,
       Pagination,
       tabs,
-      'num-list':numList
+      'num-list':numList,
+      'm-echarts':mEcharts
     },
     methods: {
       freshClick(){
@@ -272,8 +272,7 @@
       }
     },
     mounted(){
-      let myChart = echarts.init(document.getElementById('echarts'));
-      myChart.setOption(this.option);
+
     },
     created() {
 
