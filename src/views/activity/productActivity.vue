@@ -85,7 +85,7 @@
           <!--<span class="m-date-icon"></span>-->
         </p>
         <num-list :num_data="data_detail" @numListClick="numListClick"></num-list>
-        <m-echarts width="1000" height="300" :option="option" id="productActivity"></m-echarts>
+        <m-echarts :width="1000" :height="300" :option="option" id="productActivity"></m-echarts>
       </div>
     </div>
   </div>
@@ -250,8 +250,7 @@
       }
     },
     mounted(){
-      let myChart = echarts.init(document.getElementById('echarts'));
-      myChart.setOption(this.option);
+
     },
     created() {
 
