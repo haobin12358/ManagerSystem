@@ -101,7 +101,7 @@
                   <!--<img width="100%" :src="image" alt="">-->
                 <!--</el-dialog>-->
                 <div class="inputbg m-img-xl el-upload-list--picture-card" v-if="form.brands[index].PBimage">
-                  <img :src="form.brands[index].PBimage" style="width: 1.7rem;height:1.7rem;"/>
+                  <img :src="form.brands[index].PBimage" style="width: 1.5rem;height:1.5rem;"/>
                   <span class="el-upload-list__item-actions">
                       <span class="el-upload-list__item-preview" @click="CardPreview(index)">
                         <i class="el-icon-zoom-in"></i>
@@ -129,19 +129,35 @@
             <el-input v-model="form.PRPoint" class="m-input-l" placeholder="输入内容"></el-input>
             <p class="m-alert">在商品详情页下面展示卖点信息，建议36字以内</p><!--，<span class="m-link">查看示例</span>-->
           </el-form-item>
-          <el-form-item label="商品视频:" >
-            <el-upload
-              action="http://120.79.182.43:7443/sharp/manager/other/upload_files"
-              :on-remove="handleRemoveVideo"
-              :http-request="imgUploadVideo"
-              :limit="1"
-              class="m-img-l"
-              :on-exceed="outImg">
-              <span>+添加视频</span>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
+          <el-form-item label="商品视频:" class="m-video-box">
+            <div class="m-flex-start">
+              <div class="m-img-xl el-upload-list--picture-card m-video" v-if="form.PRvideo">
+                <video :src="form.PRvideo" controls="controls" >
+                  您的浏览器不支持 video 标签。
+                </video>
+                <span class="el-upload-list__item-actions">
+                      <span class="el-upload-list__item-preview" @click="videoPreview">
+                        <i class="el-icon-zoom-in"></i>
+                      </span>
+                      <span class="el-upload-list__item-delete" @click="videoRemove">
+                        <i class="el-icon-delete"></i>
+                      </span>
+                    </span>
+              </div>
+              <div class="inputbg m-img-l"><span>+添加视频</span><input type="file" id="video" accept="video/*" @change="imgUploadVideo($event)"></div>
+            </div>
+            <!--<el-upload-->
+              <!--action="http://120.79.182.43:7443/sharp/manager/other/upload_files"-->
+              <!--:http-request="imgUploadVideo"-->
+              <!--:show-file-list="false"-->
+              <!--:limit="1"-->
+              <!--class="m-img-l"-->
+              <!--:on-exceed="outImg">-->
+              <!--<span>+添加视频</span>-->
+            <!--</el-upload>-->
+            <!--<el-dialog :visible.sync="dialogVisible">-->
+              <!--<img width="100%" :src="dialogImageUrl" alt="">-->
+            <!--</el-dialog>-->
             <p class="m-img-p">建议视频尺寸比例为1:1或16:9，时长不超过60秒</p>
           </el-form-item>
           <el-form-item label="商品详情:" :rules="[{ required: false, message: '年龄不能为空'},{ type: 'number', message: '年龄必须为数字值'}]">
@@ -288,6 +304,18 @@
       </div>
     </div>
   </el-form>
+  <div class="m-modal" v-show="show_video" @click="videoPreview('modal')">
+    <div class="m-modal-state">
+      <div class="m-modal-content">
+        <div class="m-img-xl el-upload-list--picture-card " v-if="form.PRvideo">
+          <video :src="form.PRvideo" controls="controls" style="width: 7rem;height:3.6rem;" >
+            您的浏览器不支持 video 标签。
+          </video>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 </template>
@@ -368,7 +396,8 @@
               linkTo:'basicInfo',
               show_basic_info:false,
               show_price_info:false,
-              show_other_info:false
+              show_other_info:false,
+              show_video:false
             }
         },
       components:{
@@ -459,8 +488,8 @@
             this.form.PRimage = [].concat(_arr)
           },
           /*视频删除*/
-          handleRemoveVideo(file, fileList) {
-
+          videoRemove() {
+              this.form.PRvideo = '';
           },
           /*商品详情图片删除*/
           handleAboRemove(file, fileList) {
@@ -480,6 +509,14 @@
           CardPreview(index){
             this.image = this.form.brands[index].PBimage;
             this.dialogVisible = true;
+          },
+          /*视频放大显示*/
+          videoPreview(v){
+            if(v == 'modal'){
+              this.show_video = false;
+            }else{
+              this.show_video = true;
+            }
           },
           /*商品图片大图显示*/
           handlePictureCardPreview(file) {
@@ -550,14 +587,23 @@
           },
           /*商品视频大图上传重定向*/
           imgUploadVideo(params){
+            if(this.form.PRvideo){
+              this.$message({
+                type:'warning',
+                message:'一个类型只能上传一个视频'
+              });
+              return false;
+            }
             let form = new FormData();
-            form.append("file", params.file);
+            form.append("file", event.target.files[0]);
             form.append("FileType", 'PRvideo');
             form.append("contentId",  this.form.PRid);
             form.append("index", this.img_index);
             axios.post(api.upload_files,form).then(res => {
               if(res.data.status == 200){
                 this.form.PRvideo = res.data.data;
+                var file = document.getElementById('video');
+                file.value ='';
                 this.img_index ++ ;
               }else{
                 this.$message({
@@ -738,6 +784,7 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/_variate";
   @import "../../common/css/index";
+  @import "../../common/css/modal";
   .m-input-l{
     width: 4.8rem;
   }
@@ -981,10 +1028,20 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     position: relative;
-    width: 1.8rem;
-    height: 1.8rem;
-    line-height: 1.8rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    line-height: 1.6rem;
     text-align: center;
+    &.m-img-l{
+      width: 1.1rem;
+      height: 1.1rem;
+      line-height: 1.1rem;
+      input{
+        width: 1.1rem;
+        height: 1.1rem;
+        line-height: 1.1rem;
+      }
+    }
   }
   .inputbg input{
     position: absolute;
@@ -992,9 +1049,21 @@
     left: 0;
     opacity:0;
     filter:alpha(opacity=0);
-    width: 1.8rem;
-    height: 1.8rem;
-    line-height: 1.8rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    line-height: 1.6rem;
     cursor: pointer;
+  }
+
+  .m-video{
+    width: 1.1rem;
+    height: 1.1rem;
+    position: relative;
+    margin-right: 0.1rem;
+    video{
+      width: 1.1rem;
+      height: 1.1rem;
+
+    }
   }
 </style>
