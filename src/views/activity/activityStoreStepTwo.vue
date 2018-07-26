@@ -74,7 +74,7 @@
                     <span class="m-alert-info m-alert-info-a">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
                   </p>
                 </div>
-               <div v-if="storeForm.ACtype == 3">
+               <div v-if="storeForm.ACtype == 3" class="m-radio-p">
                  <p>
                    <el-radio v-model="radio" label="2">包邮</el-radio>
                    <el-input v-model="storeForm.name" class="m-input-m" placeholder="备注"></el-input>
@@ -223,5 +223,9 @@
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
   @import "../../common/css/activity";
-
+.m-radio-p{
+  p{
+    margin-bottom: 0.2rem;
+  }
+}
 </style>

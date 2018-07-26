@@ -22,11 +22,7 @@
 
           </div>
         </div>
-      <div class="m-discount-nav">
-        <template v-for="(item,index) in tab_data" >
-          <span class="m-one-nav" :class="item.show?'active':''"  @click="tabChange(item.url)">{{item.name}}</span>
-        </template>
-      </div>
+      <tabs :tab_data="tab_data" @tabChange="tabChange"></tabs>
       <!--数据详情-->
       <div class="m-data-info" v-show="tab_data.dataInfo.show">
         <p class="m-date">
@@ -43,18 +39,8 @@
           </el-date-picker>
           <!--<span class="m-date-icon"></span>-->
         </p>
-        <ul class="m-amount-sheet-ul">
-          <template v-for="(item,index) in data_detail">
-            <li class="m-amount-sheet" :class="item.click?'active':''" @click="numListClick(index)">
-              <p>{{item.name}}</p>
-              <p class="m-num">{{item.num}}</p>
-              <p class="m-grey"><span>较前1日</span><span>↑</span></p>
-            </li>
-          </template>
-        </ul>
-        <div class="m-discount-echart">
-          <div id="echarts"></div>
-        </div>
+        <num-list :num_data="data_detail" @numListClick="numListClick"></num-list>
+        <m-echarts width="10" height="3" :option="option" id="discountCoupon"></m-echarts>
       </div>
 
       <!--店铺优惠券-->
@@ -180,6 +166,9 @@
   import echarts from 'echarts';
   import user from '../../common/json/userInfo';
   import Pagination from "../../components/common/pages";
+  import tabs from '../../components/common/tabs';
+  import numList from '../../components/activity/numList';
+  import mEcharts from '../../components/common/vue-echarts';
   export default {
     data() {
       return {
@@ -305,7 +294,10 @@
     },
     components:{
       pageTitle,
-      Pagination
+      Pagination,
+      tabs,
+      'num-list':numList,
+      'm-echarts':mEcharts
     },
     methods: {
       /*刷新*/

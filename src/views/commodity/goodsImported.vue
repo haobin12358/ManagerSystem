@@ -76,15 +76,15 @@
                 </div>
                 <div>
                   <span class="m-img-label">价格:</span>
-                  <el-input v-model="form.brands[index].PBprice" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
+                  <el-input v-model="form.brands[index].PBprice" type="number" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
                 </div>
                 <div>
                   <span class="m-img-label">划线价格:</span>
-                  <el-input v-model="form.brands[index].PBmarkingPrice" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
+                  <el-input v-model="form.brands[index].PBmarkingPrice" type="number" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
                 </div>
                 <div>
                   <span class="m-img-label">库存:</span>
-                  <el-input v-model="form.brands[index].PBnumber" placeholder="输入商品该规格库存" class="m-input-m" ></el-input>
+                  <el-input v-model="form.brands[index].PBnumber" type="number" placeholder="输入商品该规格库存" class="m-input-m" ></el-input>
                   <p class="m-alert" style="margin-left: 0.6rem;">库存为0时，会放入已售罄列表中</p>
                 </div>
               </div>

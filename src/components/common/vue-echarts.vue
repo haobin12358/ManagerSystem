@@ -1,6 +1,6 @@
 <template>
-  <div class="echartsBox">
-    <div :id="id" :style="{width:width + 'px',height:height + 'px'}"></div>
+  <div class="m-echart">
+    <div :id="id" :style="{width:width + 'rem',height:height + 'rem'}"></div>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -43,5 +43,11 @@
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
-
+  @import "../../common/css/index";
+  .m-echart{
+    width: 10.82rem;
+    height: 3.25rem;
+    border: 1px solid @borderColor;
+    margin: 0.2rem 0;
+  }
 </style>

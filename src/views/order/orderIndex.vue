@@ -26,7 +26,7 @@
   import pageTitle from '../../components/common/title';
   import orderIndexTop from "../../components/common/order-index-top";
   import orderIndexLeft from "../../components/common/order-index-left";
-  import myEcharts from "../../components/common/vue-echarts."
+  import myEcharts from "../../components/common/vue-echarts"
   import api from '../../api/api';
   import {Message} from 'element-ui';
   import axios from 'axios';

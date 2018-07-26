@@ -2,11 +2,7 @@
   <div class="m-discount-index">
     <page-title :title="name" @freshClick="freshClick"></page-title>
     <div class="m-discount-content">
-      <div class="m-discount-nav">
-        <template v-for="(item,index) in tab_data" >
-          <span class="m-one-nav" :class="item.show?'active':''"  @click="tabChange(item.url)">{{item.name}}</span>
-        </template>
-      </div>
+      <tabs :tab_data="tab_data" @tabChange="tabChange"></tabs>
 
       <!--店铺优惠券-->
       <div class="m-store" v-show="tab_data.activity.show">
@@ -88,15 +84,7 @@
           </el-date-picker>
           <!--<span class="m-date-icon"></span>-->
         </p>
-        <ul class="m-amount-sheet-ul">
-          <template v-for="(item,index) in data_detail">
-            <li class="m-amount-sheet" :class="item.click?'active':''" @click="numListClick(index)">
-              <p>{{item.name}}</p>
-              <p class="m-num">{{item.num}}</p>
-              <p class="m-grey"><span>较前1日</span><span>↑</span></p>
-            </li>
-          </template>
-        </ul>
+        <num-list :num_data="data_detail" @numListClick="numListClick"></num-list>
         <div class="m-discount-echart">
           <div id="echarts"></div>
         </div>
@@ -110,6 +98,8 @@
   import user from '../../common/json/userInfo';
   import Pagination from "../../components/common/pages";
   import echarts from 'echarts';
+  import tabs from '../../components/common/tabs';
+  import numList from '../../components/activity/numList';
   export default {
     data() {
       return {
@@ -230,7 +220,9 @@
     },
     components:{
       pageTitle,
-      Pagination
+      Pagination,
+      tabs,
+      'num-list':numList
     },
     methods: {
       freshClick(){
