@@ -64,7 +64,7 @@
               <span class="m-img-label">A:</span> <el-input v-model="form.brands_key[0]" placeholder="输入商品属性" class="m-input-s" ></el-input>
               <span class="m-img-label">B:</span> <el-input v-model="form.brands_key[1]" placeholder="输入商品属性" class="m-input-s" ></el-input>
             </div>
-            <div class="m-product" v-for="(item,index) in brands">
+            <div class="m-product" v-for="(item,index) in form.brands">
               <div class="m-product-input">
                 <div>
                   <span class="m-img-label">A:</span>
@@ -77,6 +77,10 @@
                 <div>
                   <span class="m-img-label">价格:</span>
                   <el-input v-model="form.brands[index].PBprice" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
+                </div>
+                <div>
+                  <span class="m-img-label">划线价格:</span>
+                  <el-input v-model="form.brands[index].PBmarkingPrice" placeholder="输入商品该规格价格" class="m-input-m" ></el-input>
                 </div>
                 <div>
                   <span class="m-img-label">库存:</span>
@@ -344,14 +348,14 @@
                   PBunit:'$',
                   PBimage:'',
                   BRands:['',''],
-                  PBnumber:''
+                  PBnumber:'',
+                  PBmarkingPrice:''
                 }],
                 PRPoint:'',
                 PRvideo:'',
                 PRaboimage:[],
                 PRfrankingR:true,
-                PRfranking:'',
-                PBmarkingPrice:''
+                PRfranking:''
               },
               rules:{
                 PRname:[
@@ -379,7 +383,8 @@
                 PBunit:'$',
                 PBimage:'',
                 BRands:['',''],
-                PBnumber:''
+                PBnumber:'',
+                PBmarkingPrice:''
               },
               brand_list:[],
               brands:[{
@@ -446,15 +451,32 @@
                   }
                 }
                 that.form.PRbrand = [].concat(_brand);//商品属性
-                that.form.brands = [].concat(res.data.data.product_info.brands);//商品商品样式
+                let _brands = [];
+                for(let i=0;i<res.data.data.product_info.brands.length;i++){
+                  _brands[i] = {
+                    PBprice:'',
+                    PBunit:'$',
+                    PBimage:'',
+                    BRands:['',''],
+                    PBnumber:'',
+                    PBmarkingPrice:''
+                  };
+                  _brands[i].PBprice = res.data.data.product_info.brands[i].PBprice;
+                  _brands[i].PBunit = res.data.data.product_info.brands[i].PBunit;
+                  _brands[i].PBimage = res.data.data.product_info.brands[i].PBimage;
+                  _brands[i].BRands = res.data.data.product_info.brands[i].BRands;
+                  _brands[i].PBnumber = res.data.data.product_info.brands[i].PBnumber;
+                  _brands[i].PBmarkingPrice = res.data.data.product_info.brands[i].PBmarkingPrice;
+                }
+                that.form.brands = [].concat(_brands);//商品商品样式
                 that.form.brands_key = [].concat(res.data.data.product_info.brands_key);//商品商品样式
-                that.form.PRvideo = {name:'',url:res.data.data.product_info.PRvideo};//商品视频
+                that.form.PRvideo = res.data.data.product_info.PRvideo;//商品视频
                 let _aboArr = [];
                 for(let i=0;i<res.data.data.product_info.PRaboimage.length;i++){
                   _aboArr[i] = {name:'',url:res.data.data.product_info.PRaboimage[i]};
                 }
                 that.form.PRaboimage = [].concat(_aboArr);//商品详情
-                that.form.PBmarkingPrice = res.data.data.product_info.PBmarkingPrice;//商品划线价格
+                // that.form.PRaboimage = [].concat(res.data.data.product_info.PRaboimage);//商品详情
                 that.form.PRfranking = res.data.data.product_info.PRfranking;//商品邮费
               }else{
                 that.$message.error(res.data.message);
@@ -710,17 +732,17 @@
                 _PRaboimage.push(_form.PRaboimage[i].url);
               }
             }
-            _form.PRaboimage = _PRimage;
+            _form.PRaboimage = _PRaboimage;
             let _PRimage = [];
             for(let i=0;i<this.form.PRimage.length;i++){
               if(_form.PRimage[i] != undefined){
                 _PRimage.push(_form.PRimage[i].url);
               }
             }
-
+            _form.PRimage = _PRimage;
             for(let i=0;i<this.form.brands.length;i++){
               for(let item in this.form.brands[i]){
-                if(this.form.brands[i][item] == ''){
+                if(this.form.brands[i][item] == '' || this.form.brands[i][item] == null ){
                   this.$message.error('请填写完整商品样式和价格');
                   return false;
                 }
@@ -757,12 +779,12 @@
           },
           /*删除一个子类*/
           deleteOne(v){
-            this.brands.splice(v,1);
+            console.log(v)
+            this.form.brands.splice(v,1);
           },
           /*添加更多*/
           addMore(){
-            this.brands.push(this.brand_one);
-            this.form.brands.push(this.brand_one)
+            this.form.brands.push(this.brand_one);
           }
         },
         created() {
@@ -775,6 +797,7 @@
           this.form.CTid = this.$route.query.CTid;
           this.getPrid();
         }else if(this.$route.query.PRid){
+          this.form.PRid = this.$route.query.PRid;
           this.getAbo(this.$route.query.PRid);
         }
 
