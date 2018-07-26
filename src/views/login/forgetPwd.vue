@@ -5,28 +5,28 @@
       <div class="login-box">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  >
           <h3 class="login-head">忘记密码</h3>
-          <el-form-item  prop="name">
-            <i class="icon-person icon"></i>
-            <el-input v-model="ruleForm.MAname" placeholder="输入账号/邮箱" class="m-input"></el-input>
-          </el-form-item>
-          <el-form-item  prop="tel">
+          <!--<el-form-item  prop="name">-->
+            <!--<i class="icon-person icon"></i>-->
+            <!--<el-input v-model="ruleForm.MAname" placeholder="输入账号/邮箱" class="m-input"></el-input>-->
+          <!--</el-form-item>-->
+          <el-form-item  prop="MAtelphone">
             <i class="icon-tel icon"></i>
-            <el-input v-model="ruleForm.MAname" placeholder="输入手机号" class="m-input"></el-input>
+            <el-input v-model="ruleForm.MAtelphone" placeholder="输入手机号" class="m-input"></el-input>
           </el-form-item>
-          <el-form-item  prop="code">
+          <el-form-item  prop="MAcode">
             <i class="icon-tel icon"></i>
-            <el-input v-model="ruleForm.MAname" placeholder="验证码" class="m-input-s m-input"></el-input>
+            <el-input v-model="ruleForm.MAcode" placeholder="验证码" class="m-input-s m-input"></el-input>
             <span class="m-code" v-if="show" @click="getCode">获取验证码</span>
             <span class="m-code active" v-else >重发{{count}}s</span>
           </el-form-item>
-          <el-form-item  prop="pwd">
+          <el-form-item  prop="MApasswordnew">
             <span class="icon-pwd icon"></span>
-            <el-input v-model="ruleForm.MApassword" placeholder="输入新密码" type="password" class="m-input"></el-input>
+            <el-input v-model="ruleForm.MApasswordnew" placeholder="输入新密码" type="password" class="m-input"></el-input>
             <!--<i class="icon-pwd icon-r"></i>-->
           </el-form-item>
-          <el-form-item  prop="pwd">
+          <el-form-item  prop="MApasswordnewrepeat">
             <span class="icon-pwd icon"></span>
-            <el-input v-model="ruleForm.MApassword" placeholder="重复新密码" type="password" class="m-input"></el-input>
+            <el-input v-model="ruleForm.MApasswordnewrepeat" placeholder="重复新密码" type="password" class="m-input"></el-input>
             <!--<i class="icon-pwd icon-r"></i>-->
           </el-form-item>
           <el-form-item class="m-btn">
@@ -55,18 +55,27 @@
     data() {
       return {
         ruleForm: {
-          MAname: '',
-          MApassword:'',
-          checked:true,
+          MAcode: '',
+          MApasswordnew:'',
+          MApasswordnewrepeat:'',
+          MAtelphone:''
         },
         show:true,
         timer:null,
         count:'',
         rules: {
-          MAname: [
-            { required: true, message: '请输入账号名称', trigger: 'blur' }
+          MAcode: [
+            { required: true, message: '请输入验证码', trigger: 'blur' }
           ],
-          MApassword:'password',
+          MApasswordnew:[
+            { required: true, message: '请输入新密码', trigger: 'blur' }
+          ],
+          MApasswordnewrepeat:[
+            { required: true, message: '请输入新密码', trigger: 'blur' }
+          ],
+          MAtelphone:[
+            { required: true, message: '请输入手机号', trigger: 'blur' }
+          ],
         }
       };
     },
@@ -79,16 +88,18 @@
         let that = this;
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            axios.post(api.login,that.ruleForm).
+            axios.post(api.forget_password,that.ruleForm).
             then(res=>{
               if(res.data.status == 200){
-                this.$store.state.side = res.data.data.side;
-                this.$store.state.role = res.data.data.MAidentity;
-                if(res.data.data.MAidentity.indexOf('管理员') != -1){
-                  this.$router.push({ path: '/index/adminIndex' });
-                }else{
-                  this.$router.push({ path: '/index/userIndex' });
-                }
+                this.$router.push('/login');
+                //清空Cookie
+
+                  let exdate = new Date(); //获取时间
+                  exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * -1); //保存的天数
+                  //字符串拼接cookie
+                  window.document.cookie = "userName" + "=" + '' + ";path=/;expires=" + exdate.toGMTString();
+                  window.document.cookie = "userPwd" + "=" + '' + ";path=/;expires=" + exdate.toGMTString();
+
               }else{
                 MessageBox({
                   title:'提示',
@@ -114,8 +125,15 @@
         });
       },
       getCode(){
+        if(this.ruleForm.MAtelphone == ''){
+          this.$message.error('请先输入手机号');
+          return false;
+        }
         this.show = false;
         const TIME_COUNT = 60;
+        axios.post(api.get_inforcode,{MAtelphone:this.ruleForm.MAtelphone}).then(res => {
+          console.log(res)
+        });
         if (!this.timer) {
           this.count = TIME_COUNT;
           this.show = false;

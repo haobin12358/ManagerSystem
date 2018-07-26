@@ -13,7 +13,15 @@ let store= new Vuex.Store({
     now:null,
     number:0,
     isCollapse:false,
-    token:''
+    token:'',
+    activity:{
+      ACstart:'',
+      ACend:'',
+      ACname:'',
+      ACabo:'',
+      ACimage:[],
+      name:''
+    }
 	},
 	mutations: {
 	    add(state,route) {

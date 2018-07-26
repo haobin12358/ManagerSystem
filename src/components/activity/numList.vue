@@ -1,7 +1,7 @@
 <template>
   <ul class="m-amount-sheet-ul">
     <template v-for="(item,index) in num_data">
-      <li class="m-amount-sheet" :class="item.click?'active':''" @click="numListClick(index)">
+      <li class="m-amount-sheet" :class="item.click?'active':''" @click="numListClick(index)" :style="{width:1/num_data.length*100 + '%'}">
         <p>{{item.name}}</p>
         <p class="m-num">{{item.num}}</p>
         <p class="m-grey"><span>较前1日</span><span>↑</span></p>
@@ -32,7 +32,10 @@
         },
         created() {
 
-        }
+        },
+      mounted(){
+
+      }
     }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>

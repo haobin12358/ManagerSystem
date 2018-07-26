@@ -97,7 +97,7 @@
           </el-table>
         </div>
         <div class="m-page-box">
-          <pagination></pagination>
+          <Pagination :total="page_data.total_page" @pageChange="pageChange"></Pagination>
         </div>
       </div>
       <!--商品优惠卷-->
@@ -212,11 +212,6 @@
             num:20,
             down_up:'down',
             click:false
-          }, {
-            name:'支付买家数',
-            num:20,
-            down_up:'down',
-            click:false
           },
           {
             name:'支付件数',
@@ -289,7 +284,13 @@
             }
           }]
         },
-        value7: ''
+        value7: '',
+        page_data:{
+          total_page:0,
+          current_page:1,
+          total_num:0,
+          page_size:10
+        }
 
     }
     },
@@ -328,6 +329,18 @@
           this.data_detail[i].click = false;
         }
         this.data_detail[v].click = true;
+      },
+      /*分页点击*/
+      pageChange(v){
+        if(v == this.current_page){
+          this.$message({
+            message: '这已经是第' + v + '页数据了',
+            type: 'warning'
+          });
+          return false;
+        }
+        this.current_page = v;
+
       }
     },
     mounted(){

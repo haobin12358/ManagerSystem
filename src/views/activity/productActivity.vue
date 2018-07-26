@@ -57,7 +57,7 @@
             <el-table-column align="center" prop="loginTime" label="活动状态" ></el-table-column>
             <el-table-column align="center" label="操作" width="160">
               <template slot-scope="scope">
-                <span>查看</span>
+                <span class="m-link m-first">查看</span>
                 <span class="m-link">删除</span>
                 <span class=" m-link">重启</span>
               </template>
@@ -65,7 +65,7 @@
           </el-table>
         </div>
         <div class="m-page-box">
-          <pagination></pagination>
+          <Pagination :total="page_data.total_page" @pageChange="pageChange"></Pagination>
         </div>
       </div>
       <!--dataInfo-->
@@ -94,7 +94,7 @@
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
   import user from '../../common/json/userInfo';
-  import Pagination from "../../components/common/pages";
+  import Pagination from "../../components/common/page";
   import echarts from 'echarts';
   import tabs from '../../components/common/tabs';
   import numList from '../../components/activity/numList';
@@ -213,7 +213,13 @@
             }
           }]
         },
-        value7: ''
+        value7: '',
+        page_data:{
+          total_page:0,
+          current_page:1,
+          total_num:0,
+          page_size:10
+        }
 
       }
     },
@@ -247,6 +253,18 @@
           this.data_detail[i].click = false;
         }
         this.data_detail[v].click = true;
+      },
+      /*分页点击*/
+      pageChange(v){
+        if(v == this.current_page){
+          this.$message({
+            message: '这已经是第' + v + '页数据了',
+            type: 'warning'
+          });
+          return false;
+        }
+        this.current_page = v;
+
       }
     },
     mounted(){

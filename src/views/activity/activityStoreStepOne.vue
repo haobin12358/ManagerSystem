@@ -1,7 +1,7 @@
 <template>
   <div class="m-step">
     <page-title :list="title_list" @freshClick="freshClick"></page-title>
-    <el-form  :model="storeForm" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" >
+    <el-form  :model="$store.state.activity" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" >
       <div class="m-step-content">
         <h3 class="m-step-title">创建新活动</h3>
         <div class="m-step-part">
@@ -10,10 +10,10 @@
         <div class="m-step-part">
           <h4>基本信息</h4>
           <el-form-item label="活动名称：" prop="ACname">
-            <el-input v-model="storeForm.ACname" class="m-input-l" placeholder="最多10个字" maxlength="10"></el-input>
+            <el-input v-model="$store.state.activity.ACname" class="m-input-l" placeholder="最多10个字" maxlength="10"></el-input>
           </el-form-item>
           <el-form-item label="活动描述：" prop="ACabo">
-            <el-input v-model="storeForm.ACabo" class="m-input-l" placeholder="" ></el-input>
+            <el-input v-model="$store.state.activity.ACabo" class="m-input-l" placeholder="" ></el-input>
           </el-form-item>
           <el-form-item label="活动照片:" >
             <el-upload
@@ -22,7 +22,7 @@
               :http-request="imgUploadTop"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
-              :file-list="storeForm.ACimage"
+              :file-list="$store.state.activity.ACimage"
               class="m-img-l"
               :limit="1"
               :on-exceed="outImg">
@@ -35,17 +35,17 @@
           </el-form-item>
           <el-form-item label="优惠类型：" prop="ACbrand">
             <p>
-              <el-radio v-model="storeForm.ACbrand" label="1">自选商品</el-radio>
+              <el-radio v-model="$store.state.activity.ACbrand" label="1">自选商品</el-radio>
             </p>
             <p>
-              <el-radio v-model="storeForm.ACbrand" label="2">全店商品</el-radio>
+              <el-radio v-model="$store.state.activity.ACbrand" label="2">全店商品</el-radio>
             </p>
           </el-form-item>
           <el-form-item label="开始时间：" prop="ACstart">
-            <el-date-picker type="date"  placeholder="请选择时间" v-model="storeForm.ACstart" style="width: 2rem;"></el-date-picker>
+            <el-date-picker type="date"  placeholder="请选择时间" v-model="$store.state.activity.ACstart" style="width: 2rem;"></el-date-picker>
           </el-form-item>
           <el-form-item label="结束时间：" prop="ACend">
-            <el-date-picker type="date"  placeholder="请选择时间" v-model="storeForm.ACend" style="width: 2rem;"></el-date-picker>
+            <el-date-picker type="date"  placeholder="请选择时间" v-model="$store.state.activity.ACend" style="width: 2rem;"></el-date-picker>
           </el-form-item>
 
           <div class="m-bottom-btn m-flex-center">
