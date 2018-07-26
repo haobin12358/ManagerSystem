@@ -687,7 +687,6 @@
           },
           /*页面滚动*/
           handleScroll(){
-            console.log(document.body.clientHeight, document.documentElement.scrollTop ,document.body.scrollHeight)
             if(document.getElementById('otherInfo')  ){ //&& document.getElementById('priceInfo')
               //(document.getElementById('otherInfo').offsetTop <= document.documentElement.scrollTop + 230 )
               //(document.body.clientHeight + document.documentElement.scrollTop) == document.body.scrollHeight //页面滚动到最底部
@@ -786,7 +785,7 @@
           },
           /*删除一个子类*/
           deleteOne(v){
-            console.log(v)
+
             this.form.brands.splice(v,1);
           },
           /*添加更多*/
