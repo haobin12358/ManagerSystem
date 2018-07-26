@@ -731,21 +731,21 @@
                 _brands.push(_value);
               }
             }
-            _form.PRbrand = _brands;
+            _form.PRbrand = [].concat(_brands);
             let _PRaboimage = [];
             for(let i=0;i<this.form.PRaboimage.length;i++){
               if(_form.PRaboimage[i] != undefined){
                 _PRaboimage.push(_form.PRaboimage[i].url);
               }
             }
-            _form.PRaboimage = _PRaboimage;
+            _form.PRaboimage = [].concat(_PRaboimage);
             let _PRimage = [];
             for(let i=0;i<this.form.PRimage.length;i++){
               if(_form.PRimage[i] != undefined){
                 _PRimage.push(_form.PRimage[i].url);
               }
             }
-            _form.PRimage = _PRimage;
+            _form.PRimage = [].concat(_PRimage);
             for(let i=0;i<this.form.brands.length;i++){
               for(let item in this.form.brands[i]){
                 if(this.form.brands[i][item] == '' || this.form.brands[i][item] == null ){
