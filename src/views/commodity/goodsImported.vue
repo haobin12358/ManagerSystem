@@ -184,31 +184,31 @@
         </div>
 
       </div>
-      <a name="priceInfo"></a>
-      <div class="m-one-part">
-        <h3 id="priceInfo">商品价格</h3>
-        <el-form-item label="划线价格:">
-          <el-input v-model="form.PBmarkingPrice" class="m-input-m" ></el-input>
-          <p class="m-alert">建议描述文字在36字以内</p>
-        </el-form-item>
-        <!--<el-form-item label="库存:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">-->
-          <!--<el-input v-model="form.name" class="m-input-m" ></el-input>-->
-          <!--<div class="m-check-content">-->
-            <!--<el-checkbox v-model="checked"></el-checkbox>-->
-            <!--<span>商品详情不显示剩余件数</span>-->
-          <!--</div>-->
-          <!--<p class="m-alert">库存为0时，会放入已售罄列表中</p>-->
-          <!--<p class="m-look-more" @click="showMore('show_price_info')">更多价格库存设置</p>-->
+      <!--<a name="priceInfo"></a>-->
+      <!--<div class="m-one-part">-->
+        <!--<h3 id="priceInfo">商品价格</h3>-->
+        <!--<el-form-item label="划线价格:">-->
+          <!--<el-input v-model="form.PBmarkingPrice" class="m-input-m" ></el-input>-->
+          <!--<p class="m-alert">建议描述文字在36字以内</p>-->
         <!--</el-form-item>-->
-        <!--<div v-show="show_price_info">-->
-          <!--<el-form-item label="成本价格:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">-->
-            <!--<el-input v-model="form.name" class="m-input-m" ></el-input>-->
-            <!--<p class="m-alert">建议描述文字在36字以内</p>-->
-          <!--</el-form-item>-->
-        <!--</div>-->
+        <!--&lt;!&ndash;<el-form-item label="库存:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">&ndash;&gt;-->
+          <!--&lt;!&ndash;<el-input v-model="form.name" class="m-input-m" ></el-input>&ndash;&gt;-->
+          <!--&lt;!&ndash;<div class="m-check-content">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-checkbox v-model="checked"></el-checkbox>&ndash;&gt;-->
+            <!--&lt;!&ndash;<span>商品详情不显示剩余件数</span>&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--&lt;!&ndash;<p class="m-alert">库存为0时，会放入已售罄列表中</p>&ndash;&gt;-->
+          <!--&lt;!&ndash;<p class="m-look-more" @click="showMore('show_price_info')">更多价格库存设置</p>&ndash;&gt;-->
+        <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div v-show="show_price_info">&ndash;&gt;-->
+          <!--&lt;!&ndash;<el-form-item label="成本价格:" :rules="[{ required: false, message: '年龄不能为空'}, { type: 'number', message: '年龄必须为数字值'}]">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-input v-model="form.name" class="m-input-m" ></el-input>&ndash;&gt;-->
+            <!--&lt;!&ndash;<p class="m-alert">建议描述文字在36字以内</p>&ndash;&gt;-->
+          <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
 
-      </div>
+      <!--</div>-->
 
       <a name="otherInfo"></a>
       <div class="m-one-part m-other">
@@ -273,16 +273,16 @@
               <span class="m-step-content">1、基本信息</span>
             <!--</a>-->
           </li>
-          <li>
-            <span class="line">|</span>
-            <span class="m-step-content"></span>
-          </li>
-          <li @click="sideClick('priceInfo')">
-            <!--<a href="#priceInfo">-->
-              <span class="circle" :class="linkTo == 'priceInfo'?'active':''"></span>
-              <span class="m-step-content">2、商品库存</span>
-            <!--</a>-->
-          </li>
+          <!--<li>-->
+            <!--<span class="line">|</span>-->
+            <!--<span class="m-step-content"></span>-->
+          <!--</li>-->
+          <!--<li @click="sideClick('priceInfo')">-->
+            <!--&lt;!&ndash;<a href="#priceInfo">&ndash;&gt;-->
+              <!--<span class="circle" :class="linkTo == 'priceInfo'?'active':''"></span>-->
+              <!--<span class="m-step-content">2、商品库存</span>-->
+            <!--&lt;!&ndash;</a>&ndash;&gt;-->
+          <!--</li>-->
           <li>
             <span class="line">|</span>
             <span class="m-step-content"></span>
@@ -290,7 +290,7 @@
           <li @click="sideClick('otherInfo')">
             <!--<a href="#otherInfo">-->
               <span class="circle " :class="linkTo == 'otherInfo'?'active':''"></span>
-              <span class="m-step-content">3、其他信息</span>
+              <span class="m-step-content">2、其他信息</span>
             <!--</a>-->
           </li>
           <li>
@@ -677,20 +677,27 @@
             this.linkTo = v;
             if(v == 'basicInfo'){
               document.documentElement.scrollTop = 96;
-            }else if(v == 'priceInfo'){
-              document.documentElement.scrollTop = document.getElementById('priceInfo').offsetTop - 89;
-            }else if(v == 'otherInfo'){
-              document.documentElement.scrollTop = document.getElementById('otherInfo').offsetTop - 229;
+            }
+            // else if(v == 'priceInfo'){
+            //   document.documentElement.scrollTop = document.getElementById('priceInfo').offsetTop - 89;
+            // }
+            else if(v == 'otherInfo'){
+              document.documentElement.scrollTop = document.body.scrollHeight -30;
             }
           },
           /*页面滚动*/
           handleScroll(){
-            if(document.getElementById('otherInfo') && document.getElementById('priceInfo') ){
-              if((document.getElementById('otherInfo').offsetTop <= document.documentElement.scrollTop + 230 ) ){
+            console.log(document.body.clientHeight, document.documentElement.scrollTop ,document.body.scrollHeight)
+            if(document.getElementById('otherInfo')  ){ //&& document.getElementById('priceInfo')
+              //(document.getElementById('otherInfo').offsetTop <= document.documentElement.scrollTop + 230 )
+              //(document.body.clientHeight + document.documentElement.scrollTop) == document.body.scrollHeight //页面滚动到最底部
+              if((document.body.clientHeight + document.documentElement.scrollTop) >= (document.body.scrollHeight -30) ){
                 this.linkTo = 'otherInfo';
-              }else if((document.getElementById('priceInfo').offsetTop < document.documentElement.scrollTop +90  ) &&  (document.getElementById('otherInfo').offsetTop > document.documentElement.scrollTop +230)){
-                this.linkTo = 'priceInfo'
-              }else{
+              }
+              // else if((document.getElementById('priceInfo').offsetTop < document.documentElement.scrollTop +90  ) &&  (document.getElementById('otherInfo').offsetTop > document.documentElement.scrollTop +230)){
+              //   this.linkTo = 'priceInfo'
+              // }
+              else{
                 this.linkTo = 'basicInfo'
               }
             }else{
