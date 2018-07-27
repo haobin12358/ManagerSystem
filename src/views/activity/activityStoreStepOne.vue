@@ -33,14 +33,7 @@
             </el-dialog>
             <p class="m-img-p">建议尺寸：700*700像素，最多上传1张商品图片</p>
           </el-form-item>
-          <el-form-item label="优惠类型：" prop="ACbrand">
-            <p>
-              <el-radio v-model="$store.state.activity.ACbrand" label="1">自选商品</el-radio>
-            </p>
-            <p>
-              <el-radio v-model="$store.state.activity.ACbrand" label="2">全店商品</el-radio>
-            </p>
-          </el-form-item>
+
           <el-form-item label="开始时间：" prop="ACstart">
             <el-date-picker type="date"  placeholder="请选择时间" v-model="$store.state.activity.ACstart" style="width: 2rem;"></el-date-picker>
           </el-form-item>
@@ -117,9 +110,7 @@
          ACend:[
            { required: true, message: '请选择结束时间', trigger: 'blur' }
          ],
-         ACbrand:[
-           { required: true, message: '请选择优惠类型', trigger: 'blur' }
-         ],
+
        },
         radio:'1',
         dialogVisible:false,

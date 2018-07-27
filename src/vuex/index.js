@@ -20,7 +20,8 @@ let store= new Vuex.Store({
       ACname:'',
       ACabo:'',
       ACimage:[],
-      name:''
+      name:'',
+      ACbrand:'1'
     }
 	},
 	mutations: {

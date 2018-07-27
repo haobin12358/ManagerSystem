@@ -48,7 +48,7 @@
 
           <template v-for="(item,index) in layer_data">
             <div>
-              <h4>优惠门槛及内容——层级{{index+1}}</h4>
+              <h4>优惠门槛及内容</h4>
               <el-form-item label="优惠门槛：">
                 <span>满&nbsp;</span>
                 <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
@@ -83,20 +83,25 @@
                    <el-radio v-model="radio" label="2">送赠品</el-radio>
                    <el-input v-model="storeForm.name" class="m-input-m" placeholder="赠品内容"></el-input>
                  </p>
-                 <p>
-                   <el-radio v-model="radio" label="2">送权益</el-radio>
-                   <el-input v-model="storeForm.name" class="m-input-m" placeholder="权益内容"></el-input>
-                 </p>
+                 <!--<p>-->
+                   <!--<el-radio v-model="radio" label="2">送权益</el-radio>-->
+                   <!--<el-input v-model="storeForm.name" class="m-input-m" placeholder="权益内容"></el-input>-->
+                 <!--</p>-->
                  <p>
                    <el-radio v-model="radio" label="2">送优惠券</el-radio>
-                   <el-input v-model="storeForm.name" class="m-input-m" placeholder="优惠券内容"></el-input>
+                   <!--<el-input v-model="storeForm.name" class="m-input-m" placeholder="优惠券内容"></el-input>-->
+                   <el-select v-model="storeForm.name" class="m-input-l" placeholder="选择已有优惠券">
+                     <el-option label="区域一" value="shanghai"></el-option>
+                     <el-option label="区域二" value="beijing"></el-option>
+                   </el-select>
+                   <span class="m-link m-first" @click="addNewDiscount">新增优惠券</span>
                  </p>
                </div>
 
-                <p class="m-alert-btn-box">
-                  <span class="m-alert-btn active" @click="addLayer">+增加一级优惠</span>
-                  <span class="m-alert-btn" @click="cutLayer(index)">删除一级优惠</span>
-                </p>
+                <!--<p class="m-alert-btn-box">-->
+                  <!--<span class="m-alert-btn active" @click="addLayer">+增加一级优惠</span>-->
+                  <!--<span class="m-alert-btn" @click="cutLayer(index)">删除一级优惠</span>-->
+                <!--</p>-->
               </el-form-item>
             </div>
           </template>
@@ -181,9 +186,11 @@
       freshClick(){
         console.log('fresh');
       },
+      /**新增活动层级*/
       addLayer(){
         this.layer_data.push(1);
       },
+      /*删除优惠层级*/
       cutLayer(v){
         if(this.layer_data.length <=1 ){
           this.$message({
@@ -209,12 +216,18 @@
           });
         });
       },
+      /*下一步*/
       onSubmit(){
         this.$router.push('/activity/activityStoreStepThree');
       },
+      /*上一步*/
       lastStep(){
         this.$router.push('/activity/activityStoreStepOne');
       },
+      /*新增优惠券*/
+      addNewDiscount(){
+        this.$router.push('/activity/discountStoreStepOne');
+      }
     },
     created() {
 
