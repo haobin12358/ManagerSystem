@@ -9,7 +9,7 @@ from ManagerSystem.config.response import APIS_WRONG
 from ManagerSystem.globals import log
 
 
-class AStocks(Resource):
+class MSStocks(Resource):
     def __init__(self):
         self.cstocks = CStocks()
 

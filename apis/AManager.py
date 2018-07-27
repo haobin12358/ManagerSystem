@@ -8,7 +8,7 @@ from ManagerSystem.control.CManager import CManager
 from ManagerSystem.config.response import APIS_WRONG
 from ManagerSystem.globals import log
 
-class AManager(Resource):
+class MSManager(Resource):
     def __init__(self):
         self.cmanager = CManager()
         # self.log = LOG()

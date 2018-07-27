@@ -10,7 +10,7 @@ from ManagerSystem.config import dbconfig as cfg
 
 DB_PARAMS = "{0}://{1}:{2}@{3}/{4}?charset={5}".format(
     cfg.sqlenginename, cfg.username, cfg.password, cfg.host, cfg.database, cfg.charset)
-mysql_engine = create_engine(DB_PARAMS, echo=False)
+mysql_engine = create_engine(DB_PARAMS, echo=True)
 Base = declarative_base()
 
 
@@ -137,7 +137,7 @@ class OrderMain(Base):
     OMprice = Column(Float)                             # 订单总额
     USid = Column(String(64))                           # 用户id
     LOid = Column(String(64))                           # 配送地址id
-    OMlogisticsName = Column(Text, default="顺丰速运")    # 物流公司
+    OMlogisticsName = Column(Text, default="顺丰速运")   # 物流公司
     OMabo = Column(Text)                                # 订单备注
     OMcointype = Column(Integer, nullable=False)        # 货币单位 {401美元， 402人民币， 403欧元， 404英镑}
     COid = Column(String(64))                           # 优惠券id
@@ -151,36 +151,35 @@ class Orderpart(Base):
     PRnumber = Column(Integer, nullable=False)   # 商品数量
 
 
-class Coupons(Base):
-    __tablename__ = "Coupon"
+# 活动或优惠券
+class CouponsActives(Base):
+    __tablename__ = "CouponsActives"
     COid = Column(String(64), primary_key=True)
-    COfilter = Column(Float)      # 优惠券优惠条件，到达金额
+    COabo = Column(Text)          # 优惠券介绍
+    COimage = Column(Text)        # 活动宣传图画
+    COname = Column(Text)         # 活动/优惠券名称
+    COstatus = Column(Integer)    # 优惠券状态{550: 预热,551: 进行中，552: 暂停，553：结束}
+    COstart = Column(String(14))  # 开始时间
+    COend = Column(String(14))    # 结束时间
+    COfilter = Column(Float)      # 优惠条件，满额所用
+    COother = Column(Text)        # 赠品详情/赠送的优惠券id
+    COutype = Column(Integer)     # 限制的使用人群，用于后期扩展会员
     COdiscount = Column(Float)    # 折扣，值为0-1，其中0为免单
     COamount = Column(Float)      # 优惠金额，减免金额，限制最大数目
-    CObrand = Column(String(64))  # 商品类别，限制部分商品使用
-    COstart = Column(String(14))  # 优惠券的开始时间
-    COend = Column(String(14))    # 优惠券的结束时间
-    COutype = Column(Integer)     # 优惠券限制的使用人群，用于后期扩展会员
-    COtype = Column(Integer)      # 优惠券类型 {801 满减， 802 满折， 803 商品类目限制， 804 无限制， 805 用户类型限制， 806: 店铺折扣}
-    MAid = Column(String(64))     # 店家id
-    PRid = Column(Text)           # 商品id
+    COtype = Column(Integer)      # 优惠类型
+    # {801 满减， 802 满折， 803 商品类目限制， 804 无限制， 805 用户类型限制， 806: 店铺折扣，807：送赠品}
+    COnumber = Column(Integer)    # 优惠限制领取数目
+    COgenre = Column(Integer)     # 区分是活动还是优惠券{561:活动，562：优惠券}
+    COunit = Column(Integer)      # 单位
 
 
-# 活动
-class Actives(Base):
-    __tablename__ = "Actives"
-    ACid = Column(String(64), primary_key=True)
-    MAid = Column(String(64))     # 店家id
-    ACabo = Column(Text)          # 活动详情
-    ACimage = Column(Text)        # 活动宣传图画
-    ACstart = Column(String(14))  # 活动开始时间
-    ACend = Column(String(14))    # 活动结束时间
-    ACfilter = Column(Float)
-    ACdiscount = Column(Float)    # 折扣，值为0-1，其中0为免单
-    ACamount = Column(Float)      # 优惠金额，减免金额，限制最大数目
-    ACbrand = Column(String(64))  # 商品类别，限制部分商品使用
-    ACtype = Column(Integer)      # 优惠券类型 {801 满减， 802 满折， 803 商品类目限制， 804 无限制， 805 用户类型限制， 806: 店铺折扣}
-    PRid = Column(Text)           # 商品id
+class CouponsManager(Base):
+    __tablename__ = "CouponsManager"
+    CMid = Column(String(64), primary_key=True)
+    COid = Column(String(64))      # 优惠券id
+    MAid = Column(String(64))      # 店铺id
+    PRid = Column(String(64))      # 商品id
+    CMprobability = Column(Float)  # 概率不涉及全为1
 
 
 # 用户
