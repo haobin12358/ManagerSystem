@@ -13,24 +13,24 @@
               <p>自定义创建店铺活动</p>
             </div>
           </li>
-          <li class="m-store-card">
-            <div class="m-card-left">
-              <span>8</span>
-            </div>
-            <div class="m-card-right">
-              <p class="m-title">两件8折</p>
-              <p>任意两件商品8折</p>
-            </div>
-          </li>
-          <li class="m-store-card">
-            <div class="m-card-left">
-              <span>半</span>
-            </div>
-            <div class="m-card-right">
-              <p class="m-title">第二件半价</p>
-              <p>第二件商品半价</p>
-            </div>
-          </li>
+          <!--<li class="m-store-card">-->
+            <!--<div class="m-card-left">-->
+              <!--<span>8</span>-->
+            <!--</div>-->
+            <!--<div class="m-card-right">-->
+              <!--<p class="m-title">两件8折</p>-->
+              <!--<p>任意两件商品8折</p>-->
+            <!--</div>-->
+          <!--</li>-->
+          <!--<li class="m-store-card">-->
+            <!--<div class="m-card-left">-->
+              <!--<span>半</span>-->
+            <!--</div>-->
+            <!--<div class="m-card-right">-->
+              <!--<p class="m-title">第二件半价</p>-->
+              <!--<p>第二件商品半价</p>-->
+            <!--</div>-->
+          <!--</li>-->
         </ul>
       </div>
       <tabs :tab_data="tab_data" @tabChange="tabChange"></tabs>
