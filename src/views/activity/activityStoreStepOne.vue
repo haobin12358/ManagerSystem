@@ -170,10 +170,10 @@
         let that = this;
         this.$refs['storeForm'].validate((valid) => {
           if (valid) {
-
+            this.$router.push('/activity/activityStoreStepTwo');
           }
         })
-          this.$router.push('/activity/activityStoreStepTwo');
+
       }
     },
     created() {

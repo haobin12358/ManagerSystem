@@ -74,7 +74,7 @@
                   <p>{{scope.row.COend}}</p>
                   <!--<p><span>2018-07-02</span><span>20:20:13</span></p>-->
                 </div>
-                <p>活动持续：12小时18分18秒</p>
+                <p>活动持续：1{{scope.row.duration}}</p>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="COstatus" label="活动状态" ></el-table-column>
@@ -329,7 +329,7 @@
           return false;
         }
         this.current_page = v;
-
+        this.getData(v);
       }
     },
     created() {
