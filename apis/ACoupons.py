@@ -17,6 +17,7 @@ class MSCoupons(Resource):
         log.info("get api", card)
         action = {
             "get_all": "self.cactive.get_active()",
+            "get_situation": "self.cactive.get_situation()",
         }
         if card in action:
             return eval(action.get(card))
