@@ -1,7 +1,7 @@
 <template>
   <div class="m-step">
     <page-title :list="title_list" @freshClick="freshClick"></page-title>
-    <el-form  :model="storeForm" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm">
+    <el-form  :model=" $store.state.activity" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm">
       <div class="m-step-content">
         <h3 class="m-step-title">创建新活动</h3>
         <div class="m-step-part">
@@ -27,25 +27,24 @@
         </div>
         <el-form-item label="优惠类型：" prop="ACbrand">
           <p>
-            <el-radio v-model="$store.state.activity.ACbrand" label="1">自选商品</el-radio>
+            <el-radio v-model="$store.state.activity.COproduct" label="自选商品">自选商品</el-radio>
           </p>
           <p>
-            <el-radio v-model="$store.state.activity.ACbrand" label="2">全店商品</el-radio>
+            <el-radio v-model="$store.state.activity.COproduct" label="全店商品">全店商品</el-radio>
           </p>
         </el-form-item>
-        <el-form :inline="true" :model="storeForm" class="demo-form-inline" v-if=" $store.state.activity.ACbrand == '1'">
+        <el-form :inline="true" :model="storeForm" class="demo-form-inline" v-if=" $store.state.activity.COproduct == '自选商品'">
           <div class="m-select-box">
             <div class="m-left">
               <el-form-item label="商品名称">
                 <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
               </el-form-item>
-              <el-form-item label="商品ID">
-                <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
-              </el-form-item>
               <el-form-item label="商品状态">
-                <el-select v-model="storeForm.name" class="m-input-s" placeholder="活动区域">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="storeForm.status" class="m-input-s" placeholder="">
+                  <el-option label="全部" value=""></el-option>
+                  <el-option label="上架状态" value="上架状态"></el-option>
+                  <el-option label="下架状态" value="下架状态"></el-option>
+                  <el-option label="预售中" value="预售中"></el-option>
                 </el-select>
               </el-form-item>
             </div>
@@ -56,23 +55,23 @@
             </div>
           </div>
         </el-form>
-        <div class="m-middle" style="width: 100%;margin-top: 0.1rem;" v-if=" $store.state.activity.ACbrand == '1'">
-          <el-table :data="product_data" stripe style="width: 100%">
+        <div class="m-middle" style="width: 100%;margin-top: 0.1rem;" v-if=" $store.state.activity.COproduct == '自选商品'">
+          <el-table :data="product_data" stripe style="width: 100%" @selection-change="changeFun">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column align="center" prop="userId" width="400" label="宝贝描述">
               <template slot-scope="scope">
                 <div class="m-production-description">
-                  <p class="m-img"></p>
+                  <image class="m-img" :src="scope.row.PRimage[0]" style="width: 0.6rem;height:0.6rem;" />
                   <div>
-                    <p>商品1</p>
-                    <p>ID:5489798456151241</p>
+                    <p>{{scope.row.PRname}}</p>
+                    <p>{{scope.row.PRid}}</p>
                   </div>
                 </div>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="userId" label="价格" ></el-table-column>
-
-            <el-table-column align="center" prop="loginTime" label="库存" ></el-table-column>
+            <el-table-column align="center" prop="PRstatus" label="状态" ></el-table-column>
+            <el-table-column align="center" prop="PRstock" label="库存" ></el-table-column>
             <!--<el-table-column align="center" label="操作" >-->
               <!--<template slot-scope="scope">-->
                 <!--<span class="m-link m-first">参加活动</span>-->
@@ -80,7 +79,7 @@
             <!--</el-table-column>-->
           </el-table>
         </div>
-        <div class="m-page-box">
+        <div class="m-page-box" v-if=" $store.state.activity.COproduct == '自选商品'">
           <pagination :total="page_data.total_page" @pageChange="pageChange"></pagination>
         </div>
         <div class="m-bottom-btn m-flex-center">
@@ -96,6 +95,8 @@
   import pageTitle from '../../components/common/title';
   import step from '../../components/common/step';
   import Pagination from "../../components/common/page";
+  import api from '../../api/api';
+  import axios from 'axios';
   export default {
     data() {
       return {
@@ -128,7 +129,7 @@
         ],
         storeForm:{
           name:'',
-          date1:''
+          status:''
         },
         rules:{
           ACbrand:[
@@ -150,15 +151,75 @@
       step,
       Pagination
     },
+    mounted(){
+      this.getData();
+    },
     methods: {
+      /*获取表格数据*/
+      getData(v,code){
+        let params = {
+          token:localStorage.getItem('token'),
+          PBstatus:this.storeForm.status,
+          page_num: v || this.page_data.current_page,
+          page_size:this.page_data.page_size,
+          product_filter:code || ''
+        };
+        axios.get(api.get_all_product,{params:params}).then(res => {
+          if(res.data.status == 200) {
+            this.product_data = res.data.data.products;
+            this.page_data.total_num = res.data.data.count;
+            this.page_data.total_page = Math.ceil(this.page_data.total_num / this.page_data.page_size);
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
+      },
       freshClick(){
         console.log('fresh');
       },
+      /*搜索商品*/
       onSubmit(){
-
+        this.getData(1,this.storeForm.name);
       },
+      /*表格多选事件*/
+      changeFun(e){
+        this.$store.state.activity.PRids = e;
+      },
+      /*完成*/
       storeSubmit(){
-
+        // console.log(this.$store.state.activity)
+        let _form = JSON.parse(JSON.stringify(this.$store.state.activity));
+        // for(let i =0;i<this.$store.state.activity.COimage.length;i++){
+        //   _form.COimage = this.$store.state.activity.COimage[0].url
+        // }
+        if(_form.COtype == '其它'){
+          _form.COother = (_form.COotherType == 0 && _form.COotherContent[0] == '') ? '包邮':_form.COotherContent[_form.COotherType]
+        }
+        _form.COamount = Number(_form.COamount);
+        _form.COnumber = Number(_form.COnumber);
+        _form.COfilter  = Number(_form.COfilter );
+        _form.COdiscount = Number(_form.COdiscount);
+        console.log(_form)
+        axios.post(api.create+'?token='+localStorage.getItem('token'),_form).then(res => {
+          if(res.data.status == 200){
+            this.$message({
+              type: 'success',
+              message: '处理成功 '
+            });
+          }else{
+            this.$message({
+              type: 'error',
+              message: '服务器请求失败，请稍后再试 '
+            });
+          }
+        },error =>{
+          this.$message({
+            type: 'error',
+            message: '服务器请求失败，请稍后再试 '
+          });
+        })
       },
       lastStep(){
         this.$router.push('/activity/activityStoreStepTwo')

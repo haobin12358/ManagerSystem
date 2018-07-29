@@ -40,16 +40,19 @@
           <div class="m-select-box">
             <div class="m-left">
               <el-form-item label="活动状态">
-                <el-select v-model="storeForm.name" class="m-input-s" placeholder="活动区域">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="storeForm.COstatus" class="m-input-s" placeholder="活动区域">
+                  <el-option label="全部" value=""></el-option>
+                  <el-option label="预热" value="550"></el-option>
+                  <el-option label="进行中" value="551"></el-option>
+                  <el-option label="暂停" value="552"></el-option>
+                  <el-option label="结束" value="553"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="活动名称">
-                <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
+                <el-input v-model="storeForm.COname" class="m-input-s" placeholder=""></el-input>
               </el-form-item>
               <el-form-item label="活动编号">
-                <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
+                <el-input v-model="storeForm.COid" class="m-input-s" placeholder=""></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" class="m-select-btn" @click="storeSubmit">查询</el-button>
@@ -58,26 +61,28 @@
           </div>
         </el-form>
         <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
-          <el-table :data="user" stripe style="width: 100%">
-            <el-table-column align="center" prop="userId" label="名称编号"></el-table-column>
-            <el-table-column align="center" prop="userId" label="活动名称" ></el-table-column>
-            <el-table-column align="center" prop="userName" label="活动详情"></el-table-column>
-            <el-table-column align="center" prop="group" label="活动时间" width="230">
+          <el-table :data="activity_data" stripe style="width: 100%">
+            <el-table-column align="center" prop="COid" label="名称编号"></el-table-column>
+            <el-table-column align="center" prop="COname" label="活动名称" ></el-table-column>
+            <el-table-column align="center" prop="COabo" label="活动详情"></el-table-column>
+            <el-table-column align="center" prop="group" label="活动时间" width="200">
               <template slot-scope="scope">
                 <div class="m-activity-time">
-                  <p><span>2018-07-02</span><span>20:20:13</span></p>
+                  <p>{{scope.row.COstart}}</p>
+                  <!--<p><span>2018-07-02</span><span>20:20:13</span></p>-->
                   <p>至</p>
-                  <p><span>2018-07-02</span><span>20:20:13</span></p>
+                  <p>{{scope.row.COend}}</p>
+                  <!--<p><span>2018-07-02</span><span>20:20:13</span></p>-->
                 </div>
                 <p>活动持续：12小时18分18秒</p>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="loginTime" label="活动状态" ></el-table-column>
+            <el-table-column align="center" prop="COstatus" label="活动状态" ></el-table-column>
             <el-table-column align="center" label="操作" >
               <template slot-scope="scope">
-                <span class="m-link m-first">查看</span>
-                <span class="m-link">删除</span>
-                <span class=" m-link">重启</span>
+                <span class="m-link m-first" @click="checkActivity(scope.row)">查看</span>
+                <span class="m-link" @click="deleteActivity(scope.row)" >删除</span>
+                <span class=" m-link" @click="restartActivity(scope.row)">重启</span>
               </template>
             </el-table-column>
           </el-table>
@@ -111,20 +116,20 @@
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
-  import user from '../../common/json/userInfo';
   import Pagination from "../../components/common/page";
-  import echarts from 'echarts';
   import tabs from '../../components/common/tabs';
   import numList from '../../components/activity/numList';
   import mEcharts from '../../components/common/vue-echarts';
+  import axios from 'axios';
+  import api from '../../api/api';
   export default {
     data() {
       return {
         name:'店铺活动',
         storeForm:{
-          name:'',
-          date1:'',
-          date2:''
+          COname:'',
+          COid:'',
+          COstatus:''
         },
         tab_data:{
           activity:{
@@ -173,7 +178,7 @@
             click:false
           }
         ],
-        user: user,
+        activity_data:[],
         option : {
           color:['#edb3b1'],
           tooltip:{
@@ -248,13 +253,39 @@
       'num-list':numList,
       'm-echarts':mEcharts
     },
+    mounted(){
+      this.getData();
+    },
     methods: {
+      /*获取表格数据*/
+      getData(v,name,id,status){
+        let params = {
+          token:localStorage.getItem('token'),
+          page_num: v || this.page_data.current_page,
+          page_size:this.page_data.page_size,
+          COname:name,
+          COid:id,
+          COstatus:status,
+          COgenre:'活动'
+        };
+        axios.get(api.get_all_card,{params:params}).then(res => {
+          if(res.data.status == 200) {
+            this.activity_data = res.data.CouponsActives;
+            this.page_data.total_num = res.data.count;
+            this.page_data.total_page = Math.ceil(this.page_data.total_num / this.page_data.page_size);
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
+      },
       freshClick(){
         console.log('fresh');
       },
       /*搜索*/
       storeSubmit(){
-
+        this.getData(1,this.storeForm.COname,this.storeForm.COid,this.storeForm.COstatus);
       },
       /*数据和店铺活动数tab切换*/
       tabChange(v){
@@ -276,6 +307,18 @@
         }
         this.data_detail[v].click = true;
       },
+      /*查看*/
+      checkActivity(v){
+
+      },
+      /*删除*/
+      deleteActivity(v){
+
+      },
+      /*重启*/
+      restartActivity(v){
+
+      },
       /*分页点击*/
       pageChange(v){
         if(v == this.current_page){
@@ -288,9 +331,6 @@
         this.current_page = v;
 
       }
-    },
-    mounted(){
-
     },
     created() {
 

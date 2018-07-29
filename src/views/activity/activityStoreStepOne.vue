@@ -9,11 +9,11 @@
         </div>
         <div class="m-step-part">
           <h4>基本信息</h4>
-          <el-form-item label="活动名称：" prop="ACname">
-            <el-input v-model="$store.state.activity.ACname" class="m-input-l" placeholder="最多10个字" maxlength="10"></el-input>
+          <el-form-item label="活动名称：" prop="COname">
+            <el-input v-model="$store.state.activity.COname" class="m-input-l" placeholder="最多10个字" maxlength="10"></el-input>
           </el-form-item>
-          <el-form-item label="活动描述：" prop="ACabo">
-            <el-input v-model="$store.state.activity.ACabo" class="m-input-l" placeholder="" ></el-input>
+          <el-form-item label="活动描述：" prop="COabo">
+            <el-input v-model="$store.state.activity.COabo" class="m-input-l" placeholder="" ></el-input>
           </el-form-item>
           <el-form-item label="活动照片:" >
             <el-upload
@@ -22,7 +22,7 @@
               :http-request="imgUploadTop"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
-              :file-list="$store.state.activity.ACimage"
+              :file-list="$store.state.activity.COimage"
               class="m-img-l"
               :limit="1"
               :on-exceed="outImg">
@@ -34,11 +34,11 @@
             <p class="m-img-p">建议尺寸：700*700像素，最多上传1张商品图片</p>
           </el-form-item>
 
-          <el-form-item label="开始时间：" prop="ACstart">
-            <el-date-picker type="date"  placeholder="请选择时间" v-model="$store.state.activity.ACstart" style="width: 2rem;"></el-date-picker>
+          <el-form-item label="开始时间：" prop="COstart">
+            <el-date-picker type="date"  placeholder="请选择时间" value-format="yyyy-MM-dd HH:mm:ss" v-model="$store.state.activity.COstart" style="width: 2rem;"></el-date-picker>
           </el-form-item>
-          <el-form-item label="结束时间：" prop="ACend">
-            <el-date-picker type="date"  placeholder="请选择时间" v-model="$store.state.activity.ACend" style="width: 2rem;"></el-date-picker>
+          <el-form-item label="结束时间：" prop="COend">
+            <el-date-picker type="date"  placeholder="请选择时间" value-format="yyyy-MM-dd HH:mm:ss" v-model="$store.state.activity.COend" style="width: 2rem;"></el-date-picker>
           </el-form-item>
 
           <div class="m-bottom-btn m-flex-center">
@@ -90,7 +90,7 @@
           }
         ],
         storeForm:{
-          ACstart:'',
+          COstart:'',
           ACend:'',
           ACname:'',
           ACabo:'',
@@ -98,16 +98,16 @@
           name:''
         },
        rules:{
-         ACname:[
+         COname:[
            { required: true, message: '请输入活动名称', trigger: 'blur' }
          ],
-         ACabo:[
+         COabo:[
            { required: true, message: '请输入活动描述', trigger: 'blur' }
          ],
-         ACstart:[
+         COstart:[
            { required: true, message: '请选择开始时间', trigger: 'blur' }
          ],
-         ACend:[
+         COend:[
            { required: true, message: '请选择结束时间', trigger: 'blur' }
          ],
 
@@ -130,7 +130,7 @@
         for(let i=0;i<fileList.length;i++){
           _arr[i] = {name:fileList[i].name,url:fileList[i].url}
         }
-        this.storeForm.ACimage = [].concat(_arr);
+        this.$store.state.activity.COimage = [].concat(_arr);
       },
       imgUploadTop(params){
         let form = new FormData();
@@ -140,7 +140,7 @@
         form.append("index", 1);
         axios.post(api.upload_files,form).then(res => {
           if(res.data.status == 200){
-            this.storeForm.ACimage.push({name:params.file.name,url:res.data.data});
+            this.$store.state.activity.COimage.push({name:params.file.name,url:res.data.data});
             // this.img_index ++ ;
           }else{
             this.$message({

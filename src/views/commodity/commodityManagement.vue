@@ -22,7 +22,7 @@
           <el-table-column type="selection"  width="55" ></el-table-column>
           <el-table-column align="center" prop="PRimage" label="商品" width="125">
             <template slot-scope="scope">
-              <image class="m-table-img" :src="scope.row.PBimage"/>
+              <image class="m-table-img" :src="scope.row.PBimage" />
               <!--<div class="m-table-img"></div>-->
             </template>
           </el-table-column>

@@ -33,6 +33,9 @@ const api={
   get_categorybrands: title + 'category/get_categorybrands',//根据类目id获取商品属性
   get_category_by_prname: title + 'category/get_category_by_prname',//搜索商品对应的类目
   get_ctlist_by_ctid: title + 'category/get_ctlist_by_ctid',//根据最后一层CTid获取对应的类目
+
+  create: title + 'card/create',//创建活动/优惠券
+  get_all_card: title + 'card/get_all',//获取优惠券/活动
 }
 
 export default api

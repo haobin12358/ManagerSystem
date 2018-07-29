@@ -15,13 +15,40 @@ let store= new Vuex.Store({
     isCollapse:false,
     token:'',
     activity:{
-      ACstart:'',
-      ACend:'',
-      ACname:'',
-      ACabo:'',
-      ACimage:[],
-      name:'',
-      ACbrand:'1'
+      COabo:'',
+      COname:'',
+      COstatus:'',
+      COstart:'',
+      COend:'',
+      COfilter:0,
+      COother:'',
+      COdiscount:0,
+      COamount:0,
+      COtype:'满减',
+      COunit:'元',
+      COnumber:0,
+      COimage:[],
+      COotherType:'0',
+      COotherContent:[
+        '','',''
+      ],
+      COproduct:'全店商品',
+      PRids:[],
+      COgenre:'活动'
+    },
+    discount:{
+      COabo:'',
+      COname:'',
+      COstatus:'',
+      COstart:'',
+      COend:'',
+      COfilter:'',
+      COother:'',
+      COdiscount:'',
+      COamount:'',
+      COtype:'',
+      COnumber:'',
+      COgenre:'优惠券'
     }
 	},
 	mutations: {
