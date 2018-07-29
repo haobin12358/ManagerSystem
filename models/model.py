@@ -10,7 +10,7 @@ from ManagerSystem.config import dbconfig as cfg
 
 DB_PARAMS = "{0}://{1}:{2}@{3}/{4}?charset={5}".format(
     cfg.sqlenginename, cfg.username, cfg.password, cfg.host, cfg.database, cfg.charset)
-mysql_engine = create_engine(DB_PARAMS, echo=True)
+mysql_engine = create_engine(DB_PARAMS, echo=False)
 Base = declarative_base()
 
 
@@ -171,6 +171,9 @@ class CouponsActives(Base):
     COnumber = Column(Integer)    # 优惠限制领取数目
     COgenre = Column(Integer)     # 区分是活动还是优惠券{561:活动，562：优惠券}
     COunit = Column(Integer)      # 单位
+    COused = Column(Integer)      # 已使用的数量
+    COtime = Column(String(14))   # 创建时间
+    COuserfilter = Column(Integer)  # 每人限额
 
 
 class CouponsManager(Base):
@@ -274,3 +277,13 @@ class BlackUsers(Base):
     BUtelphone = Column(String(14), nullable=False)     # 黑名单电话
     BUreason = Column(Text)                             # 加入黑名单的原因
 
+
+class Cardpackage(Base):
+    __tablename__ = "Cardpackage"
+    CAid = Column(String(64), primary_key=True)
+    USid = Column(String(64), nullable=False)
+    CAstatus = Column(Integer, default=1)  # 卡包中优惠券的状态 {1:可使用，2: 不可使用}
+    COid = Column(String(64), nullable=False)
+    CPstart = Column(String(14))
+    CPend = Column(String(14))
+    CPtime = Column(String(14))  # 创建时间

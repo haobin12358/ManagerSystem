@@ -38,6 +38,31 @@ class TimeManager(object):
     def get_forward_time(**kwargs):
         return (datetime.datetime.now() + datetime.timedelta(**kwargs)).strftime(format_for_db)
 
+    @staticmethod
+    def get_forward_time_web(**kwargs):
+        return (datetime.datetime.now() + datetime.timedelta(**kwargs)).strftime(fomat_for_web_second)
+
+    @staticmethod
+    def get_delta_time(starttime, endtime):
+        deltatime = datetime.datetime.strptime(endtime, format_for_db) - datetime.datetime.strptime(starttime, format_for_db)
+        hour, remainder = divmod(deltatime.seconds, 3600)
+        minute, second = divmod(remainder, 60)
+        # return deltatime
+        return "{0}天{1}时{2}分{3}秒".format(deltatime.days, hour, minute, second)
+
 
 if __name__ == "__main__":
-    print(TimeManager.get_forward_time(days=-1))
+    delta = TimeManager.get_delta_time("20170622001100", "20170722061100")
+    print(delta)
+    # print type(delta)
+
+
+
+    # timestart = datetime.datetime.strptime("20170622001100", format_for_db)
+    # timesend = datetime.datetime.strptime("20170623001100", format_for_db)
+    # print(timestart)
+    # print(timesend)
+    # print(timesend - timestart)
+
+    # print(TimeManager.get_forward_time(days=-1))
+

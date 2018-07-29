@@ -16,7 +16,7 @@ class MSCoupons(Resource):
     def get(self, card):
         log.info("get api", card)
         action = {
-            "get_all": "self.cactive.get_card()",
+            "get_all": "self.cactive.get_active()",
         }
         if card in action:
             return eval(action.get(card))
@@ -27,7 +27,7 @@ class MSCoupons(Resource):
         log.info("get api", card)
         action = {
             "create": "self.cactive.add_active()",
-            "update_card": "self.cactive.update_card()"
+            "update_cative_status": "self.cactive.update_cative_status()"
         }
         if card in action:
             return eval(action.get(card))
