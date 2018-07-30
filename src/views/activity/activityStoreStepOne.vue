@@ -1,6 +1,6 @@
 <template>
   <div class="m-step">
-    <page-title :list="title_list" @freshClick="freshClick"></page-title>
+    <page-title :list="title_list" ></page-title>
     <el-form  :model="$store.state.activity" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" :disabled="$store.state.activity.disabled">
       <div class="m-step-content">
         <h3 class="m-step-title">创建新活动</h3>
@@ -43,7 +43,7 @@
 
           <div class="m-bottom-btn m-flex-center">
             <router-link to="/activity/storeActivity" >
-              <span class="m-btn active">返回</span>
+              <span class="m-btn active" >返回</span>
             </router-link>
               <span class="m-btn" @click="onSubmit">下一步</span>
           </div>
@@ -124,6 +124,30 @@
     mounted(){
       if(this.$route.query.COid){
         this.getData(this.$route.query.COid);
+      }else{
+        this.$store.state.activity = {
+          COabo:'',
+          COname:'',
+          COstatus:'',
+          COstart:'',
+          COend:'',
+          COfilter:null,
+          COother:'',
+          COdiscount:null,
+          COamount:null,
+          COtype:'满减',
+          COunit:'元',
+          COnumber:null,
+          COimage:[],
+          COotherType:'0',
+          COotherContent:[
+            '','',''
+          ],
+          COproduct:'全店商品',
+          PRids:[],
+          COgenre:'活动',
+          disabled:false
+        }
       }
     },
     methods: {
@@ -163,9 +187,6 @@
             this.$store.state.activity.COotherContent[this.$store.state.activity.COotherType] = res.data.data.COother
           }
         })
-      },
-      freshClick(){
-        console.log('fresh');
       },
       handleRemove(file, fileList) {
         let _arr = [];

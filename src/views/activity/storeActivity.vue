@@ -1,6 +1,6 @@
 <template>
   <div class="m-discount-index">
-    <page-title :title="name" @freshClick="freshClick"></page-title>
+    <page-title :title="name" :fresh="true" @freshClick="freshClick"></page-title>
     <div class="m-discount-content">
       <div class="m-discount-top">
         <ul class="m-store-top">
@@ -323,7 +323,8 @@
         console.log(this.situation_date)
       },
       freshClick(){
-        console.log('fresh');
+        this.getData();
+        this.getSituation();
       },
       /*搜索*/
       storeSubmit(){
@@ -344,7 +345,7 @@
       },
       /*张数点击切换*/
       numListClick(v){
-        let  _arr = JSON.parse(JSON.stringify(this.data_detail));
+        let  _arr = this.data_detail;
         for(let i = 0;i<_arr.length;i++){
           _arr[i].click = false;
         }

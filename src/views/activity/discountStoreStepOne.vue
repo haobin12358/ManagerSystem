@@ -230,7 +230,6 @@
         let that = this;
         let params = {
           token:localStorage.getItem('token'),
-          PBstatus:'',
           page_num: v || this.page_data.current_page,
           page_size:this.page_data.page_size,
           product_filter:code

@@ -374,7 +374,8 @@
       },
       /*刷新*/
       freshClick(){
-        console.log('fresh');
+        this.getStoreData();
+        this.getSituation();
       },
       /*搜索*/
       storeSubmit(){
@@ -396,7 +397,7 @@
       },
       /*张数点击，数据切换*/
       numListClick(v){
-        let  _arr = JSON.parse(JSON.stringify(this.data_detail));
+        let  _arr = this.data_detail;
         for(let i = 0;i<_arr.length;i++){
           _arr[i].click = false;
         }
