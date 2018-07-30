@@ -1,6 +1,6 @@
 <template>
   <div class="m-step">
-    <page-title :list="title_list" @freshClick="freshClick"></page-title>
+    <page-title :list="title_list" ></page-title>
     <el-form  :model="$store.state.discount" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" >
       <div class="m-step-content">
         <div class="m-step-part">
@@ -12,7 +12,7 @@
             <el-input v-model="$store.state.discount.COname" class="m-input-l" placeholder=""></el-input>
             <span class="m-label-line">商品范围：</span>
             <span class="m-link m-first" @click="showModal(true)">选择商品</span>
-            <span class="m-remark">(已选中{{$store.state.discount.PRids.length}}商品)</span>
+            <span class="m-remark">(已选中{{$store.state.discount.PRids.length}}商品,不如则默认全店商品可用)</span>
           </el-form-item>
           <el-form-item label="使用时间：" prop="COstart">
             <el-date-picker type="date"  placeholder="起始时间"  value-format="yyyy-MM-dd HH:mm:ss" v-model="$store.state.discount.COstart" style="width: 2rem;"></el-date-picker>
@@ -76,23 +76,23 @@
                 </div>
               </div>
             </el-form>
-            <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
-              <el-table :data="product_data" stripe style="width: 100%" @selection-change="changeFun">
-                <el-table-column type="selection" width="55"></el-table-column>
+            <div class="m-middle" style="width: 100%;margin-top: 0.1rem;" >
+              <el-table :data="product_data" stripe style="width: 100%" ref="table" @selection-change="changeFun" >
+                <el-table-column type="selection" width="55" prop="COcheck" ></el-table-column>
                 <el-table-column align="center" prop="userId" width="400" label="宝贝描述">
                   <template slot-scope="scope">
                     <div class="m-production-description">
-                      <p class="m-img"></p>
+                      <img class="m-img" :src="scope.row.PRimage[0]"/>
                       <div>
-                        <p>商品1</p>
-                        <p>ID:5489798456151241</p>
+                        <p>{{scope.row.PRname}}</p>
+                        <p>{{scope.row.PRid}}</p>
                       </div>
                     </div>
                   </template>
                 </el-table-column>
                 <el-table-column align="center" prop="userId" label="价格" ></el-table-column>
 
-                <el-table-column align="center" prop="loginTime" label="库存" ></el-table-column>
+                <el-table-column align="center" prop="PRstock" label="库存" ></el-table-column>
                 <!--<el-table-column align="center" label="操作" >-->
                 <!--<template slot-scope="scope">-->
                 <!--<span class="m-link m-first">参加活动</span>-->
@@ -146,8 +146,7 @@
           }
         ],
         storeForm:{
-          name:'',
-          id_list:[]
+          name:''
         },
         rules:{
           COname:[
@@ -180,7 +179,8 @@
           current_page:1,
           total_num:0,
           page_size:1
-        }
+        },
+        check_data:[]
       }
     },
     components:{
@@ -194,6 +194,7 @@
     methods: {
       /*获取表格数据*/
       getData(v,code){
+        let that = this;
         let params = {
           token:localStorage.getItem('token'),
           PBstatus:'',
@@ -204,6 +205,13 @@
         axios.get(api.get_all_product,{params:params}).then(res => {
           if(res.data.status == 200) {
             this.product_data = res.data.data.products;
+            for(let i=0;i<this.product_data.length;i++){
+              if(this.$store.state.discount.PRids.indexOf(this.product_data[i].PRid)!= -1){
+                that.$nextTick(function(){//注意这个，延时执行。
+                  that.$refs.table.toggleRowSelection(that.product_data[i],true);//每次更新了数据，触发这个函数即可。
+                });
+              }
+            }
             this.page_data.total_num = res.data.data.count;
             this.page_data.total_page = Math.ceil(this.page_data.total_num / this.page_data.page_size);
           }else{
@@ -213,34 +221,35 @@
           this.$message.error(error.data.message);
         })
       },
-      freshClick(){
-        console.log('fresh');
-      },
       /*点击确认*/
       onSubmit(){
-        // this.$store.state.discount.PRids = [].concat(this.storeForm.id_list);
+
         this.show_modal = false;
       },
+      /*显示模态框*/
       showModal(v){
         this.show_modal = v;
       },
+      /*商品查询*/
       storeSubmit(){
-
+        this.getData(1,this.storeForm.name);
       },
       /*选择商品*/
-      changeFun(v){
-        if(v){
-          for(let i =0;i<this.storeForm.id_list.length;i++){
-            if(v[0].PRid == this.storeForm.id_list[i]){
-              return false;
-            }
-          }
-          // this.storeForm.id_list.push(v[0].PRid);
+      changeFun(e){
+        let _arr = [];
+        for(let i=0;i<e.length;i++){
+          _arr.push(e[i].PRid);
         }
-
-
+        this.check_data[this.page_data.current_page-1] = [].concat(_arr);
+        let newarr=[];
+        let arr = JSON.parse(JSON.stringify(this.check_data));
+        for(let i=0;i<arr.length;i++)
+        {
+          newarr=newarr.concat(arr[i]);
+        }
+        this.$store.state.discount.PRids = [].concat(newarr);
       },
-      /*创建一个活动*/
+      /*创建一个优惠券*/
       createOne(){
         let that = this;
         this.$refs['storeForm'].validate((valid) => {
@@ -257,11 +266,36 @@
             _form.COuserfilter = Number(_form.COuserfilter);
             axios.post(api.create+'?token='+localStorage.getItem('token'),_form).then(res => {
               if(res.data.status == 200){
-                this.$router.push('/activity/storeStepResult');
                 this.$message({
                   type: 'success',
                   message: '处理成功 '
                 });
+                this.$store.state.discount = {
+                  COabo:'',
+                  COname:'',
+                  COstatus:'',
+                  COstart:'',
+                  COend:'',
+                  COfilter:null,
+                  COother:'',
+                  COdiscount:null,
+                  COamount:null,
+                  COtype:'',
+                  COnumber:null,
+                  PRids:[],
+                  COuserfilter:null,
+                  COgenre:'优惠券'
+                }
+                if(this.$route.query.router == 'activity'){
+                  this.$router.push('/activity/activityStoreStepTwo?COid='+res.data.data);
+                }else{
+                  this.$router.push({path:'/activity/storeStepResult',query:{
+                      COamount:_form.COamount,
+                      COfilter:_form.COfilter,
+                      COstart:_form.COstart,
+                      COend:_form.COend
+                    }});
+                }
               }else{
                 this.$message({
                   type: 'error',
@@ -280,14 +314,14 @@
       },
       /*分页点击*/
       pageChange(v){
-        if(v == this.current_page){
+        if(v == this.page_data.current_page){
           this.$message({
             message: '这已经是第' + v + '页数据了',
             type: 'warning'
           });
           return false;
         }
-        this.current_page = v;
+        this.page_data.current_page = v;
         this.getData(v)
       }
     },

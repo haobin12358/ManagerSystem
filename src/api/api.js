@@ -23,6 +23,7 @@ const api={
 
   get_all_product: title + 'product/get_all',//获取所有商品
   release_product: title + 'product/release',//发布商品商品
+  update_pro_info:title + 'product/update_pro_info',//更新商品
   update_product : title + 'product/update_product',//上下架商品
   upload_files: title +'other/upload_files',//上传图片
   get_prid: title + 'product/get_prid',//获取商品id
@@ -36,6 +37,7 @@ const api={
 
   create: title + 'card/create',//创建活动/优惠券
   get_all_card: title + 'card/get_all',//获取优惠券/活动
+  get_situation:title + 'card/get_situation',//获取活动或优惠券概况
 }
 
 export default api

@@ -466,7 +466,7 @@
                   _brands[i].PBimage = res.data.data.product_info.brands[i].PBimage;
                   _brands[i].BRands = res.data.data.product_info.brands[i].BRands;
                   _brands[i].PBnumber = res.data.data.product_info.brands[i].PBnumber;
-                  _brands[i].PBmarkingPrice = res.data.data.product_info.brands[i].PBmarkingPrice;
+                  _brands[i].PBmarkingPrice = Number(res.data.data.product_info.brands[i].PBmarkingPrice);
                 }
                 that.form.brands = [].concat(_brands);//商品商品样式
                 that.form.brands_key = [].concat(res.data.data.product_info.brands_key);//商品商品样式
@@ -716,12 +716,16 @@
             let that = this;
             this.$refs['form'].validate((valid) => {
                 if (valid) {
-                  that.query(this.form)
+                  if(this.$route.query.PRid){
+                    that.query(this.form,api.update_pro_info)
+                  }else{
+                    that.query(this.form,api.release_product)
+                  }
                 }
             })
           },
           /*发布方法*/
-          query(params){
+          query(params,_api){
             let _brands = [];
             let _form = JSON.parse(JSON.stringify(params));
             for(let i=0;i<this.form.PRbrand.length;i++){
@@ -748,6 +752,9 @@
             _form.PRimage = [].concat(_PRimage);
             for(let i=0;i<this.form.brands.length;i++){
               for(let item in this.form.brands[i]){
+                if(this.form.brands[i][item] == 0){
+                  continue
+                }
                 if(this.form.brands[i][item] == '' || this.form.brands[i][item] == null ){
                   this.$message.error('请填写完整商品样式和价格');
                   return false;
@@ -764,7 +771,7 @@
               }
             }
             _form.PRimage = _PRimage;
-            axios.post(api.release_product+'?token='+localStorage.getItem('token'),_form).then(res => {
+            axios.post(_api+'?token='+localStorage.getItem('token'),_form).then(res => {
               if(res.data.status == 200){
                 this.$message({
                   type: 'success',
@@ -785,7 +792,6 @@
           },
           /*删除一个子类*/
           deleteOne(v){
-
             this.form.brands.splice(v,1);
           },
           /*添加更多*/

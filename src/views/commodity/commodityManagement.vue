@@ -18,11 +18,11 @@
       </div>
 
       <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
-        <el-table :data="product_data" stripe style="width: 100%" @selection-change="changeFun">
+        <el-table :data="product_data" stripe style="width: 100%" ref="table" @selection-change="changeFun">
           <el-table-column type="selection"  width="55" ></el-table-column>
           <el-table-column align="center" prop="PRimage" label="商品" width="125">
             <template slot-scope="scope">
-              <image class="m-table-img" :src="scope.row.PBimage" />
+              <img class="m-table-img" :src="scope.row.PRimage[0]" />
               <!--<div class="m-table-img"></div>-->
             </template>
           </el-table-column>
@@ -122,6 +122,7 @@
         checkRow:[],
         show_modal:false,
         one_product:[],
+        check_data:[]
       }
     },
     components:{
@@ -155,8 +156,19 @@
 
       },
       /*多选按钮点击*/
-      changeFun(v){
-        this.checkRow = v;
+      changeFun(e){
+        let _arr = [];
+        for(let i=0;i<e.length;i++){
+          _arr.push(e[i].PRid);
+        }
+        this.check_data[this.current_page-1] = [].concat(_arr);
+        let newarr=[];
+        let arr = JSON.parse(JSON.stringify(this.check_data));
+        for(let i=0;i<arr.length;i++)
+        {
+          newarr=newarr.concat(arr[i]);
+        }
+        this.checkRow = [].concat(newarr);
       },
       /*编辑*/
       editClick(row){
@@ -201,7 +213,7 @@
       },
       /*更新商品方法*/
       updateProduct(status){
-        let PRid = [];
+        let PRid = [].concat(this.checkRow);
         let that = this;
         if(this.checkRow.length <1){
           this.$message({
@@ -210,14 +222,14 @@
           });
           return false;
         }
-        for(let i = 0; i< this.checkRow.length;i++){
-          PRid.push(this.checkRow[i].PRid);
-        }
+        // for(let i = 0; i< this.checkRow.length;i++){
+        //   PRid.push(this.checkRow[i].PRid);
+        // }
         let params = {
           PRid: PRid,
           PRstatus:status
         }
-        axios.post(api.update_product+ '?token=' + this.$store.state.token,params).then(res => {
+        axios.post(api.update_product+ '?token=' + localStorage.getItem('token'),params).then(res => {
           if(res.data.status == 200){
             this.$message({
               message:res.data.message,
@@ -229,6 +241,7 @@
       },
       /*获取表格数据*/
       getData(v,code){
+        let that = this;
         let params = {
           token:localStorage.getItem('token'),
           PRstatus:'',
@@ -239,6 +252,13 @@
         axios.get(api.get_all_product,{params:params}).then(res => {
           if(res.data.status == 200) {
             this.product_data = res.data.data.products;
+            for(let i=0;i<this.product_data.length;i++){
+              if(this.checkRow.indexOf(this.product_data[i].PRid)!= -1){
+                that.$nextTick(function(){//注意这个，延时执行。
+                  that.$refs.table.toggleRowSelection(that.product_data[i],true);//每次更新了数据，触发这个函数即可。
+                });
+              }
+            }
             this.total_num = res.data.data.count;
             this.total_page = Math.ceil(this.total_num / this.page_size);
           }else{

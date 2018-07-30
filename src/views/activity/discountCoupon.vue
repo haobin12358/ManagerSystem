@@ -1,6 +1,6 @@
 <template>
   <div class="m-discount-index">
-    <page-title :title="name" @freshClick="freshClick"></page-title>
+    <page-title :title="name" :fresh="true" @freshClick="freshClick"></page-title>
     <div class="m-discount-content">
         <div class="m-discount-top">
           <div class="m-discount-top-part">
@@ -28,7 +28,7 @@
         <p class="m-date">
           <span>日</span>
           <el-date-picker
-            v-model="value7"
+            v-model="situation_date"
             type="daterange"
             align="right"
             unlink-panels
@@ -49,22 +49,30 @@
             <div class="m-select-box">
               <div class="m-left">
                 <el-form-item label="活动状态">
-                  <el-select v-model="storeForm.name" class="m-input-s" placeholder="活动区域">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                  <el-select v-model="storeForm.COstatus" class="m-input-s" placeholder="活动区域">
+                    <el-option label="全部" value=""></el-option>
+                    <el-option label="预热" value="预热"></el-option>
+                    <el-option label="进行中" value="进行中"></el-option>
+                    <el-option label="暂停" value="暂停"></el-option>
+                    <el-option label="结束" value="介绍"></el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="优惠券名称">
-                  <el-input v-model="storeForm.name" class="m-input-s" placeholder="审批人"></el-input>
+                  <el-input v-model="storeForm.COname" class="m-input-s" placeholder=""></el-input>
                 </el-form-item>
-                <el-form-item label="面额">
-                  <el-input v-model="storeForm.name" class="m-input-s" placeholder="审批人"></el-input>
+                <el-form-item label="类型">
+                    <el-select v-model="storeForm.COstatus" class="m-input-s" placeholder="活动区域">
+                      <el-option label="全部" value=""></el-option>
+                      <el-option label="满减" value="满减"></el-option>
+                      <el-option label="满折" value="满折"></el-option>
+                      <el-option label="其它" value="其它"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="时间">
-                  <el-date-picker type="date" class="m-input-s" placeholder="起始时间" v-model="storeForm.date1" style="width: 1.2rem;"></el-date-picker>
+                  <el-date-picker type="date" class="m-input-s" placeholder="起始时间" value-format="yyyy-MM-dd HH:mm:ss" v-model="storeForm.COstart" style="width: 1.2rem;"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="-">
-                  <el-date-picker type="date" class="m-input-s" placeholder="结束时间" v-model="storeForm.date2" style="width: 1.2rem;"></el-date-picker>
+                  <el-date-picker type="date" class="m-input-s" placeholder="结束时间" value-format="yyyy-MM-dd HH:mm:ss" v-model="storeForm.COend" style="width: 1.2rem;"></el-date-picker>
                 </el-form-item>
               </div>
               <div class="m-right">
@@ -75,23 +83,23 @@
             </div>
           </el-form>
         <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
-          <el-table :data="user" stripe style="width: 100%">
-            <el-table-column align="center" prop="userId" label="名称/渠道"></el-table-column>
-            <el-table-column align="center" prop="userId" label="状态" ></el-table-column>
-            <el-table-column align="center" prop="userName" label="面额"></el-table-column>
-            <el-table-column align="center" prop="group" label="门槛" ></el-table-column>
-            <el-table-column align="center" prop="group" label="使用时间" >
+          <el-table :data="store_data" stripe style="width: 100%">
+            <el-table-column align="center" prop="COname" label="名称/渠道"></el-table-column>
+            <el-table-column align="center" prop="COstatus" label="状态" ></el-table-column>
+            <el-table-column align="center" prop="COfilter" label="面额"></el-table-column>
+            <el-table-column align="center" prop="COfilter" label="门槛" ></el-table-column>
+            <el-table-column align="center" prop="group" label="使用时间" width="200">
               <template slot-scope="scope">
-               <p>起：2018-07-02</p>
-                <p>止：2018-07-08</p>
+               <p>起：{{scope.row.COstart}}</p>
+                <p>止：{{scope.row.COend}}</p>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="group" label="限额" ></el-table-column>
-            <el-table-column align="center" prop="loginTime" label="发行量" ></el-table-column>
+            <el-table-column align="center" prop="COuserfilter" label="每人限额" ></el-table-column>
+            <el-table-column align="center" prop="COnumber" label="发行量" ></el-table-column>
             <el-table-column align="center" prop="group" label="已领取" ></el-table-column>
             <el-table-column align="center" label="操作" >
               <template slot-scope="scope">
-                <span class="m-link m-first" @click="storeEdit">编辑</span>
+                <span class="m-link m-first" @click="storeEdit(scope.row,'store')">查看</span>
               </template>
             </el-table-column>
           </el-table>
@@ -132,12 +140,12 @@
           </div>
         </el-form>
         <div class="m-middle" style="width: 100%;margin-top: 0.1rem;">
-          <el-table :data="user" stripe style="width: 100%">
+          <el-table :data="platform_data" stripe style="width: 100%">
             <el-table-column align="center" prop="userId" label="名称/渠道"></el-table-column>
             <el-table-column align="center" prop="userId" label="状态" ></el-table-column>
             <el-table-column align="center" prop="userName" label="面额"></el-table-column>
             <el-table-column align="center" prop="group" label="门槛" ></el-table-column>
-            <el-table-column align="center" prop="group" label="使用时间" >
+            <el-table-column align="center" prop="group" label="使用时间" width="300">
               <template slot-scope="scope">
                 <p>起：2018-07-02</p>
                 <p>止：2018-07-08</p>
@@ -154,7 +162,7 @@
           </el-table>
         </div>
         <div class="m-page-box">
-          <pagination></pagination>
+          <Pagination :total="page_data.total_page" @pageChange="pageChange"></Pagination>
         </div>
       </div>
     </div>
@@ -163,21 +171,22 @@
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
-  import echarts from 'echarts';
-  import user from '../../common/json/userInfo';
-  import Pagination from "../../components/common/pages";
+  import Pagination from "../../components/common/page";
   import tabs from '../../components/common/tabs';
   import numList from '../../components/activity/numList';
   import mEcharts from '../../components/common/vue-echarts';
+  import axios from 'axios';
+  import api from '../../api/api';
   export default {
     data() {
       return {
         id:'discountCoupon',
         name:'优惠券',
         storeForm:{
-          name:'',
-          date1:'',
-          date2:''
+          COstatus:'',
+          COstart:'',
+          COend:'',
+          COname:''
         },
         tab_data:{
           dataInfo:{
@@ -226,7 +235,6 @@
             click:false
           }
         ],
-        user: user,
         option : {
           color:['#edb3b1'],
           tooltip:{
@@ -284,14 +292,15 @@
             }
           }]
         },
-        value7: '',
+        situation_date: '',
         page_data:{
           total_page:0,
           current_page:1,
           total_num:0,
           page_size:10
-        }
-
+        },
+        store_data:[],
+        platform_data:[],
     }
     },
     components:{
@@ -302,13 +311,39 @@
       'm-echarts':mEcharts
     },
     methods: {
+      /*获取店铺优惠券数据*/
+      getStoreData(v,name,id,status,start,end,type){
+        let params = {
+          token:localStorage.getItem('token'),
+          page_num: v || this.page_data.current_page,
+          page_size:this.page_data.page_size,
+          COname:name,
+          COid:id,
+          COstatus:status,
+          COstart:start,
+          COend:end,
+          COtype:type,
+          COgenre:'优惠券'
+        };
+        axios.get(api.get_all_card,{params:params}).then(res => {
+          if(res.data.status == 200) {
+            this.store_data = res.data.CouponsActives;
+            this.page_data.total_num = res.data.count;
+            this.page_data.total_page = Math.ceil(this.page_data.total_num / this.page_data.page_size);
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
+      },
       /*刷新*/
       freshClick(){
         console.log('fresh');
       },
       /*搜索*/
       storeSubmit(){
-
+        this.getStoreData(1,this.storeForm.COname,'',this.storeForm.COstatus,this.storeForm.COstart,this.storeForm.COend,this.storeForm.COtype);
       },
       /*数据概况/店铺优惠券的切换*/
       tabChange(v){
@@ -320,8 +355,9 @@
        }
       },
       /*+店铺优惠券*/
-      storeEdit(){
-        this.$router.push('/activity/discountStoreStepOne');
+      storeEdit(v,name){
+        if(name == 'store')
+        this.$router.push('/activity/discountStoreStepOne?COid=' + v.COid);
       },
       /*张数点击，数据切换*/
       numListClick(v){
@@ -344,6 +380,7 @@
       }
     },
     mounted(){
+      this.getStoreData()
     },
     created() {
 

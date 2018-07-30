@@ -1,7 +1,7 @@
 <template>
   <div class="m-step">
     <page-title :list="title_list" @freshClick="freshClick"></page-title>
-    <el-form  :model="$store.state.activity"  :rules="rules" label-width="1.2rem" class="demo-ruleForm"  >
+    <el-form  :model="$store.state.activity"  :rules="rules" label-width="1.2rem" class="demo-ruleForm" :disabled="$store.state.activity.disabled" >
       <div class="m-step-content">
         <h3 class="m-step-title">创建新活动</h3>
         <div class="m-step-part">
@@ -28,12 +28,12 @@
           <h4>基本信息</h4>
           <el-form-item label="优惠类型：" prop="COtype">
             <p class="m-alert-box">
-              <el-radio v-model="$store.state.activity.COtype" label="满减">满减（打折）</el-radio>
+              <el-radio v-model="$store.state.activity.COtype" label="满折">满折（打折）</el-radio>
               <span class="m-alert-icon"></span>
               <span class="m-alert-info">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
             </p>
             <p>
-              <el-radio v-model="$store.state.activity.COtype" label="满元">满元（减钱）</el-radio>
+              <el-radio v-model="$store.state.activity.COtype" label="满减">满元（减钱）</el-radio>
             </p>
             <p class="m-margin-bottom">
               <el-radio v-model="$store.state.activity.COtype" label="其它">其它</el-radio>
@@ -56,7 +56,7 @@
                 <el-radio v-model="$store.state.activity.COunit" label="件">件</el-radio>
               </el-form-item>
               <el-form-item label="优惠内容：" prop="COunit">
-                <div v-if="$store.state.activity.COtype == '满减'">
+                <div v-if="$store.state.activity.COtype == '满折'">
                   <p class="m-alert-box">
                     <!--<el-radio v-model="radio" label="1">打</el-radio>-->
                     <span>打</span>
@@ -66,7 +66,7 @@
                     <span class="m-alert-info m-alert-info-a">设置折扣前请务必确保您的折扣基准价是法律规定的原价（前七天最低价，详见《淘宝价格发布规范》 ），若不是，请您返回商品发布页对价格进行修改，否则由此产生的价格欺诈等法律责任需由您自行承担。</span>
                   </p>
                 </div>
-                <div v-if="$store.state.activity.COtype == '满元'">
+                <div v-if="$store.state.activity.COtype == '满减'">
                   <p class="m-alert-box">
                     <!--<el-radio v-model="radio" label="3">减</el-radio>-->
                     <span>减</span>
@@ -79,11 +79,11 @@
                <div v-if="$store.state.activity.COtype == '其它'" class="m-radio-p">
                  <p>
                    <el-radio v-model="$store.state.activity.COotherType" label="0">包邮</el-radio>
-                   <el-input v-model="$store.state.activity.COotherContent[0]" class="m-input-m" placeholder="备注"></el-input>
+                   <el-input v-model="$store.state.activity.COotherContent[0]" class="m-input-m" placeholder="备注" v-if="$store.state.activity.COotherType ==0"></el-input>
                  </p>
                  <p>
                    <el-radio v-model="$store.state.activity.COotherType" label="1">送赠品</el-radio>
-                   <el-input v-model="$store.state.activity.COotherContent[1]" class="m-input-m" placeholder="赠品内容"></el-input>
+                   <el-input v-model="$store.state.activity.COotherContent[1]" class="m-input-m" placeholder="赠品内容" v-if="$store.state.activity.COotherType ==1"></el-input>
                  </p>
                  <!--<p>-->
                    <!--<el-radio v-model="radio" label="2">送权益</el-radio>-->
@@ -92,14 +92,14 @@
                  <p>
                    <el-radio v-model="$store.state.activity.COotherType" label="2">送优惠券</el-radio>
                    <!--<el-input v-model="storeForm.name" class="m-input-m" placeholder="优惠券内容"></el-input>-->
-                   <el-select v-model="$store.state.activity.COotherContent[2]" filterable remote :remote-method="productBlur" placeholder="选择已有优惠券" class="m-input-l" >
+                   <el-select v-model="$store.state.activity.COotherContent[2]" filterable remote :remote-method="productBlur" placeholder="选择已有优惠券" class="m-input-l" v-if="$store.state.activity.COotherType ==2">
                      <el-option
                        v-for="(items,index) in discount_data"
                        :key="index"
                        :label="items.COname"
                        :value="items.COid"></el-option>
                    </el-select>
-                   <span class="m-link m-first" @click="addNewDiscount">新增优惠券</span>
+                   <span class="m-link m-first" @click="addNewDiscount" v-if="$store.state.activity.COotherType == 2">新增优惠券</span>
                  </p>
                </div>
 
@@ -170,7 +170,7 @@
             { required: true, message: '请输入活动优惠类型', trigger: 'blur' }
           ],
           COfilter:[
-            { required: true, message: '请输入活动描述', trigger: 'blur' }
+            { required: true, message: '请输入优惠门槛', trigger: 'blur' }
           ],
           COunit:[
             { required: true, message: '请选择优惠内容', trigger: 'blur' }
@@ -190,6 +190,19 @@
       step
     },
     mounted(){
+      let item = this.$store.state.activity;
+      if(!item.COname || !item.COabo || !item.COstart || !item.COend){
+        this.$message({
+          type:'warning',
+          message:'请先填写第一步内容',
+          duration:1000
+        });
+        this.$router.push('/activity/activityStoreStepOne');
+        return false;
+      }
+      if(this.$route.query.COid){
+        this.$store.state.activity.COotherContent[2] = this.$route.query.COid;
+      }
       this.getData();
     },
     methods: {
@@ -254,7 +267,7 @@
       },
       /*新增优惠券*/
       addNewDiscount(){
-        this.$router.push('/activity/discountStoreStepOne');
+        this.$router.push('/activity/discountStoreStepOne?router=activity');
       }
     }
   }

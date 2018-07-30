@@ -1,7 +1,7 @@
 <template>
   <div class="m-step">
     <page-title :list="title_list" @freshClick="freshClick"></page-title>
-    <el-form  :model="$store.state.activity" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" >
+    <el-form  :model="$store.state.activity" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" :disabled="$store.state.activity.disabled">
       <div class="m-step-content">
         <h3 class="m-step-title">创建新活动</h3>
         <div class="m-step-part">
@@ -121,6 +121,33 @@
       pageTitle,
       step
     },
+    mounted(){
+      if(this.$route.query.COid){
+        this.$store.state.activity = {
+          COabo:'',
+          COname:'',
+          COstatus:'',
+          COstart:'',
+          COend:'',
+          COfilter:null,
+          COother:'',
+          COdiscount:null,
+          COamount:null,
+          COtype:'满减',
+          COunit:'元',
+          COnumber:null,
+          COimage:[],
+          COotherType:'0',
+          COotherContent:[
+            '','',''
+          ],
+          COproduct:'全店商品',
+          PRids:[],
+          COgenre:'活动',
+          disabled:true
+        }
+      }
+    },
     methods: {
       freshClick(){
         console.log('fresh');
@@ -173,6 +200,9 @@
             this.$router.push('/activity/activityStoreStepTwo');
           }
         })
+      },
+      /*获取数据*/
+      getData(){
 
       }
     },
