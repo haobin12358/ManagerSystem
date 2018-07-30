@@ -509,7 +509,7 @@ class CManager():
             approvaling_sum = 0
             deliver_sum = 0
             ordered_sum = 0
-            payed_sum = 0
+            paid_num = 0
             ordered_price_sum = 0
             payed_price_sum = 0
             active_sum = 0
@@ -551,7 +551,7 @@ class CManager():
                 om_count[om.OMstatus] += 1
                 if om.OMtime > time_filter_week:
                     if om.OMstatus >= 21:
-                        payed_sum += 1
+                        paid_num += 1
                         payed_price_sum += om.OMprice
                     if om.OMstatus >= 7:
                         ordered_sum += 1
@@ -570,9 +570,9 @@ class CManager():
                     if om.OMstatus >= 7:
                         yesterday_order += 1
 
-            om_count_result = {}
-            for status in om_count:
-                om_count_result[conversion_OMstatus.get(status)] = om_count.get(status, 0)
+            # om_count_result = {}
+            # for status in om_count:
+            #     om_count_result[conversion_OMstatus.get(status)] = om_count.get(status, 0)
             deliver_sum = om_count.get(21)
             dealing_sum = deliver_sum + approvaling_sum
             from ManagerSystem.service.SActive import SActive
@@ -597,20 +597,20 @@ class CManager():
             from decimal import Decimal
 
             vto = (Decimal(ordered_sum) / (Decimal(visitors_sum))).quantize(Decimal('0.00')) if visitors_sum != 0 else 0
-            vtp = (Decimal(payed_sum) / (Decimal(visitors_sum))).quantize(Decimal('0.00')) if visitors_sum != 0 else 0
-            otp = (Decimal(payed_sum) / (Decimal(ordered_sum))).quantize(Decimal('0.00')) if ordered_sum != 0 else 0
+            vtp = (Decimal(paid_num) / (Decimal(visitors_sum))).quantize(Decimal('0.00')) if visitors_sum != 0 else 0
+            otp = (Decimal(paid_num) / (Decimal(ordered_sum))).quantize(Decimal('0.00')) if ordered_sum != 0 else 0
+            pct = (Decimal(payed_price_sum) / (Decimal(paid_num))).quantize(Decimal("0.00")) if paid_num != 0 else 0
             response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
             response["data"] = {
                 "deliver_sum": deliver_sum,
                 "approvaling_sum": approvaling_sum,
                 "dealing_sum": dealing_sum,
-                "om_count": om_count_result,
+                "om_count": om_count,
                 "active_sum": active_sum,
                 "couponse_sum": couponse_sum,
-                "visitors_sum": visitors_sum,
-                "vtp": vtp,
-                "vto": vto,
-                "otp": otp,
+                "vtp": float(vtp),
+                "vto": float(vto),
+                "otp": float(otp),
                 "today_vistor": today_vistor,
                 "today_omprice": today_omprice,
                 "today_order": today_order,
@@ -619,7 +619,12 @@ class CManager():
                 "yesterday_vistor": yesterday_vistor,
                 "yesterday_order": yesterday_order,
                 "yesterday_payed": yesterday_payed,
-
+                "paid_num": paid_num,
+                "ordered_sum": ordered_sum,
+                "visitors_sum": visitors_sum,
+                "payed_price_sum": payed_price_sum,
+                "ordered_price_sum": ordered_price_sum,
+                "pct": float(pct),
             }
             return response
 
