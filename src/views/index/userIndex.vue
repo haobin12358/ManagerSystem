@@ -21,27 +21,27 @@
              </li>
            </ul>
             <div class="m-activity">
-              <h3>活动管理</h3>
+              <h3>订单管理</h3>
               <ul>
                 <li>
                   <span>待付款订单：</span>
-                  <span>1</span>
+                  <span class="m-red">1</span>
                 </li>
                 <li>
                   <span>待发货订单：</span>
-                  <span>1</span>
+                  <span class="m-red">1</span>
                 </li>
                 <li>
                   <span>待评价的订单：</span>
-                  <span>0</span>
+                  <span class="m-red">0</span>
                 </li>
                 <li>
                   <span>退款中订单：</span>
-                  <span>0</span>
+                  <span class="m-red">0</span>
                 </li>
                 <li>
                   <span>物流异常订单：</span>
-                  <span>0</span>
+                  <span class="m-red">0</span>
                 </li>
                 <li>
                   <span>物流未更新订单：</span>
@@ -54,7 +54,7 @@
               <ul>
                 <li>
                   <span>正在进行的活动：</span>
-                  <span>1</span>
+                  <span class="m-red">1</span>
                 </li>
               </ul>
             </div>
@@ -80,7 +80,7 @@
               <div class="m-data-top">
                 <span class="m-data-icon icon-order"></span>
                 <div class="m-data-label">
-                  <p>支付金额</p>
+                  <p>访客数</p>
                   <p>0</p>
                 </div>
               </div>
@@ -93,7 +93,7 @@
               <div class="m-data-top">
                 <span class="m-data-icon icon-pay"></span>
                 <div class="m-data-label">
-                  <p>支付金额</p>
+                  <p>支付买家数</p>
                   <p>0</p>
                 </div>
               </div>
@@ -106,7 +106,7 @@
               <div class="m-data-top">
                 <span class="m-data-icon icon-person"></span>
                 <div class="m-data-label">
-                  <p>支付金额</p>
+                  <p>支付订单数</p>
                   <p>0</p>
                 </div>
               </div>
@@ -183,17 +183,17 @@
 
 
             <p class="m-percent">
-              <span class="m-percent-content">下单转化率12.3% </span>
+              <span class="m-percent-content">下单转化率：12.3% </span>
               <span class="m-green m-arrow"></span>
               <span class="m-green m-arrow-head"></span>
             </p>
             <p class="m-percent">
-              <span class="m-percent-content">支付转化率12.3% </span>
+              <span class="m-percent-content">支付转化率：12.3% </span>
               <span class="m-red m-arrow"></span>
               <span class="m-red m-arrow-head"></span>
             </p>
             <p class="m-percent">
-              <span class="m-percent-content">下单-支付转化率12.3% </span>
+              <span class="m-percent-content">下单-支付转化率：12.3% </span>
               <span class="m-yellow m-arrow"></span>
               <span class="m-yellow m-arrow-head"></span>
             </p>
@@ -433,7 +433,8 @@
           line-height: 0.24rem;
           .flex-row(flex-start);
           .m-percent-content{
-              width: 1.5rem;
+            width: 1.5rem;
+            margin-left: 0.2rem;
           }
           .m-arrow{
             display: block;
