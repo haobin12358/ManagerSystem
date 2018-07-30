@@ -506,7 +506,123 @@ class CManager():
             if not manager:
                 return SYSTEM_ERROR
             dealing_sum = 0
-            approvaling = 0
+            approvaling_sum = 0
+            deliver_sum = 0
+            ordered_sum = 0
+            payed_sum = 0
+            ordered_price_sum = 0
+            payed_price_sum = 0
+            active_sum = 0
+            couponse_sum = 0
+            today_omprice = 0
+            today_vistor = 0
+            today_order = 0
+            today_payed = 0
+            yesterday_omprice = 0
+            yesterday_vistor = 0
+            yesterday_order = 0
+            yesterday_payed = 0
+
+            time_filter_week = TimeManager.get_forward_time(days=-7)
+            time_filter_yesterday = TimeManager.get_forward_time(days=-1)[:8] + "000000"
+            time_filter_today = TimeManager.get_db_time_str()[:8] + "000000"
+            from ManagerSystem.service.SApproval import SApproval
+            sapproval = SApproval()
+
+            approval = [apr.APname for apr in sapproval.get_approval_by_maid(maid)]
+            approval = {}.fromkeys(approval).keys()
+            approvaling_sum = len(approval)
+            from ManagerSystem.service.SOrder import SOrder
+            from ManagerSystem.service.SProducts import SProducts
+            from ManagerSystem.config.conversion import conversion_OMstatus, conversion_OMstatus_reverse
+            sorder = SOrder()
+            sproduct = SProducts()
+            prid_list = [product.PRid for product in sproduct.get_product_by_maid(maid)]
+            pbid_list = []
+            for prid in prid_list:
+                pbid_list.extend([pb.PBid for pb in sproduct.get_pbid_by_prid(prid)])
+            omid_list = []
+            for pbid in pbid_list:
+                omid_list.extend([op.OMid for op in sorder.get_order_part_list_by_pbid(pbid)])
+            omid_list = {}.fromkeys(omid_list).keys()
+            om_count = {k: 0 for k in conversion_OMstatus}
+            for omid in omid_list:
+                om = sorder.get_order_main_by_om_id(omid)
+                om_count[om.OMstatus] += 1
+                if om.OMtime > time_filter_week:
+                    if om.OMstatus >= 21:
+                        payed_sum += 1
+                        payed_price_sum += om.OMprice
+                    if om.OMstatus >= 7:
+                        ordered_sum += 1
+                        ordered_price_sum += om.OMprice
+                if om.OMtime[:8] == time_filter_today[:8]:
+                    if om.OMstatus >= 21:
+                        today_omprice += om.OMprice
+                        today_payed += 1
+                    if om.OMstatus >= 7:
+                        today_order += 1
+
+                elif om.OMtime[:8] == time_filter_yesterday[:8]:
+                    if om.OMstatus >= 21:
+                        yesterday_payed += 1
+                        yesterday_omprice += om.OMprice
+                    if om.OMstatus >= 7:
+                        yesterday_order += 1
+
+            om_count_result = {}
+            for status in om_count:
+                om_count_result[conversion_OMstatus.get(status)] = om_count.get(status, 0)
+            deliver_sum = om_count.get(21)
+            dealing_sum = deliver_sum + approvaling_sum
+            from ManagerSystem.service.SActive import SActive
+            from ManagerSystem.models.model import CouponsManager
+            from ManagerSystem.models.model import CouponsActives
+            sactive = SActive()
+            cmlist =[cm.COid for cm in sactive.get_cm_by_filter({CouponsManager.MAid == maid}, set())]
+            cmlist = {}.fromkeys(cmlist).keys()
+
+            for coid in cmlist:
+                ca = sactive.get_actives_by_filter({CouponsActives.COid == coid, CouponsActives.COstatus == 551}, set())
+                if ca:
+                    ca = ca[0]
+                    if ca.COgenre == 561:
+                        couponse_sum += 1
+                    elif ca.COgenre == 562:
+                        active_sum += 1
+
+            visitors_sum = len(self.smanager.get_visitors_by_maid(maid, time_filter_week))
+            today_vistor = len(self.smanager.get_visitors_by_maid(maid, time_filter_today))
+            yesterday_vistor = len(self.smanager.get_visitors_by_maid(maid, time_filter_yesterday))
+            from decimal import Decimal
+
+            vto = (Decimal(ordered_sum) / (Decimal(visitors_sum))).quantize(Decimal('0.00')) if visitors_sum != 0 else 0
+            vtp = (Decimal(payed_sum) / (Decimal(visitors_sum))).quantize(Decimal('0.00')) if visitors_sum != 0 else 0
+            otp = (Decimal(payed_sum) / (Decimal(ordered_sum))).quantize(Decimal('0.00')) if ordered_sum != 0 else 0
+            response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
+            response["data"] = {
+                "deliver_sum": deliver_sum,
+                "approvaling_sum": approvaling_sum,
+                "dealing_sum": dealing_sum,
+                "om_count": om_count_result,
+                "active_sum": active_sum,
+                "couponse_sum": couponse_sum,
+                "visitors_sum": visitors_sum,
+                "vtp": vtp,
+                "vto": vto,
+                "otp": otp,
+                "today_vistor": today_vistor,
+                "today_omprice": today_omprice,
+                "today_order": today_order,
+                "today_payed": today_payed,
+                "yesterday_omprice": yesterday_omprice,
+                "yesterday_vistor": yesterday_vistor,
+                "yesterday_order": yesterday_order,
+                "yesterday_payed": yesterday_payed,
+
+            }
+            return response
+
         except Exception as e:
             log.error("get situation", e.message)
             return SYSTEM_ERROR

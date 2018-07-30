@@ -199,3 +199,18 @@ class SProducts(SBase):
     @close_session
     def del_brand(self, brid):
         return self.session.query(Brands).filter(Brands.BRid == brid).delete()
+
+if __name__ == "__main__":
+    sp = SProducts()
+    prid_list = [pro.PRid for pro in sp.session.query(Products.PRid).all()]
+    prid_br_list = [pb.PRid for pb in sp.session.query(PB.PRid).all()]
+    error_list = []
+    for prid in prid_list:
+        if prid not in prid_br_list:
+            error_list.append(prid)
+
+    print error_list
+
+
+#
+# 0b66230f-9095-11e8-a97d-74d02b0d3622

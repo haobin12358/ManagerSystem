@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.getcwd()))
 from sqlalchemy import or_, and_
 from SBase import SBase, close_session
 
-from ManagerSystem.models.model import Manager, IdentifyingCode, Users
+from ManagerSystem.models.model import Manager, IdentifyingCode, Users, UserManager
 
 class SManager(SBase):
 
@@ -76,3 +76,9 @@ class SManager(SBase):
     @close_session
     def update_user_by_filter(self, and_filter, user):
         return self.session.query(Users).filter(and_(*and_filter)).update(user)
+
+    @close_session
+    def get_visitors_by_maid(self, maid, vmtime):
+        return self.session.query(
+            UserManager.MAid, UserManager.UMtime, UserManager.USid
+        ).filter(UserManager.MAid == maid, UserManager.UMtime >= vmtime).all()

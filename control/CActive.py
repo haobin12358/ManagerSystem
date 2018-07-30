@@ -208,7 +208,7 @@ class CActive():
             coid_list_filter = []
             for coid in coid_list_all:
                 ca = self.sactive.get_actives_by_filter({CouponsActives.COid == coid}, set())
-                log.info("ca" ,ca)
+                log.info("ca", ca)
                 if ca:
                     ca = ca[0]
                     if ca.COgenre != cogenre:
@@ -319,10 +319,12 @@ class CActive():
             co["COend"] = TimeManager.get_web_time_str(co["COend"])
             co["COunit"] = conversion_PBunit.get(co["COunit"])
             co["COgenre"] = conversion_COgenre.get(co["COgenre"])
+            co["COimage"] = json.loads(co["COimage"])
             cm_list = self.sactive.get_cm_by_filter({CouponsManager.COid == coid}, set())
             prid = []
             for cm in cm_list:
-                prid.append(cm.PRid)
+                if cm.PRid:
+                    prid.append(cm.PRid)
             co["PRids"] = prid
             response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
             response["data"] = co

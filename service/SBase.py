@@ -72,7 +72,7 @@ class SBase(object):
 
     # todo 修改mode_id
     @close_session
-    def get_count_by_or_filter(self, model_name,and_params, or_params):
+    def get_count_by_or_filter(self, model_name, and_params, or_params):
         """
         获取某个数据表中的全部数据
         :param model_name:

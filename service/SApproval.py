@@ -58,3 +58,9 @@ class SApproval(SBase):
     @close_session
     def update_approval_by_name(self, apname, approval):
         return self.session.query(Approval).filter(Approval.APname == apname).update(approval)
+
+    @close_session
+    def get_approval_by_maid(self, maid):
+        return self.session.query(Approval.APid, Approval.APname, Approval.APremark, Approval.APstart,
+            Approval.APreceive, Approval.APstatus, Approval.PEtype, Approval.APcontent, Approval.APtime
+        ).filter(Approval.APstart == maid, Approval.APstatus == 405).all()

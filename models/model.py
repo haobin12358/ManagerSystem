@@ -208,6 +208,14 @@ class Manager(Base):
     MAloginTime = Column(String(14))                  # 最后一次登录时间
 
 
+class UserManager(Base):
+    __tablename__ = "UserManager"
+    UMid = Column(String(64), primary_key=True)
+    USid = Column(String(64))
+    MAid = Column(String(64))
+    UMtime = Column(String(14))
+
+
 # 权限
 class Permission(Base):
     __tablename__ = "Permission"
