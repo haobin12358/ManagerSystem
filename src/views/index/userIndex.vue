@@ -23,29 +23,9 @@
             <div class="m-activity">
               <h3>订单管理</h3>
               <ul>
-                <li>
-                  <span>未支付：</span>
-                  <span class="m-red">{{index.om_count[""]}}7</span>
-                </li>
-                <li>
-                  <span>支付中：</span>
-                  <span class="m-red">{{index.om_count[""]}}14</span>
-                </li>
-                <li>
-                  <span>已发货：</span>
-                  <span class="m-red">{{index.om_count[""]}}28</span>
-                </li>
-                <li>
-                  <span>已取消：</span>
-                  <span class="m-red">{{index.om_count[""]}}0</span>
-                </li>
-                <li>
-                  <span>已完成：</span>
-                  <span class="m-red">{{index.om_count[""]}}42</span>
-                </li>
-                <li>
-                  <span>已评价：</span>
-                  <span class="m-red">{{index.om_count[""]}}49</span>
+                <li v-for="item in orderStatusList">
+                  <span>{{item.status}}</span>
+                  <span class="m-red">{{item.index}}</span>
                 </li>
               </ul>
             </div>
@@ -147,14 +127,12 @@
                 <li class="m-store-label icon-red">
                   <div class="m-store-content">
                     <div>
-                      <p>下单买家数</p>
-                      <p></p>
-                      <p class="m-decline">33.33% ⬇</p>
+                      <p>下单数</p>
+                      <p class="m-decline">{{index.ordered_sum}}</p>
                     </div>
                     <div>
-                      <p>下单金额</p>
-                      <p>336.00</p>
-                      <p class="m-decline">33.33% ⬇</p>
+                      <p>下单总金额</p>
+                      <p class="m-decline">{{index.ordered_price_sum}}</p>
                     </div>
                   </div>
                   <div class="m-store-icon-box">
@@ -165,19 +143,16 @@
                 <li class="m-store-label icon-yellow">
                   <div class="m-store-content">
                     <div>
-                      <p>支付买家数</p>
-                      <p></p>
-                      <p class="m-decline">33.33% ⬇</p>
+                      <p>支付数</p>
+                      <p class="m-decline">{{index.paid_num}}</p>
                     </div>
                     <div>
-                      <p>支付金额</p>
-                      <p>336.00</p>
-                      <p class="m-decline">33.33% ⬇</p>
+                      <p>支付总金额</p>
+                      <p class="m-decline">{{index.payed_price_sum}}</p>
                     </div>
                     <div>
                       <p>客单价</p>
-                      <p>336.00</p>
-                      <p class="m-decline">33.33% ⬇</p>
+                      <p class="m-decline">{{index.pct}}</p>
                     </div>
                   </div>
                   <div class="m-store-icon-box">
@@ -190,17 +165,17 @@
             </div>
 
             <p class="m-percent">
-              <span class="m-percent-content">下单转化率：12.3% </span>
+              <span class="m-percent-content">下单转化率：{{index.vtp*100}}% </span>
               <span class="m-green m-arrow"></span>
               <span class="m-green m-arrow-head"></span>
             </p>
             <p class="m-percent">
-              <span class="m-percent-content">支付转化率：12.3% </span>
+              <span class="m-percent-content">支付转化率：{{index.otp*100}}% </span>
               <span class="m-red m-arrow"></span>
               <span class="m-red m-arrow-head"></span>
             </p>
             <p class="m-percent">
-              <span class="m-percent-content">下单-支付转化率：12.3% </span>
+              <span class="m-percent-content">下单-支付转化率：{{index.vtp*100}}% </span>
               <span class="m-yellow m-arrow"></span>
               <span class="m-yellow m-arrow-head"></span>
             </p>
@@ -220,7 +195,15 @@
       data() {
           return {
             name:'工作模块管理',
-            index: {}
+            index: {},
+            orderStatusList: [
+              { status: '已取消', index: 0 },
+              { status: '未支付', index: 1 },
+              { status: '支付中', index: 2 },
+              { status: '已发货', index: 4 },
+              { status: '已完成', index: 6 },
+              { status: '已评价', index: 7 },
+            ]
           }
       },
       components:{
@@ -236,6 +219,9 @@
             if (res.data.status == 200) {
               this.index = res.data.data
               console.log(this.index)
+              for(let i=0;i<this.orderStatusList.length;i++) {
+                this.orderStatusList[i].index = this.index.om_count[this.orderStatusList[i].index*7]
+              }
             } else {
               this.$message.error(res.data.message);
             }
@@ -309,6 +295,7 @@
             margin-bottom: 0.1rem;
             span.m-red{
               color: @red;
+              margin-left: 0.1rem;
             }
           }
         }
@@ -435,14 +422,15 @@
                 line-height: 0.4rem;
                 font-size: 0.12rem;
                 p {
-                  height: 0.2rem;
+                  height: 0.3rem;
                 }
                 .flex-row(flex-start);
                 div {
                   margin-right: 0.2rem;
                 }
                 .m-decline {
-                  color: #1ea45a;
+                  color: @red;
+                  text-align: center;
                 }
               }
               .m-store-icon-box {
