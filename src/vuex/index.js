@@ -34,7 +34,8 @@ let store= new Vuex.Store({
       ],
       COproduct:'全店商品',
       PRids:[],
-      COgenre:'活动'
+      COgenre:'活动',
+      disabled:false
     },
     discount:{
       COabo:'',

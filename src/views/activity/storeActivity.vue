@@ -42,10 +42,10 @@
               <el-form-item label="活动状态">
                 <el-select v-model="storeForm.COstatus" class="m-input-s" placeholder="活动区域">
                   <el-option label="全部" value=""></el-option>
-                  <el-option label="预热" value="550"></el-option>
-                  <el-option label="进行中" value="551"></el-option>
-                  <el-option label="暂停" value="552"></el-option>
-                  <el-option label="结束" value="553"></el-option>
+                  <el-option label="预热" value="预热"></el-option>
+                  <el-option label="进行中" value="进行中"></el-option>
+                  <el-option label="暂停" value="暂停"></el-option>
+                  <el-option label="结束" value="介绍"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="活动名称">
@@ -82,7 +82,8 @@
               <template slot-scope="scope">
                 <span class="m-link m-first" @click="checkActivity(scope.row)">查看</span>
                 <span class="m-link" @click="deleteActivity(scope.row)" >删除</span>
-                <span class=" m-link" @click="restartActivity(scope.row)">重启</span>
+                <span class="m-link" @click="pauseActivity(scope.row)" >暂停</span>
+                <span class=" m-link" @click="restartActivity(scope.row)" v-if="scope.row.COstatus == '暂停'">重启</span>
               </template>
             </el-table-column>
           </el-table>
@@ -96,14 +97,16 @@
         <p class="m-date">
           <span>日</span>
           <el-date-picker
-            v-model="value7"
+            v-model="situation_date"
             type="daterange"
             align="right"
             unlink-panels
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions2">
+            :picker-options="pickerOptions2"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          @change="dateChange">
           </el-date-picker>
           <!--<span class="m-date-icon"></span>-->
         </p>
@@ -209,6 +212,7 @@
             type: 'line'
           }]
         },
+        option_data: [],
         pickerOptions2: {
           shortcuts: [{
             text: '最近一周',
@@ -236,7 +240,7 @@
             }
           }]
         },
-        value7: '',
+        situation_date: '',
         page_data:{
           total_page:0,
           current_page:1,
@@ -255,6 +259,7 @@
     },
     mounted(){
       this.getData();
+      this.getSituation();
     },
     methods: {
       /*获取表格数据*/
@@ -280,6 +285,40 @@
           this.$message.error(error.data.message);
         })
       },
+      /*获取概况*/
+      getSituation() {
+        axios.get(api.get_situation,{params:{
+          token:localStorage.getItem('token'),
+            COgenre:'优惠券',
+            start_time:this.situation_date[0] || '',
+            end_time:this.situation_date[1] || ''
+          }}).then(res => {
+            if(res.data.status == 200){
+              this.data_detail = res.data.data.params;
+              this.option_data = res.data.data.data;
+              this.dealOption(0);
+              for(let i=0;i<this.data_detail.length;i++){
+                this.data_detail[i].click = false
+              }
+              this.data_detail[0].click = true
+            }
+
+        })
+      },
+      dealOption(v){
+        let _xAxis = [];
+        let _series = [];
+        for(let key in this.option_data){
+          _xAxis.push(key.slice(0,11));
+          _series.push(this.option_data[key][v]);
+        }
+        this.option.xAxis.data = [].concat(_xAxis);
+        this.option.series[0].data = [].concat(_series);
+      },
+      /*日期变化*/
+      dateChange() {
+        console.log(this.situation_date)
+      },
       freshClick(){
         console.log('fresh');
       },
@@ -302,10 +341,13 @@
       },
       /*张数点击切换*/
       numListClick(v){
-        for(let i = 0;i<this.data_detail.length;i++){
-          this.data_detail[i].click = false;
+        let  _arr = JSON.parse(JSON.stringify(this.data_detail));
+        for(let i = 0;i<_arr.length;i++){
+          _arr[i].click = false;
         }
-        this.data_detail[v].click = true;
+        _arr[v].click = true;
+        this.data_detail = [].concat(_arr);
+        this.dealOption(v)
       },
       /*查看*/
       checkActivity(v){
@@ -315,20 +357,28 @@
       deleteActivity(v){
 
       },
+      pauseActivity(v){
+
+      },
       /*重启*/
       restartActivity(v){
 
       },
+      changeStatus(v){
+        // axios.get(api.get_situation,{
+        //
+        // })
+      },
       /*分页点击*/
       pageChange(v){
-        if(v == this.current_page){
+        if(v == this.page_data.current_page){
           this.$message({
             message: '这已经是第' + v + '页数据了',
             type: 'warning'
           });
           return false;
         }
-        this.current_page = v;
+        this.page_data.current_page = v;
         this.getData(v);
       }
     },

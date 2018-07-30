@@ -1,7 +1,7 @@
 <template>
   <div class="m-step">
     <page-title :list="title_list" @freshClick="freshClick"></page-title>
-    <el-form  :model=" $store.state.activity" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm">
+    <el-form  :model=" $store.state.activity" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" :disabled="$store.state.activity.disabled">
       <div class="m-step-content">
         <h3 class="m-step-title">创建新活动</h3>
         <div class="m-step-part">
@@ -56,12 +56,12 @@
           </div>
         </el-form>
         <div class="m-middle" style="width: 100%;margin-top: 0.1rem;" v-if=" $store.state.activity.COproduct == '自选商品'">
-          <el-table :data="product_data" stripe style="width: 100%" @selection-change="changeFun">
+          <el-table :data="product_data" stripe style="width: 100%" ref="table" @selection-change="changeFun">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column align="center" prop="userId" width="400" label="宝贝描述">
               <template slot-scope="scope">
                 <div class="m-production-description">
-                  <image class="m-img" :src="scope.row.PRimage[0]" style="width: 0.6rem;height:0.6rem;" />
+                  <img class="m-img" :src="scope.row.PRimage[0]" style="width: 0.6rem;height:0.6rem;" />
                   <div>
                     <p>{{scope.row.PRname}}</p>
                     <p>{{scope.row.PRid}}</p>
@@ -143,7 +143,8 @@
           current_page:1,
           total_num:0,
           page_size:10,
-        }
+        },
+        check_data:[]
       }
     },
     components:{
@@ -152,11 +153,31 @@
       Pagination
     },
     mounted(){
+      let item = this.$store.state.activity;
+      if(!item.COname || !item.COabo || !item.COstart || !item.COend){
+        this.$message({
+          type:'warning',
+          message:'请先填写第一步内容',
+          duration:1000
+        });
+        this.$router.push('/activity/activityStoreStepOne');
+        return false;
+      }
+      if(!item.COfilter || !(item.COdiscount || item.COamount || item.COtype == '其它')){
+        this.$message({
+          type:'warning',
+          message:'请先填写第二步内容',
+          duration:1000
+        });
+        this.$router.push('/activity/activityStoreStepTwo');
+        return false;
+      }
       this.getData();
     },
     methods: {
       /*获取表格数据*/
       getData(v,code){
+        let that = this;
         let params = {
           token:localStorage.getItem('token'),
           PBstatus:this.storeForm.status,
@@ -167,6 +188,13 @@
         axios.get(api.get_all_product,{params:params}).then(res => {
           if(res.data.status == 200) {
             this.product_data = res.data.data.products;
+            for(let i=0;i<this.product_data.length;i++){
+              if(this.$store.state.activity.PRids.indexOf(this.product_data[i].PRid)!= -1){
+                that.$nextTick(function(){//注意这个，延时执行。
+                  that.$refs.table.toggleRowSelection(that.product_data[i],true);//每次更新了数据，触发这个函数即可。
+                });
+              }
+            }
             this.page_data.total_num = res.data.data.count;
             this.page_data.total_page = Math.ceil(this.page_data.total_num / this.page_data.page_size);
           }else{
@@ -185,7 +213,18 @@
       },
       /*表格多选事件*/
       changeFun(e){
-        this.$store.state.activity.PRids = e;
+        let _arr = [];
+       for(let i=0;i<e.length;i++){
+         _arr.push(e[i].PRid);
+       }
+        this.check_data[this.page_data.current_page-1] = [].concat(_arr);
+        let newarr=[];
+        let arr = JSON.parse(JSON.stringify(this.check_data));
+        for(let i=0;i<arr.length;i++)
+        {
+          newarr=newarr.concat(arr[i]);
+        }
+        this.$store.state.activity.PRids = [].concat(newarr);
       },
       /*完成*/
       storeSubmit(){
@@ -201,13 +240,36 @@
         _form.COnumber = Number(_form.COnumber);
         _form.COfilter  = Number(_form.COfilter );
         _form.COdiscount = Number(_form.COdiscount);
-        console.log(_form)
+
         axios.post(api.create+'?token='+localStorage.getItem('token'),_form).then(res => {
           if(res.data.status == 200){
             this.$message({
               type: 'success',
               message: '处理成功 '
             });
+            this.$store.state.activity = {
+              COabo:'',
+              COname:'',
+              COstatus:'',
+              COstart:'',
+              COend:'',
+              COfilter:null,
+              COother:'',
+              COdiscount:null,
+              COamount:null,
+              COtype:'满减',
+              COunit:'元',
+              COnumber:null,
+              COimage:[],
+              COotherType:'0',
+              COotherContent:[
+                '','',''
+              ],
+              COproduct:'全店商品',
+              PRids:[],
+              COgenre:'活动'
+            };
+            this.$router.push('/activity/storeActivity');
           }else{
             this.$message({
               type: 'error',
@@ -225,15 +287,15 @@
         this.$router.push('/activity/activityStoreStepTwo')
       },
       pageChange(v){
-        if(v == this.current_page){
+        if(v == this.page_data.current_page){
           this.$message({
             message: '这已经是第' + v + '页数据了',
             type: 'warning'
           });
           return false;
         }
-        this.current_page = v;
-        // this.getData(v);
+        this.page_data.current_page = v;
+        this.getData(v);
       }
     },
     created() {

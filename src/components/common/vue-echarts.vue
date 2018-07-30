@@ -35,9 +35,12 @@
       myEcharts.setOption(this.option)
     },
     watch:{
-      'option':function (val, oldVal) {
-        let myEcharts = this.echarts.init(document.getElementById(`${this.id}`))
-        myEcharts.setOption(this.option)
+      option:{
+        handler(val, oldVal) {
+          let myEcharts = this.echarts.init(document.getElementById(`${this.id}`))
+          myEcharts.setOption(this.option)
+        },
+        deep:true
       }
     }
   }

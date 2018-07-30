@@ -14,9 +14,9 @@
               <span @click="returnClick">返回列表</span>
           </div>
           <div class="m-discount-info">
-            <h2>￥<span>5</span></h2>
-            <p class="m-font-14">满20元可用</p>
-            <p class="m-font-12">使用时间：2018.07.04-2018.07.08</p>
+            <h2>￥<span>{{$route.query.COamount}}</span></h2>
+            <p class="m-font-14">满{{$route.query.COfilter}}元可用</p>
+            <p class="m-font-12">使用时间：{{$route.query.COstart}}-{{$route.query.COend}}</p>
           </div>
         </div>
       </div>
@@ -57,6 +57,9 @@
     components:{
       pageTitle,
       step
+    },
+    mounted(){
+      console.log(this.$route.query)
     },
     methods: {
       freshClick(){
