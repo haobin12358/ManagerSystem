@@ -38,6 +38,8 @@ const api={
   create: title + 'card/create',//创建活动/优惠券
   get_all_card: title + 'card/get_all',//获取优惠券/活动
   get_situation:title + 'card/get_situation',//获取活动或优惠券概况
+  update_active_status:title +'card/update_active_status',//更新优惠券状态
+  get_acabo:title + 'card/get_acabo',//获取活动和优惠券详情
 }
 
 export default api

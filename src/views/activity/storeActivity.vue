@@ -1,6 +1,6 @@
 <template>
   <div class="m-discount-index">
-    <page-title :title="name" @freshClick="freshClick"></page-title>
+    <page-title :title="name" :fresh="true" @freshClick="freshClick"></page-title>
     <div class="m-discount-content">
       <div class="m-discount-top">
         <ul class="m-store-top">
@@ -289,7 +289,7 @@
       getSituation() {
         axios.get(api.get_situation,{params:{
           token:localStorage.getItem('token'),
-            COgenre:'优惠券',
+            COgenre:'活动',
             start_time:this.situation_date[0] || '',
             end_time:this.situation_date[1] || ''
           }}).then(res => {
@@ -301,8 +301,11 @@
                 this.data_detail[i].click = false
               }
               this.data_detail[0].click = true
+            }else{
+              this.$message.error(res.data.message);
             }
-
+        },error => {
+          this.$message.error(error.data.message);
         })
       },
       dealOption(v){
@@ -320,7 +323,8 @@
         console.log(this.situation_date)
       },
       freshClick(){
-        console.log('fresh');
+        this.getData();
+        this.getSituation();
       },
       /*搜索*/
       storeSubmit(){
@@ -341,7 +345,7 @@
       },
       /*张数点击切换*/
       numListClick(v){
-        let  _arr = JSON.parse(JSON.stringify(this.data_detail));
+        let  _arr = this.data_detail;
         for(let i = 0;i<_arr.length;i++){
           _arr[i].click = false;
         }
@@ -351,23 +355,60 @@
       },
       /*查看*/
       checkActivity(v){
-
+        this.$router.push('/activity/activityStoreStepOne?COid=' + v.COid);
       },
       /*删除*/
       deleteActivity(v){
-
+        this.$confirm('确认将选中商品删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.changeStatus(v,'删除');
+        }).catch(() => {
+        });
       },
+      /*暂停*/
       pauseActivity(v){
+        this.$confirm('确认将选中商品暂停吗 ?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.changeStatus(v,'暂停');
+        }).catch(() => {
+        });
 
       },
       /*重启*/
       restartActivity(v){
+        this.$confirm('确认将选中商品重启吗 ?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.changeStatus(v,'进行中');
+        }).catch(() => {
+        });
 
       },
-      changeStatus(v){
-        // axios.get(api.get_situation,{
-        //
-        // })
+      changeStatus(v,status){
+        axios.post(api.update_active_status+'?token=' +localStorage.getItem('token') ,{
+          COid:v.COid,
+          COstatus:status
+        }).then(res => {
+          if(res.data.status == 200){
+            this.$message({
+              message: '更新成功',
+              type: 'success'
+            });
+            this.getData()
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
       },
       /*分页点击*/
       pageChange(v){

@@ -1,6 +1,6 @@
 <template>
   <div class="m-step">
-    <page-title :list="title_list" @freshClick="freshClick"></page-title>
+    <page-title :list="title_list" ></page-title>
     <el-form  :model="$store.state.activity" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" :disabled="$store.state.activity.disabled">
       <div class="m-step-content">
         <h3 class="m-step-title">创建新活动</h3>
@@ -43,7 +43,7 @@
 
           <div class="m-bottom-btn m-flex-center">
             <router-link to="/activity/storeActivity" >
-              <span class="m-btn active">返回</span>
+              <span class="m-btn active" >返回</span>
             </router-link>
               <span class="m-btn" @click="onSubmit">下一步</span>
           </div>
@@ -123,6 +123,8 @@
     },
     mounted(){
       if(this.$route.query.COid){
+        this.getData(this.$route.query.COid);
+      }else{
         this.$store.state.activity = {
           COabo:'',
           COname:'',
@@ -144,13 +146,47 @@
           COproduct:'全店商品',
           PRids:[],
           COgenre:'活动',
-          disabled:true
+          disabled:false
         }
       }
     },
     methods: {
-      freshClick(){
-        console.log('fresh');
+      /*获取活动详情*/
+      getData(v){
+        axios.get(api.get_acabo,{
+          params:{
+            token:localStorage.getItem('token'),
+            COid:v
+          }
+        }).then(res => {
+          console.log(res)
+          if(res.data.status == 200){
+            this.$store.state.activity =  {
+              COabo:res.data.data.COabo,
+              COname:res.data.data.COname,
+              COstatus:res.data.data.COstatus,
+              COstart:res.data.data.COstart,
+              COend:res.data.data.COend,
+              COfilter:res.data.data.COfilter,
+              COother:res.data.data.COother,
+              COdiscount:res.data.data.COdiscount,
+              COamount:res.data.data.COamount,
+              COtype:res.data.data.COtype,
+              COunit:res.data.data.COunit,
+              COnumber:res.data.data.COnumber,
+              COimage:res.data.data.COimage,
+              COotherType:res.data.data.COotherType,
+              COotherContent:[
+                '','',''
+              ],
+              COproduct: res.data.data.PRids.length >0 ?'自选商品':'全店商品',
+              PRids:res.data.data.PRids,
+              COgenre:'活动',
+              disabled:true
+            }
+            this.$store.state.activity.COotherContent[this.$store.state.activity.COotherType] = res.data.data.COother
+          }
+        })
       },
       handleRemove(file, fileList) {
         let _arr = [];
@@ -200,10 +236,6 @@
             this.$router.push('/activity/activityStoreStepTwo');
           }
         })
-      },
-      /*获取数据*/
-      getData(){
-
       }
     },
     created() {

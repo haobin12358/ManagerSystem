@@ -9,18 +9,18 @@
         </div>
         <div class="m-step-part">
           <h3 class="m-step-h3 m-flex-between">
-            <span>活动名称：2565484102</span>
+            <span>活动名称：{{$store.state.activity.COname}}</span>
           </h3>
           <div>
             <table class="m-activity-table" width="100%">
               <tr>
-                <td width="250">活动描述：<span>新品秒杀价</span></td>
-                <td width="400">活动时间：<span>2018-06-29  00 : 00：01 至 2018-06-29  23 : 59：59</span></td>
-                <td width="320">活动预热：<span>不预热</span></td>
+                <td width="250">活动描述：<span>{{$store.state.activity.COabo}}</span></td>
+                <td>活动时间：<span>{{$store.state.activity.COstart}} 至 {{$store.state.activity.COend}}</span></td>
+                <td width="320">活动预热：<span>预热</span></td>
               </tr>
               <tr>
-                <td>活动类型：<span>自选商品</span></td>
-                <td>创建时间：<span>2018-06-29  00 : 00：01 </span></td>
+                <td>活动类型：<span>{{$store.state.activity.COtype}}</span></td>
+                <!--<td>创建时间：<span>2018-06-29  00 : 00：01 </span></td>-->
               </tr>
             </table>
           </div>
