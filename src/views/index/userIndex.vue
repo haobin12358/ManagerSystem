@@ -9,52 +9,61 @@
            <ul>
              <li class="m-label m-red">
                <span>待处理</span>
-               <span>12</span>
+               <span>{{index.dealing_sum}}</span>
              </li>
              <li class="m-label m-green">
-               <span>审批中</span>
-               <span>12</span>
+               <span>待审批</span>
+               <span>{{index.approvaling_sum}}</span>
              </li>
              <li class="m-label m-blue">
                <span>待发货</span>
-               <span>12</span>
+               <span>{{index.deliver_sum}}</span>
              </li>
            </ul>
             <div class="m-activity">
               <h3>订单管理</h3>
               <ul>
                 <li>
-                  <span>待付款订单：</span>
-                  <span class="m-red">1</span>
+                  <span>未支付：</span>
+                  <span class="m-red">{{index.om_count[""]}}7</span>
                 </li>
                 <li>
-                  <span>待发货订单：</span>
-                  <span class="m-red">1</span>
+                  <span>支付中：</span>
+                  <span class="m-red">{{index.om_count[""]}}14</span>
                 </li>
                 <li>
-                  <span>待评价的订单：</span>
-                  <span class="m-red">0</span>
+                  <span>已发货：</span>
+                  <span class="m-red">{{index.om_count[""]}}28</span>
                 </li>
                 <li>
-                  <span>退款中订单：</span>
-                  <span class="m-red">0</span>
+                  <span>已取消：</span>
+                  <span class="m-red">{{index.om_count[""]}}0</span>
                 </li>
                 <li>
-                  <span>物流异常订单：</span>
-                  <span class="m-red">0</span>
+                  <span>已完成：</span>
+                  <span class="m-red">{{index.om_count[""]}}42</span>
                 </li>
                 <li>
-                  <span>物流未更新订单：</span>
-                  <span class="m-red">1</span>
+                  <span>已评价：</span>
+                  <span class="m-red">{{index.om_count[""]}}49</span>
                 </li>
               </ul>
             </div>
-            <div class="m-activity">
+            <div class="m-activity-left">
               <h3>活动管理</h3>
               <ul>
                 <li>
                   <span>正在进行的活动：</span>
-                  <span class="m-red">1</span>
+                  <span class="m-red">{{index.active_sum}}</span>
+                </li>
+              </ul>
+            </div>
+            <div class="m-activity-right">
+              <h3>优惠券管理</h3>
+              <ul>
+                <li>
+                  <span>正在发放的优惠券：</span>
+                  <span class="m-red">{{index.couponse_sum}}</span>
                 </li>
               </ul>
             </div>
@@ -68,12 +77,12 @@
                 <span class="m-data-icon icon-money"></span>
                 <div class="m-data-label">
                   <p>支付金额</p>
-                  <p>0</p>
+                  <p>{{index.today_payed}}</p>
                 </div>
               </div>
               <div class="m-data-bottom">
                 <p>昨日全天</p>
-                <p>336.00</p>
+                <p>{{index.yesterday_payed}}</p>
               </div>
             </li>
             <li class="m-data-li">
@@ -81,12 +90,12 @@
                 <span class="m-data-icon icon-order"></span>
                 <div class="m-data-label">
                   <p>访客数</p>
-                  <p>0</p>
+                  <p>{{index.today_vistor}}</p>
                 </div>
               </div>
               <div class="m-data-bottom">
                 <p>昨日全天</p>
-                <p>336.00</p>
+                <p>{{index.yesterday_vistor}}</p>
               </div>
             </li>
             <li class="m-data-li">
@@ -94,12 +103,12 @@
                 <span class="m-data-icon icon-pay"></span>
                 <div class="m-data-label">
                   <p>支付买家数</p>
-                  <p>0</p>
+                  <p>{{index.today_omprice}}</p>
                 </div>
               </div>
               <div class="m-data-bottom">
                 <p>昨日全天</p>
-                <p>336.00</p>
+                <p>{{index.yesterday_omprice}}</p>
               </div>
             </li>
             <li class="m-data-li">
@@ -107,12 +116,12 @@
                 <span class="m-data-icon icon-person"></span>
                 <div class="m-data-label">
                   <p>支付订单数</p>
-                  <p>0</p>
+                  <p>{{index.today_order}}</p>
                 </div>
               </div>
               <div class="m-data-bottom">
                 <p>昨日全天</p>
-                <p>336.00</p>
+                <p>{{index.yesterday_order}}</p>
               </div>
             </li>
           </ul>
@@ -120,15 +129,15 @@
       </div>
       <div class="m-right">
         <div class="one-part">
-          <h3 class="m-title">店铺数据</h3>
+          <h3 class="m-title">店铺周数据</h3>
           <div class="m-store-data">
             <div class="m-store-content">
               <ul>
                 <li class="m-store-label icon-green">
                   <div class="m-store-content">
-                    <p>访客人数</p>
+                    <p>周访客人数：</p>
                     <p></p>
-                    <p class="m-decline">33.33% ⬇</p>
+                    <p class="m-decline">{{index.visitors_sum}}</p>
                   </div>
                   <div class="m-store-icon-box">
                     <span class="m-store-icon icon-person"></span>
@@ -180,8 +189,6 @@
               <span class="m-arrows"></span>
             </div>
 
-
-
             <p class="m-percent">
               <span class="m-percent-content">下单转化率：12.3% </span>
               <span class="m-green m-arrow"></span>
@@ -206,10 +213,14 @@
 </template>
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
+  import api from '../../api/api';
+  import {Message} from 'element-ui';
+  import axios from 'axios';
     export default {
       data() {
           return {
-            name:'工作模块管理'
+            name:'工作模块管理',
+            index: {}
           }
       },
       components:{
@@ -223,7 +234,8 @@
           // 获取用户首页
           axios.get(api.get_userIndex+'?token='+localStorage.getItem('token')).then(res => {
             if (res.data.status == 200) {
-              console.log(res)
+              this.index = res.data.data
+              console.log(this.index)
             } else {
               this.$message.error(res.data.message);
             }
@@ -233,7 +245,7 @@
         }
       },
       created() {
-
+        this.getData()
       }
     }
 </script>
@@ -295,6 +307,42 @@
             color: #999;
             width: 30%;
             margin-bottom: 0.1rem;
+            span.m-red{
+              color: @red;
+            }
+          }
+        }
+      }
+      .m-activity-left{
+        width: 50%;
+        float: left;
+        h3{
+          margin: 0.1rem 0 ;
+        }
+        ul{
+          li{
+            font-size: 0.12rem;
+            color: #999;
+            width: 60%;
+            /*margin-bottom: 0.1rem;*/
+            span.m-red{
+              color: @red;
+            }
+          }
+        }
+      }
+      .m-activity-right{
+        width: 50%;
+        float: left;
+        h3{
+          margin: 0.1rem 0 ;
+        }
+        ul{
+          li{
+            font-size: 0.12rem;
+            color: #999;
+            width: 60%;
+            /*margin-bottom: 0.1rem;*/
             span.m-red{
               color: @red;
             }
