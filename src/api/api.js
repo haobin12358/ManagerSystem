@@ -9,6 +9,7 @@ const api={
   forget_password:title + 'user/forget_password',//忘记密码
   get_approval: title + 'approval/get_approval',//获取审批信息
   update_approval:title + 'approval/update_approval',//同意/拒绝
+  // get_userIndex: title + 'user/get_userIndex',//获取用户首页
 
   get_order_situation: title + 'order/get_order_situation',//获取订单概况
   get_all_order: title + 'order/order_list',//获取所有订单
