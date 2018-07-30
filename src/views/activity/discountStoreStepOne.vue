@@ -1,7 +1,7 @@
 <template>
   <div class="m-step">
     <page-title :list="title_list" ></page-title>
-    <el-form  :model="$store.state.discount" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" >
+    <el-form  :model="$store.state.discount" ref="storeForm" :rules="rules" label-width="1.2rem" class="demo-ruleForm" :disabled="$store.state.discount.disable" >
       <div class="m-step-content">
         <div class="m-step-part">
           <step :list="step"></step>
@@ -189,9 +189,42 @@
       Pagination
     },
     mounted(){
-      this.getData()
+      this.getData();
+      if(this.$route.query.COid){
+        this.getDetailData(this.$route.query.COid);
+      }
     },
     methods: {
+      /*获取活动详情*/
+      getDetailData(v){
+        axios.get(api.get_acabo,{
+          params:{
+            token:localStorage.getItem('token'),
+            COid:v
+          }
+        }).then(res => {
+          if(res.data.status == 200){
+            this.$store.state.discount={
+              COabo:res.data.data.COabo,
+              COname:res.data.data.COname,
+              COstatus:res.data.data.COstatus,
+              COstart:res.data.data.COstart,
+              COend:res.data.data.COend,
+              COfilter:res.data.data.COfilter,
+              COother:res.data.data.COother,
+              COdiscount:res.data.data.COdiscount,
+              COamount:res.data.data.COamount,
+              COtype:res.data.data.COtype,
+              COunit:res.data.data.COunit,
+              COnumber:res.data.data.COnumber,
+              PRids:res.data.data.PRids,
+              COuserfilter:res.data.data.COuserfilter,
+              COgenre:'优惠券',
+              disable:true
+            }
+          }
+        })
+      },
       /*获取表格数据*/
       getData(v,code){
         let that = this;

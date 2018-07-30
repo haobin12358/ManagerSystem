@@ -265,6 +265,7 @@
             type: 'line'
           }]
         },
+        option_data:[],
         pickerOptions2: {
           shortcuts: [{
             text: '最近一周',
@@ -337,6 +338,40 @@
           this.$message.error(error.data.message);
         })
       },
+      /*获取概况*/
+      getSituation() {
+        axios.get(api.get_situation,{params:{
+            token:localStorage.getItem('token'),
+            COgenre:'优惠券',
+            start_time:this.situation_date[0] || '',
+            end_time:this.situation_date[1] || ''
+          }}).then(res => {
+          if(res.data.status == 200){
+            this.data_detail = res.data.data.params;
+            this.option_data = res.data.data.data;
+            this.dealOption(0);
+            for(let i=0;i<this.data_detail.length;i++){
+              this.data_detail[i].click = false
+            }
+            this.data_detail[0].click = true
+          }else{
+            this.$message.error(res.data.message);
+          }
+        },error => {
+          this.$message.error(error.data.message);
+        })
+      },
+      /*处理图*/
+      dealOption(v){
+        let _xAxis = [];
+        let _series = [];
+        for(let key in this.option_data){
+          _xAxis.push(key.slice(0,11));
+          _series.push(this.option_data[key][v]);
+        }
+        this.option.xAxis.data = [].concat(_xAxis);
+        this.option.series[0].data = [].concat(_series);
+      },
       /*刷新*/
       freshClick(){
         console.log('fresh');
@@ -357,14 +392,17 @@
       /*+店铺优惠券*/
       storeEdit(v,name){
         if(name == 'store')
-        this.$router.push('/activity/discountStoreStepOne?COid=' + v.COid);
+          this.$router.push('/activity/discountStoreStepOne?COid=' + v.COid);
       },
       /*张数点击，数据切换*/
       numListClick(v){
-        for(let i = 0;i<this.data_detail.length;i++){
-          this.data_detail[i].click = false;
+        let  _arr = JSON.parse(JSON.stringify(this.data_detail));
+        for(let i = 0;i<_arr.length;i++){
+          _arr[i].click = false;
         }
-        this.data_detail[v].click = true;
+        _arr[v].click = true;
+        this.data_detail = [].concat(_arr);
+        this.dealOption(v)
       },
       /*分页点击*/
       pageChange(v){
@@ -380,7 +418,8 @@
       }
     },
     mounted(){
-      this.getStoreData()
+      this.getStoreData();
+      this.getSituation();
     },
     created() {
 

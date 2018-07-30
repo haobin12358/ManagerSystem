@@ -19,7 +19,7 @@
               </tr>
               <tr>
                 <td>活动类型：<span>{{$store.state.activity.COtype}}</span></td>
-                <td>活动预热：<span>不预热</span></td>
+                <td>活动预热：<span>预热</span></td>
               </tr>
             </table>
           </div>
@@ -224,6 +224,7 @@
           this.$message.error(error.data.message);
         })
       },
+
       freshClick(){
         console.log('fresh');
       },

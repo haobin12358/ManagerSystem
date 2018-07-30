@@ -123,32 +123,47 @@
     },
     mounted(){
       if(this.$route.query.COid){
-        this.$store.state.activity = {
-          COabo:'',
-          COname:'',
-          COstatus:'',
-          COstart:'',
-          COend:'',
-          COfilter:null,
-          COother:'',
-          COdiscount:null,
-          COamount:null,
-          COtype:'满减',
-          COunit:'元',
-          COnumber:null,
-          COimage:[],
-          COotherType:'0',
-          COotherContent:[
-            '','',''
-          ],
-          COproduct:'全店商品',
-          PRids:[],
-          COgenre:'活动',
-          disabled:true
-        }
+        this.getData(this.$route.query.COid);
       }
     },
     methods: {
+      /*获取活动详情*/
+      getData(v){
+        axios.get(api.get_acabo,{
+          params:{
+            token:localStorage.getItem('token'),
+            COid:v
+          }
+        }).then(res => {
+          console.log(res)
+          if(res.data.status == 200){
+            this.$store.state.activity =  {
+              COabo:res.data.data.COabo,
+              COname:res.data.data.COname,
+              COstatus:res.data.data.COstatus,
+              COstart:res.data.data.COstart,
+              COend:res.data.data.COend,
+              COfilter:res.data.data.COfilter,
+              COother:res.data.data.COother,
+              COdiscount:res.data.data.COdiscount,
+              COamount:res.data.data.COamount,
+              COtype:res.data.data.COtype,
+              COunit:res.data.data.COunit,
+              COnumber:res.data.data.COnumber,
+              COimage:res.data.data.COimage,
+              COotherType:res.data.data.COotherType,
+              COotherContent:[
+                '','',''
+              ],
+              COproduct: res.data.data.PRids.length >0 ?'自选商品':'全店商品',
+              PRids:res.data.data.PRids,
+              COgenre:'活动',
+              disabled:true
+            }
+            this.$store.state.activity.COotherContent[this.$store.state.activity.COotherType] = res.data.data.COother
+          }
+        })
+      },
       freshClick(){
         console.log('fresh');
       },
@@ -200,10 +215,6 @@
             this.$router.push('/activity/activityStoreStepTwo');
           }
         })
-      },
-      /*获取数据*/
-      getData(){
-
       }
     },
     created() {
