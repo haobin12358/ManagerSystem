@@ -93,11 +93,12 @@
           },
           OMtime: null,
           OMlogisticsNameSearch: '',
-          OMlogisticsNameList: ['顺丰快递', '中通快递'],
+          OMlogisticsNameList: [],
           lazyStatus: false,
           PRnameSearch: '',
           OMidSearch: '',
           orderList: [],
+          search: {},
           order: {},
           page_size: 10,
           OMstatus: '',
@@ -127,8 +128,11 @@
         }else {
           this.OMstatus = tab.name
         }
-        this.tabList = ['全 部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中']
-        this.getData(1)
+        // this.tabList = ['全 部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中']
+        // tab.label含"0"则不调用接口
+        if(tab.label.indexOf("0") == -1) {
+          this.getData(1)
+        }
       },
       // 获取订单数据
       getData(v){
@@ -137,16 +141,27 @@
           OMstatus: this.OMstatus,
           page_num: v,
           page_size: this.page_size,
-          OMid: this.OMidSearch,
-          OMlogisticsName: this.OMlogisticsNameSearch,
-          PRname: this.PRnameSearch,
-          OMstartTime: this.OMstartTime,
-          OMendTime: this.OMendTime
+          OMid: '',
+          OMlogisticsName: '',
+          PRname: '',
+          OMstartTime: '',
+          OMendTime: ''
+        }
+        if(this.search != '') {
+            params.OMid =  this.search.OMid
+            params.OMlogisticsName =  this.search.OMlogisticsName
+            params.PRname =  this.search.PRname
+            params.OMstartTime = this.search.OMstartTime
+            params.OMendTime =  this.search.OMendTime
         }
         axios.get(api.get_all_order,{params:params}).then(res => {
           if(res.data.status == 200) {
             this.orderList = res.data.data.OrderMains;
             this.order = res.data.data
+            // 仅在查询和点击“全部”Tab标签时，对tabList进行一次添加数量操作
+            if(this.tabList[0].length == 3) {
+              this.getTabs(this.order.OMcount)
+            }
           }else{
             this.$message.error(res.data.message);
           }
@@ -163,9 +178,9 @@
       },
       // 头部查询条件
       topSearch() {
+        this.OMstatus = ''
         // 完善头部查询条件去除后获取数据的逻辑
         if(this.OMtime != null || this.PRnameSearch != '' || this.OMidSearch != '' || this.OMlogisticsNameSearch != '') {
-          // console.log(this.OMtime)
           if(this.OMtime != null) {
             this.OMstartTime = this.OMtime[0]+' 00:00:00'
             this.OMendTime = this.OMtime[1]+' 23:59:59'
@@ -173,6 +188,13 @@
             this.OMstartTime = ''
             this.OMendTime = ''
           }
+        }
+        this.search = {
+          OMid: this.OMidSearch,
+          OMlogisticsName: this.OMlogisticsNameSearch,
+          PRname: this.PRnameSearch,
+          OMstartTime: this.OMstartTime,
+          OMendTime: this.OMendTime
         }
         this.tabList = ['全 部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中']
         this.getData(1)
@@ -196,10 +218,6 @@
       // 依据order变化来传递对应的新的order给对应的this.index的子组件，并调用该子组件的getOrderList方法
       order(newValue, oldValue) {
         this.$refs.child[this.index].getOrderList(newValue)
-        // 仅对tabList进行一次添加数量操作
-        if(this.tabList[0].length == 3) {
-          this.getTabs(newValue.OMcount)
-        }
       }
     }
   }

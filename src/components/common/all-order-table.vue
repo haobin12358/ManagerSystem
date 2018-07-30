@@ -69,15 +69,18 @@
     },
     components: { Pagination },
     methods: {
+      // 去往订单详情 orderDetails
       orderDetails(order) {
         let OMid = order.OMid
         this.$router.push({path: '/order/orderDetails', query: {OMid}});
       },
+      // 接收数据并赋值给 this.orderList
       getOrderList(data) {
         this.orderList = data.OrderMains
         // console.log(this.orderList)
         this.total_page = Math.ceil(data.count / data.page_size);
       },
+      // 分页组件的提示
       pageChange(v){
         if(v == this.current_page){
           this.$message({
