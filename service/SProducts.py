@@ -191,3 +191,11 @@ class SProducts(SBase):
             Products.PRid, Products.PRname, Products.PRvideo, Products.PRimage, Products.PRtype, Products.CTid,
             Products.PRaboimage, Products.PRinfo, Products.PRbrand, Products.PRvideostart, Products.PRfranking, Products.PRPoint
         ).filter(*pr_filter).all()
+
+    @close_session
+    def delete_pb(self, prid):
+        return self.session.query(PB).filter(PB.PRid == prid).delete()
+
+    @close_session
+    def del_brand(self, brid):
+        return self.session.query(Brands).filter(Brands.BRid == brid).delete()

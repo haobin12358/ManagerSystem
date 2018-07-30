@@ -69,9 +69,10 @@ class CActive():
             "COtype": conversion_COtype_resverse.get(get_str(data, "COtype")),
             "COnumber": data.get("COnumber", 0),
             "COgenre": conversion_COgenre_resverse.get(get_str(data, "COgenre")),
-            "COunit": conversion_PBunit_reverse.get(get_str(data, "COunit")),
+            "COunit": conversion_PBunit_reverse.get(get_str(data, "COunit"), 402),
             "COtime": TimeManager.get_db_time_str(),
-            "COuserfilter": data.get("COuserfilter", 0)
+            "COuserfilter": data.get("COuserfilter", 0),
+            "COotherType": data.get("COotherType", "0")
         }
         log.info("CA", CA)
         try:
@@ -98,7 +99,9 @@ class CActive():
                     "PRid": "",
                     "CMprobability": data.get("CMprobability", 1)
                 })
-            return get_response("SUCCESS_MESSAGE_ADD_DATA", "OK")
+            response = get_response("SUCCESS_MESSAGE_ADD_DATA", "OK")
+            response["data"] = coid
+            return response
         except Exception as e:
             log.error("add CM", e.message)
             return SYSTEM_ERROR
@@ -119,6 +122,12 @@ class CActive():
             return TOKEN_ERROR
         page_num = int(args.get("page_num"))
         page_size = int(args.get("page_size"))
+        start_time = ""
+        end_time = ""
+        if args.get("COstart"):
+            start_time = TimeManager.get_db_time_str(args.get("COstart"))
+        if args.get("COend"):
+            end_time = TimeManager.get_db_time_str(args.get("COend"))
         amfilter = {
             CouponsManager.MAid == maid
         }
@@ -144,6 +153,12 @@ class CActive():
                     continue
                 if args.get("COstatus") and conversion_COstatus_resverse.get(get_str(args, "COstatus")) != ca.get("COstatus"):
                     continue
+                if start_time and start_time > ca.get("COend"):
+                    continue
+                if end_time and end_time < ca.get("COstart"):
+                    continue
+                if args.get("COtype") and conversion_COtype_resverse.get(get_str(args, "COtype")) != ca.get("COtype"):
+                    continue
                 ca["COstatus"] = conversion_COstatus.get(ca["COstatus"])
                 ca["duration"] = TimeManager.get_delta_time(ca["COstart"], ca["COend"])
                 ca["COstart"] = TimeManager.get_web_time_str(ca["COstart"])
@@ -152,7 +167,7 @@ class CActive():
                 ca["COtype"] = conversion_COtype.get(ca.get("COtype"))
                 ca["PRids"] = cm_dict.get(coid)
                 ca["COimage"] = json.loads(ca["COimage"])
-
+                ca["get_num"] = len(self.sactive.get_cp_by_filter({Cardpackage.COid == coid}, set()))
 
                 active_list.append(ca)
         count = len(active_list)
@@ -179,47 +194,58 @@ class CActive():
         if not manager:
             return TOKEN_ERROR
 
-        days = int(args.get("days", 1))
+        # start_time = int(args.get("days", 1))
+        end_time =TimeManager.get_db_time_str(args.get("end_time"))
+        start_time = TimeManager.get_db_time_str(args.get("start_time"))
         try:
             cm_list = self.sactive.get_cm_by_filter({CouponsManager.MAid ==maid}, set())
+            log.info("cm list", cm_list)
             coid_list_all = {}.fromkeys([cm.COid for cm in cm_list]).keys()
-            timefilter = TimeManager.get_forward_time_web(days=-days)
-            # 筛选优惠券/活动创建时间
-            # coid_list_filter = []
-            # for coid in coid_list_all:
-            #     ca = self.sactive.get_actives_by_filter({CouponsActives.COid == coid}, set())
-            #     if ca.COtime < TimeManager.get_forward_time_web(days=-days):
-            #         continue
-            #     coid_list_filter.append(ca.COid)
+            # timefilter = TimeManager.get_forward_time_web(days=-days)
+            cogenre = conversion_COgenre_resverse.get(get_str(args, "COgenre"))
+            log.info("COgenre", cogenre)
+            # 筛选优惠券/活动
+            coid_list_filter = []
+            for coid in coid_list_all:
+                ca = self.sactive.get_actives_by_filter({CouponsActives.COid == coid}, set())
+                log.info("ca" ,ca)
+                if ca:
+                    ca = ca[0]
+                    if ca.COgenre != cogenre:
+                        continue
+
+                    coid_list_filter.append(ca.COid)
 
             om_list = self.sorder.get_om_by_filter(set())
             used_sum = 0
             for om in om_list:
-                if om.COid in coid_list_all and om.OMtime > timefilter:
+                if om.COid in coid_list_filter and end_time> om.OMtime > start_time:
                     used_sum += 1
 
             cp_list = self.sactive.get_cp_by_filter(set(), set())
             get_num = 0
             for cp in cp_list:
-                if cp.COid in coid_list_all and cp.CPtime > timefilter:
+                if cp.COid in coid_list_filter and end_time > cp.CPtime > start_time:
                     get_num += 1
             data_dict = {}
-            for i in range(1, days):
-                sub_time_filter_start = TimeManager.get_forward_time_web(days=-i)
-                sub_time_filter_end = TimeManager.get_forward_time_web(days=-(i + 1))
+            days = TimeManager.get_delta_days(start_time, end_time)
+            log.info("days", days + 1)
+            for i in range(0, days + 1):
+                sub_time_filter_start = TimeManager.get_forward_time_web(days=-(i + 1))
+                sub_time_filter_end = TimeManager.get_forward_time_web(days=-i)
 
                 sub_om_num = 0
                 for om in om_list:
-                    if om.COid in coid_list_all and sub_time_filter_end < om.OMtime < sub_time_filter_start:
+                    if om.COid in coid_list_filter and sub_time_filter_end < om.OMtime < sub_time_filter_start:
                         sub_om_num += 1
                 sub_cp_num = 0
                 for cp in cp_list:
                     sub_cp_num += 1
-                    if cp.COid in coid_list_all and sub_time_filter_end < cp.CPtime < sub_time_filter_start:
+                    if cp.COid in coid_list_filter and sub_time_filter_end < cp.CPtime < sub_time_filter_start:
                         sub_cp_num += 1
                 data_dict[sub_time_filter_start] = [sub_om_num, sub_cp_num]
 
-            response = get_response("SUCCESS_MESSAGE_ADD_DATA", "OK")
+            response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
             params = [
                 {"name": "领取张数", "value": get_num},
                 {"name": "使用张数", "value": used_sum},
@@ -233,7 +259,7 @@ class CActive():
             log.error("get situation", e.message)
             return SYSTEM_ERROR
 
-    def update_cative_status(self):
+    def update_active_status(self):
         args = request.args.to_dict()
         log.info("args", args)
         if "token" not in args:
@@ -266,6 +292,45 @@ class CActive():
         except Exception as e:
             log.error("update actiave status", e.message)
             return SYSTEM_ERROR
+
+    def get_acabo(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        if "token" not in args or "COid" not in args:
+            return PARAMS_MISS
+        try:
+            maid = token_to_usid(args.get("token"))
+        except:
+            return TOKEN_ERROR
+        manager = self.smanager.get_manager_by_maid(maid)
+        if not manager:
+            return TOKEN_ERROR
+
+        coid = args.get("COid")
+        try:
+            co = tolist(self.sactive.get_actives_by_filter({CouponsActives.COid == coid}, set()))
+            log.info("co", co)
+            if not co:
+                return get_response("ERROR_MESSAGE_DB_ERROR", "MANAGERSYSTEMERROR", "ERROR_CODE_DB_ERROR")
+            co = co[0]
+            co["COstatus"] = conversion_COstatus.get(co["COstatus"])
+            co["COtype"] = conversion_COtype.get(co["COtype"])
+            co["COstart"] = TimeManager.get_web_time_str(co["COstart"])
+            co["COend"] = TimeManager.get_web_time_str(co["COend"])
+            co["COunit"] = conversion_PBunit.get(co["COunit"])
+            co["COgenre"] = conversion_COgenre.get(co["COgenre"])
+            cm_list = self.sactive.get_cm_by_filter({CouponsManager.COid == coid}, set())
+            prid = []
+            for cm in cm_list:
+                prid.append(cm.PRid)
+            co["PRids"] = prid
+            response = get_response("SUCCESS_MESSAGE_GET_INFO", "OK")
+            response["data"] = co
+            return response
+        except Exception as e:
+            log.error("get abo", e.message)
+            return SYSTEM_ERROR
+
 
 
 

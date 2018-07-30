@@ -494,3 +494,19 @@ class CManager():
         except Exception as e:
             log.error("update users", e.message)
             return SYSTEM_ERROR
+
+    def get_situation(self):
+        args = request.args.to_dict()
+        log.info("args", args)
+        if "token" not in args:
+            return PARAMS_MISS
+        maid = token_to_usid(args.get("token"))
+        try:
+            manager = self.smanager.get_manager_by_maid(maid)
+            if not manager:
+                return SYSTEM_ERROR
+            dealing_sum = 0
+            approvaling = 0
+        except Exception as e:
+            log.error("get situation", e.message)
+            return SYSTEM_ERROR

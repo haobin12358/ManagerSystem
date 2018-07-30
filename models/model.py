@@ -155,25 +155,26 @@ class Orderpart(Base):
 class CouponsActives(Base):
     __tablename__ = "CouponsActives"
     COid = Column(String(64), primary_key=True)
-    COabo = Column(Text)          # 优惠券介绍
-    COimage = Column(Text)        # 活动宣传图画
-    COname = Column(Text)         # 活动/优惠券名称
-    COstatus = Column(Integer)    # 优惠券状态{550: 预热,551: 进行中，552: 暂停，553：结束}
-    COstart = Column(String(14))  # 开始时间
-    COend = Column(String(14))    # 结束时间
-    COfilter = Column(Float)      # 优惠条件，满额所用
-    COother = Column(Text)        # 赠品详情/赠送的优惠券id
-    COutype = Column(Integer)     # 限制的使用人群，用于后期扩展会员
-    COdiscount = Column(Float)    # 折扣，值为0-1，其中0为免单
-    COamount = Column(Float)      # 优惠金额，减免金额，限制最大数目
-    COtype = Column(Integer)      # 优惠类型
+    COabo = Column(Text)            # 优惠券介绍
+    COimage = Column(Text)          # 活动宣传图画
+    COname = Column(Text)           # 活动/优惠券名称
+    COstatus = Column(Integer)      # 优惠券状态{550: 预热,551: 进行中，552: 暂停，553：结束}
+    COstart = Column(String(14))    # 开始时间
+    COend = Column(String(14))      # 结束时间
+    COfilter = Column(Float)        # 优惠条件，满额所用
+    COother = Column(Text)          # 赠品详情/赠送的优惠券id
+    COutype = Column(Integer)       # 限制的使用人群，用于后期扩展会员
+    COdiscount = Column(Float)      # 折扣，值为0-1，其中0为免单
+    COamount = Column(Float)        # 优惠金额，减免金额，限制最大数目
+    COtype = Column(Integer)        # 优惠类型
     # {801 满减， 802 满折， 803 商品类目限制， 804 无限制， 805 用户类型限制， 806: 店铺折扣，807：送赠品}
     COnumber = Column(Integer)    # 优惠限制领取数目
-    COgenre = Column(Integer)     # 区分是活动还是优惠券{561:活动，562：优惠券}
-    COunit = Column(Integer)      # 单位
-    COused = Column(Integer)      # 已使用的数量
-    COtime = Column(String(14))   # 创建时间
+    COgenre = Column(Integer)       # 区分是活动还是优惠券{561:活动，562：优惠券}
+    COunit = Column(Integer)        # 单位
+    COused = Column(Integer)        # 已使用的数量
+    COtime = Column(String(14))     # 创建时间
     COuserfilter = Column(Integer)  # 每人限额
+    COotherType = Column(String(14))    # other的具体属性
 
 
 class CouponsManager(Base):
@@ -223,7 +224,7 @@ class Menu(Base):
     MNid = Column(String(64), primary_key=True)
     MNname = Column(String(66))    # 菜单名称
     MNurl = Column(String(255))    # 菜单url
-    MNicon = Column(String(255))          # 菜单图标名称
+    MNicon = Column(String(255))   # 菜单图标名称
     MNparent = Column(String(64))  # 父菜单节点id，根节点为0
 
 

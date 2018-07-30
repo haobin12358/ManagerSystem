@@ -50,11 +50,18 @@ class TimeManager(object):
         # return deltatime
         return "{0}天{1}时{2}分{3}秒".format(deltatime.days, hour, minute, second)
 
+    @staticmethod
+    def get_delta_days(starttime, endtime):
+        deltatime = datetime.datetime.strptime(endtime, format_for_db) - datetime.datetime.strptime(starttime, format_for_db)
+        return deltatime.days
+
 
 if __name__ == "__main__":
-    delta = TimeManager.get_delta_time("20170622001100", "20170722061100")
+    delta = TimeManager.get_delta_days("20170622001100", "20170622061100")
     print(delta)
     # print type(delta)
+    for i in range(1, 1):
+        print(i)
 
 
 

@@ -99,6 +99,7 @@ class CProducts():
 
     def get_brands(self, prid):
         pblist = tolist(self.sproduct.get_pball_by_prid(prid))
+        log.info("pblist", pblist)
         brandskey = []
 
         for pb in pblist:
@@ -418,31 +419,31 @@ class CProducts():
         prid = data.get("PRid")
         # todo 拆分更新
         prid = prid if prid else str(uuid.uuid1())
-        try:
-            if not self.add_brands(prid, data.get("brands"), data.get("brands_key")):
-                return get_response("ERROR_MESSAGE_WRONG_BRNADS", "MANAGERSYSTEMERROR", "ERROR_CODE_WRONG_BRANDS")
-            product = {
-                "PRid": prid,
-                "PRname": data.get("PRname", ""),
-                "PRvideo": data.get("PRvideo", ""),
-                "PRimage": json.dumps(data.get("PRimage", [])),
-                "PRaboimage": json.dumps(data.get("PRaboimage", "")),
-                "PRinfo": data.get("PRinfo", ""),
-                "PRvideostart": data.get("PRvideostart", ""),
-                "PRfranking": data.get("PRfranking", 0.0),
-                "MAid": maid,
-                "PRtype": conversion_PRtype_reverse.get(get_str(data, "PRtype", "自营")),
-                "PRbrand": json.dumps(data.get("PRbrand")),
-                "PRtime": TimeManager.get_db_time_str(),
-                "CTid": data.get("CTid")
-            }
+        # try:
+        if not self.add_brands(prid, data.get("brands"), data.get("brands_key")):
+            return get_response("ERROR_MESSAGE_WRONG_BRNADS", "MANAGERSYSTEMERROR", "ERROR_CODE_WRONG_BRANDS")
+        product = {
+            "PRid": prid,
+            "PRname": data.get("PRname", ""),
+            "PRvideo": data.get("PRvideo", ""),
+            "PRimage": json.dumps(data.get("PRimage", [])),
+            "PRaboimage": json.dumps(data.get("PRaboimage", "")),
+            "PRinfo": data.get("PRinfo", ""),
+            "PRvideostart": data.get("PRvideostart", ""),
+            "PRfranking": data.get("PRfranking", 0.0),
+            "MAid": maid,
+            "PRtype": conversion_PRtype_reverse.get(get_str(data, "PRtype", "自营")),
+            "PRbrand": json.dumps(data.get("PRbrand")),
+            "PRtime": TimeManager.get_db_time_str(),
+            "CTid": data.get("CTid")
+        }
 
-            self.sproduct.add_model("Products", **product)
-            self.add_approval(maid, prid)
-            return get_response("SUCCESS_MESSAGE_ADD_DATA", "OK")
-        except Exception as e:
-            log.error("add pruduct error", e.message)
-            return SYSTEM_ERROR
+        self.sproduct.add_model("Products", **product)
+        self.add_approval(maid, prid)
+        return get_response("SUCCESS_MESSAGE_ADD_DATA", "OK")
+        # except Exception as e:
+        #     log.error("add pruduct error", e.message)
+        #     return SYSTEM_ERROR
 
 
     def update_product_status(self):
@@ -505,9 +506,45 @@ class CProducts():
         if "token" not in args:
             return PARAMS_MISS
 
-        if  "PRid" not in data:
+        if "PRid" not in data:
             return PARAMS_MISS
         prid = data.get("PRid")
+        product = {
+            "PRimage": json.dumps(data.get("PRimage", [])),
+            "PRvideo": data.get("PRvideo", ""),
+            "PRfranking": data.get("PRfranking", 0),
+            "PRPoint": data.get("PRPoint", ""),
+            "PRtime": TimeManager.get_db_time_str(),
+        }
+        if data.get("PRbrand"):
+            product["PRbrand"] = json.dumps(data.get("PRbrand"))
+
+        try:
+            update_result = self.sproduct.update_product(prid, product)
+            log.info("update result", update_result)
+            if not update_result:
+                return get_response("ERROR_MESSAGE_DB_ERROR", "MANAGERSYSTEMERROR", "ERROR_CODE_DB_ERROR")
+            # brid_list = [br.BRid for br in self.sproduct.get_brid_by_prid(prid)]
+            # while True:
+            #     fromid_list = []
+            #     if not brid_list:
+            #         break
+            #     for brid in brid_list:
+            #         fromid = self.sproduct.get_brfromid_by_brid(brid)
+            #         if fromid != "0":
+            #             fromid_list.append(fromid)
+            #             self.sproduct.del_brand(brid)
+
+                # brid_list = {}.fromkeys(fromid_list).keys()
+
+            delete_result = self.sproduct.delete_pb(prid)
+            log.info("delete result", delete_result)
+            self.add_brands(prid, data.get("brands"), data.get("brands_key"))
+            return get_response("SUCCESS_MESSAGE_UPDATE_DATA", "OK")
+
+        except Exception as e:
+            log.error("update product", e.message)
+            return SYSTEM_ERROR
 
     def add_brands(self, prid, brands, brands_key):
         if not isinstance(brands, list):
