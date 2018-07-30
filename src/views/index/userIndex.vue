@@ -207,22 +207,34 @@
 <script type="text/ecmascript-6">
   import pageTitle from '../../components/common/title';
     export default {
-        data() {
-            return {
-              name:'工作模块管理'
-            }
-        },
-        components:{
-          pageTitle
-        },
-        methods: {
-          freshClick(){
-            console.log('fresh');
+      data() {
+          return {
+            name:'工作模块管理'
           }
+      },
+      components:{
+        pageTitle
+      },
+      methods: {
+        freshClick(){
+          console.log('fresh');
         },
-        created() {
-
+        getData() {
+          // 获取用户首页
+          axios.get(api.get_userIndex+'?token='+localStorage.getItem('token')).then(res => {
+            if (res.data.status == 200) {
+              console.log(res)
+            } else {
+              this.$message.error(res.data.message);
+            }
+          }, error => {
+            this.$message.error(error.data.message);
+          })
         }
+      },
+      created() {
+
+      }
     }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
@@ -372,7 +384,7 @@
                 background-size: 100% 100%;
               }
               .m-store-content {
-                /*line-height: 0.3rem;*/
+                line-height: 0.4rem;
                 font-size: 0.12rem;
                 p {
                   height: 0.2rem;
