@@ -1,7 +1,7 @@
 # *- coding:utf8 *-
 from flask import Flask
 import flask_restful
-
+from flask_cors import CORS
 
 from ManagerSystem.apis.AManager import MSManager
 from ManagerSystem.apis.AStocks import MSStocks
@@ -13,8 +13,9 @@ from ManagerSystem.apis.AOther import AOther
 from ManagerSystem.apis.ACoupons import MSCoupons
 
 sg = Flask(__name__)
+CORS(sg, resources=r'/*')
 api = flask_restful.Api(sg)
-
+# r'/*' 是通配符，让本服务器所有的URL 都允许跨域请求
 
 api.add_resource(MSManager, "/sharp/manager/user/<string:manager>")
 api.add_resource(MSStocks, "/sharp/manager/stock/<string:stock>")
