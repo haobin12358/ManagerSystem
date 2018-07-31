@@ -228,6 +228,13 @@
       },
       /*完成*/
       storeSubmit(){
+        if(this.$route.query.COid){
+          this.$message({
+            type: 'warning',
+            message: '已创建过的活动不可修改'
+          });
+          return false;
+        }
         // console.log(this.$store.state.activity)
         let _form = JSON.parse(JSON.stringify(this.$store.state.activity));
         // for(let i =0;i<this.$store.state.activity.COimage.length;i++){

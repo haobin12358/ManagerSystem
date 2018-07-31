@@ -43,7 +43,7 @@
 
           <div class="m-bottom-btn m-flex-center">
             <router-link to="/activity/storeActivity" >
-              <span class="m-btn active" >返回</span>
+              <span class="m-btn active">返回</span>
             </router-link>
               <span class="m-btn" @click="onSubmit">下一步</span>
           </div>
@@ -233,7 +233,7 @@
         let that = this;
         this.$refs['storeForm'].validate((valid) => {
           if (valid) {
-            this.$router.push('/activity/activityStoreStepTwo');
+            this.$router.push('/activity/activityStoreStepTwo?COid='+this.$route.query.COid);
           }
         })
       }

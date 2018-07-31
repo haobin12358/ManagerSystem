@@ -52,62 +52,64 @@
     <transition name="fade">
       <div class="m-modal" v-show="show_modal">
         <div class="m-modal-state">
-          <div class="m-modal-head m-flex-between">
-            <span>选择商品</span>
-            <span class="m-close" @click="showModal(false)">X</span></div>
-          <div class="m-modal-content">
-            <el-form :inline="true" :model="storeForm" class="demo-form-inline">
-              <div class="m-select-box">
-                <div class="m-left">
-                  <!--<el-form-item label="全部类目">-->
-                    <!--<el-select v-model="storeForm.name" class="m-input-s" placeholder="活动区域">-->
-                      <!--<el-option label="区域一" value="shanghai"></el-option>-->
-                      <!--<el-option label="区域二" value="beijing"></el-option>-->
-                    <!--</el-select>-->
-                  <!--</el-form-item>-->
-                  <el-form-item label="商品名称">
-                    <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
-                  </el-form-item>
-                </div>
-                <div class="m-right">
-                  <el-form-item>
-                    <el-button type="primary" class="m-select-btn" @click="storeSubmit">查询</el-button>
-                  </el-form-item>
-                </div>
-              </div>
-            </el-form>
-            <div class="m-middle" style="width: 100%;margin-top: 0.1rem;" >
-              <el-table :data="product_data" stripe style="width: 100%" ref="table" @selection-change="changeFun" >
-                <el-table-column type="selection" width="55" prop="COcheck" ></el-table-column>
-                <el-table-column align="center" prop="userId" width="400" label="宝贝描述">
-                  <template slot-scope="scope">
-                    <div class="m-production-description">
-                      <img class="m-img" :src="scope.row.PRimage[0]"/>
-                      <div>
-                        <p>{{scope.row.PRname}}</p>
-                        <p>{{scope.row.PRid}}</p>
-                      </div>
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column align="center" prop="userId" label="价格" ></el-table-column>
+          <el-form :inline="true" :model="storeForm" class="demo-form-inline" :disabled="$store.state.discount.disable" >
+            <div class="m-modal-head m-flex-between">
+              <span>选择商品</span>
+              <span class="m-close" @click="showModal(false)">X</span></div>
+            <div class="m-modal-content">
 
-                <el-table-column align="center" prop="PRstock" label="库存" ></el-table-column>
-                <!--<el-table-column align="center" label="操作" >-->
-                <!--<template slot-scope="scope">-->
-                <!--<span class="m-link m-first">参加活动</span>-->
-                <!--</template>-->
-                <!--</el-table-column>-->
-              </el-table>
+                <div class="m-select-box">
+                  <div class="m-left">
+                    <!--<el-form-item label="全部类目">-->
+                      <!--<el-select v-model="storeForm.name" class="m-input-s" placeholder="活动区域">-->
+                        <!--<el-option label="区域一" value="shanghai"></el-option>-->
+                        <!--<el-option label="区域二" value="beijing"></el-option>-->
+                      <!--</el-select>-->
+                    <!--</el-form-item>-->
+                    <el-form-item label="商品名称">
+                      <el-input v-model="storeForm.name" class="m-input-s" placeholder=""></el-input>
+                    </el-form-item>
+                  </div>
+                  <div class="m-right">
+                    <el-form-item>
+                      <el-button type="primary" class="m-select-btn" @click="storeSubmit">查询</el-button>
+                    </el-form-item>
+                  </div>
+                </div>
+
+              <div class="m-middle" style="width: 100%;margin-top: 0.1rem;" >
+                <el-table :data="product_data" stripe style="width: 100%" ref="table" @selection-change="changeFun" >
+                  <el-table-column type="selection" width="55" prop="COcheck" ></el-table-column>
+                  <el-table-column align="center" prop="userId" width="400" label="宝贝描述">
+                    <template slot-scope="scope">
+                      <div class="m-production-description">
+                        <img class="m-img" :src="scope.row.PRimage[0]" style="width: 0.5rem;height: 0.5rem;"/>
+                        <div>
+                          <p>{{scope.row.PRname}}</p>
+                          <p>{{scope.row.PRid}}</p>
+                        </div>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column align="center" prop="userId" label="价格" ></el-table-column>
+
+                  <el-table-column align="center" prop="PRstock" label="库存" ></el-table-column>
+                  <!--<el-table-column align="center" label="操作" >-->
+                  <!--<template slot-scope="scope">-->
+                  <!--<span class="m-link m-first">参加活动</span>-->
+                  <!--</template>-->
+                  <!--</el-table-column>-->
+                </el-table>
+              </div>
+              <div class="m-page-box">
+                <Pagination :total="page_data.total_page" @pageChange="pageChange"></Pagination>
+              </div>
             </div>
-            <div class="m-page-box">
-              <Pagination :total="page_data.total_page" @pageChange="pageChange"></Pagination>
+            <div class="m-modal-foot">
+              <span class="m-btn active" @click="onSubmit">确认</span>
+              <span class="m-btn">取消</span>
             </div>
-          </div>
-          <div class="m-modal-foot">
-            <span class="m-btn active" @click="onSubmit">确认</span>
-            <span class="m-btn">取消</span>
-          </div>
+          </el-form>
         </div>
       </div>
     </transition>
@@ -283,6 +285,13 @@
       },
       /*创建一个优惠券*/
       createOne(){
+        if(this.$route.query.COid){
+          this.$message({
+            type: 'warning',
+            message: '已创建过的优惠券不可修改'
+          });
+          return false;
+        }
         let that = this;
         this.$refs['storeForm'].validate((valid) => {
           if (valid) {

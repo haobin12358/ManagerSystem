@@ -260,7 +260,7 @@
       },
       /*下一步*/
       onSubmit(){
-        this.$router.push('/activity/activityStoreStepThree');
+        this.$router.push('/activity/activityStoreStepThree?COid='+this.$route.query.COid);
       },
       /*上一步*/
       lastStep(){

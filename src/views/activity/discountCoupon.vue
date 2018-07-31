@@ -9,7 +9,7 @@
               <p>优惠券</p>
               <p class="m-info-grey">可通过多种渠道推广的电子券，通过设置优惠金额和使用门槛，刺激转化提高客单，</p>
               <p class="m-info-grey">包括店铺优惠券和商品优惠券。</p>
-              <p>店铺优惠券：可创建 <span class="m-num">20</span> 个 &nbsp;&nbsp; 店铺优惠券：可创建 <span class="m-num">20</span> 个</p>
+              <p>店铺优惠券：已创建 <span class="m-num">{{page_data.total_num}}</span> 个 &nbsp;&nbsp; 平台优惠券：已创建 <span class="m-num">0</span> 个</p>
             </div>
           </div>
           <div class="m-discount-top-part">
@@ -17,7 +17,7 @@
               <div class="m-top-btn">+店铺优惠券</div>
             </router-link>
             <router-link to="/activity/discountProductStepOne" >
-              <div class="m-top-btn">+商品优惠券</div>
+              <div class="m-top-btn">+平台优惠券</div>
             </router-link>
 
           </div>
@@ -35,7 +35,10 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions2">
+            :picker-options="pickerOptions2"
+            value-format="yyyy-MM-dd HH:mm:ss"
+          @change="dateChange">
+
           </el-date-picker>
           <!--<span class="m-date-icon"></span>-->
         </p>
@@ -96,7 +99,7 @@
             </el-table-column>
             <el-table-column align="center" prop="COuserfilter" label="每人限额" ></el-table-column>
             <el-table-column align="center" prop="COnumber" label="发行量" ></el-table-column>
-            <el-table-column align="center" prop="group" label="已领取" ></el-table-column>
+            <el-table-column align="center" prop="get_num" label="已领取" ></el-table-column>
             <el-table-column align="center" label="操作" >
               <template slot-scope="scope">
                 <span class="m-link m-first" @click="storeEdit(scope.row,'store')">查看</span>
@@ -200,7 +203,7 @@
             show:false
           },
           commodity:{
-            name:'商品优惠券',
+            name:'平台优惠券',
             url:'commodity',
             show:false
           }
@@ -404,6 +407,9 @@
         _arr[v].click = true;
         this.data_detail = [].concat(_arr);
         this.dealOption(v)
+      },
+      dateChange(){
+        this.getSituation()
       },
       /*分页点击*/
       pageChange(v){

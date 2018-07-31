@@ -320,7 +320,7 @@
       },
       /*日期变化*/
       dateChange() {
-        console.log(this.situation_date)
+        this.getSituation();
       },
       freshClick(){
         this.getData();
