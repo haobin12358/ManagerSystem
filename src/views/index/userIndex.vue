@@ -7,15 +7,15 @@
           <h3 class="m-title">待办事项</h3>
           <div class="m-scroll">
            <ul>
-             <li class="m-label m-red">
+             <li class="m-label m-red" @click="goPage('待处理')">
                <span>待处理</span>
                <span>{{index.dealing_sum}}</span>
              </li>
-             <li class="m-label m-green">
+             <li class="m-label m-green" @click="goPage('待审批')">
                <span>待审批</span>
                <span>{{index.approvaling_sum}}</span>
              </li>
-             <li class="m-label m-blue">
+             <li class="m-label m-blue" @click="goPage('21')">
                <span>待发货</span>
                <span>{{index.deliver_sum}}</span>
              </li>
@@ -25,7 +25,7 @@
               <ul>
                 <li v-for="item in orderStatusList">
                   <span>{{item.status}}</span>
-                  <span class="m-red">{{item.index}}</span>
+                  <span class="m-red" @click="goPage(item.index)">{{item.value}}</span>
                 </li>
               </ul>
             </div>
@@ -34,7 +34,9 @@
               <ul>
                 <li>
                   <span>正在进行的活动：</span>
-                  <span class="m-red">{{index.active_sum}}</span>
+                  <router-link to="/activity/storeActivity" >
+                    <span class="m-red">{{index.active_sum}}</span>
+                  </router-link>
                 </li>
               </ul>
             </div>
@@ -43,7 +45,9 @@
               <ul>
                 <li>
                   <span>正在发放的优惠券：</span>
-                  <span class="m-red">{{index.couponse_sum}}</span>
+                  <router-link to="/activity/discountCoupon" >
+                    <span class="m-red">{{index.couponse_sum}}</span>
+                  </router-link>
                 </li>
               </ul>
             </div>
@@ -197,12 +201,12 @@
             name:'工作模块管理',
             index: {},
             orderStatusList: [
-              { status: '已取消', index: 0 },
-              { status: '未支付', index: 1 },
-              { status: '支付中', index: 2 },
-              { status: '已发货', index: 4 },
-              { status: '已完成', index: 6 },
-              { status: '已评价', index: 7 },
+              { status: '已取消：', index: 0, value: 0 },
+              { status: '未支付：', index: 1, value: 1 },
+              { status: '支付中：', index: 2, value: 2 },
+              { status: '已发货：', index: 4, value: 4 },
+              { status: '已完成：', index: 6, value: 6 },
+              { status: '已评价：', index: 7, value: 7 },
             ]
           }
       },
@@ -213,14 +217,14 @@
         freshClick(){
           console.log('fresh');
         },
+        // 获取用户首页
         getData() {
-          // 获取用户首页
           axios.get(api.get_userIndex+'?token='+localStorage.getItem('token')).then(res => {
             if (res.data.status == 200) {
               this.index = res.data.data
-              console.log(this.index)
+              // console.log(this.index)
               for(let i=0;i<this.orderStatusList.length;i++) {
-                this.orderStatusList[i].index = this.index.om_count[this.orderStatusList[i].index*7]
+                this.orderStatusList[i].value = this.index.om_count[this.orderStatusList[i].value*7]
               }
             } else {
               this.$message.error(res.data.message);
@@ -228,6 +232,13 @@
           }, error => {
             this.$message.error(error.data.message);
           })
+        },
+        goPage(page) {
+          if(page == '待审批') {
+            this.$router.push({path: '/index/adminIndex', query: 0})
+          }else {
+            this.$router.push({path: '/order/allOrder', query: 0})
+          }
         }
       },
       created() {
@@ -291,7 +302,7 @@
           li{
             font-size: 0.12rem;
             color: #999;
-            width: 30%;
+            width: 33%;
             margin-bottom: 0.1rem;
             span.m-red{
               color: @red;

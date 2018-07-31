@@ -198,21 +198,24 @@
         }
         this.tabList = ['全 部', '已取消','未支付','支付中', '已支付','已发货','已收货', '已完成','已评价','退款中']
         this.getData(1)
+      },
+      getOMlogisticsNameList() {
+        axios.get(api.get_omfilter).then(res => {
+          if(res.data.status == 200) {
+            for(let i=0;i<res.data.data.length;i++) {
+              if(res.data.data[i].key == "OMlogisticsName") {
+                this.OMlogisticsNameList = res.data.data[i].value
+              }
+            }
+          }else{
+            this.$message.error(res.data.message);
+          }
+        })
       }
     },
     created() {
       this.getData(1)
-      axios.get(api.get_omfilter).then(res => {
-        if(res.data.status == 200) {
-          for(let i=0;i<res.data.data.length;i++) {
-            if(res.data.data[i].key == "OMlogisticsName") {
-              this.OMlogisticsNameList = res.data.data[i].value
-            }
-          }
-        }else{
-          this.$message.error(res.data.message);
-        }
-      })
+      this.getOMlogisticsNameList()
     },
     watch: {
       // 依据order变化来传递对应的新的order给对应的this.index的子组件，并调用该子组件的getOrderList方法
